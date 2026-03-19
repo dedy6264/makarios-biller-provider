@@ -16,14 +16,6 @@ class UserRoleController extends Controller
         session(['activeMenu'=>'User Role']);
         $users = User::all();
         $roles = Role::all();
-        // $clients=[[
-        //         'id'=>1,
-        //         'client_name'=>'Client A',
-        //     ],[
-        //         'id'=>2,
-        //         'client_name'=>'Client B'
-        //     ]];
-
         $filter=[
             "id"=>0,
             "client_name"=>"",
