@@ -220,7 +220,7 @@
         </li>
         @if(session('client_id')==0)
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#dropdownAccount" class="nav-link  {{Route::is(['accounts.index', 'savings.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownAccount" role="button" aria-expanded="{{Route::is(['accounts.index', 'savings.index']) ?  false:true}}">
+          <a data-bs-toggle="collapse" href="#dropdownAccount" class="nav-link  {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownAccount" role="button" aria-expanded="{{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
               <svg class="text-dark" width="12px" height="12px" viewBox="0 0 42 44" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>basket</title>
@@ -238,7 +238,7 @@
             </div>
             <span class="nav-link-text ms-1">Account </span>
           </a>
-          <div class="collapse {{Route::is(['accounts.index', 'savings.index']) ?  'show':''}}" id="dropdownAccount" style="">
+          <div class="collapse {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  'show':''}}" id="dropdownAccount" style="">
             <ul class="nav ms-4 ps-3">
               <li class="nav-item {{Route::is('accounts.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('accounts.index') }}">
@@ -250,6 +250,12 @@
                 <a class="nav-link " href="{{ route('savings.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
                   <span class="sidenav-normal"> Saving </span>
+                </a>
+              </li>
+              <li class="nav-item {{Route::is('saving_transactions.index') ?  'active':''}}">
+                <a class="nav-link " href="{{ route('saving_transactions.index') }}">
+                  <span class="sidenav-mini-icon"> O </span>
+                  <span class="sidenav-normal"> Saving Transaction </span>
                 </a>
               </li>
             </ul>

@@ -15,6 +15,7 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Product\ProviderController;
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Account\SavingAccountController;
+use App\Http\Controllers\Account\SavingTransactionController;
 
 Route::middleware(['auth','checkRole:ADMT'])->group(function () {
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
@@ -34,6 +35,10 @@ Route::middleware(['auth','checkRole:ADMT'])->group(function () {
     Route::post('/savings/getAll', [SavingAccountController::class, 'getAll'])->name('savings.getAll');
     Route::post('/savings/update', [SavingAccountController::class, 'update'])->name('savings.update');
     Route::post('/savings/destroy', [SavingAccountController::class, 'destroy'])->name('savings.destroy');
+    Route::post('/savings/destroy', [SavingAccountController::class, 'destroy'])->name('savings.destroy');
+    
+    Route::get('/saving_transactions', [SavingTransactionController::class, 'index'])->name('saving_transactions.index');
+    Route::post('/saving_transactions/getAll', [SavingTransactionController::class, 'getAll'])->name('saving_transactions.getAll');
 });
 Route::middleware(['auth','checkRole:ADMT,CLT'])->group(function () {
     Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
