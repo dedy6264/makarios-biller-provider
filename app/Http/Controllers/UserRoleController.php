@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\{UserRole,User,Role};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Services\HostService;
 
 class UserRoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+     protected $hostService;
+     public function __construct(HostService $hostService){
+        $this->hostService = $hostService;
+    }
     public function index()
     {
         session(['activeMenu'=>'User Role']);
@@ -31,7 +33,7 @@ class UserRoleController extends Controller
             "end_date"=>"",
             "filter"=>$filter,
         ];
-        $response = Http::withBasicAuth('mocha','michi')->post('https://api.mimogo.sbs/makarios/api/getClient', $payload)->json();
+        $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/getClient', $payload)->json();
         if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
             return response()->json(['error' => 'Invalid API response format or data type'], 500);
         }

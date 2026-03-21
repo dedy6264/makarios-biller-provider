@@ -3,11 +3,15 @@
       <div class="modal-content">
         <div class="modal-header">
             <div class="row">
-                <div class="col-2">
-                <img src="{{ asset('assets/img/icons/Tick.gif') }}" alt="" style="max-width: 100%;">
+                <div class="col-2" >
+                <img src="{{ asset('assets/img/icons/success.gif') }}" alt="" style="max-width: 100%;" v-if="formInquiry.status_code == '00'">
+                <img src="{{ asset('assets/img/icons/pending.gif') }}" alt="" style="max-width: 100%;" v-if="formInquiry.status_code == '02'">
+                <img src="{{ asset('assets/img/icons/failed.gif') }}" alt="" style="max-width: 100%;" v-else>
                 </div>
                 <div class="col-10">
-                    <h5 class="modal-title" id="exampleModalLabel">Transaksi Sukses</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '00'">Transaksi Sukses</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '02'">Transaksi Sedang Diproses</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" v-else>Transaksi Gagal</h5>
                 </div>
             </div>
         </div>
@@ -47,7 +51,7 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">089678971119</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">@{{ formInquiry.customer_id}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -116,8 +120,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="backModal">Cancel</button>
-          <button type="button" class="btn btn-primary" @click="payment">Bayar</button>
+          <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
+          {{-- <button type="button" class="btn btn-primary" @click="payment">Bayar</button> --}}
         </div>
       </div>
     </div>

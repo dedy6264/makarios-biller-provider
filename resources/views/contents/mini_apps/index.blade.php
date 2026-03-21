@@ -46,7 +46,7 @@
             <div class="p-3 card-body">
               <div class="row">
                 <div class="pt-3 pb-4 text-center col-lg-2 col-4">
-                  <div class="text-center shadow icon icon-shape bg-gradient-primary border-radius-md" @click="openModal(0)" style="cursor: pointer">
+                  <div class="text-center shadow icon icon-shape bg-gradient-primary border-radius-md" @click="openModal('pulsa_prabayar')" style="cursor: pointer">
                       <i class="text-lg ni ni-mobile-button opacity-10" aria-hidden="true"></i>
                   </div>
                   <div class="pt-1 numbers"  >
@@ -73,7 +73,7 @@
                   </div>
                 </div>
                 <div class="pt-3 pb-4 text-center col-lg-2 col-4">
-                  <div class="text-center shadow icon icon-shape bg-gradient-primary border-radius-md" @click="openModal(3)" style="cursor: pointer">
+                  <div class="text-center shadow icon icon-shape bg-gradient-primary border-radius-md" @click="openModal('pln_token')" style="cursor: pointer">
                     <i class="text-lg ni ni-money-coins opacity-10" aria-hidden="true"></i>
                   </div>
                    <div class="pt-1 numbers">
@@ -253,9 +253,9 @@
         </div>
     </div>
   <!-- Modals -->
-  @include('contents.mini_apps.modal0')
-  @include('contents.mini_apps.modal3')
-  @include('contents.mini_apps.modalInquiry')
+  @include('contents.mini_apps.modal_pulsa_prabayar')
+  @include('contents.mini_apps.modal_pln_token')
+  @include('contents.mini_apps.modal_inquiry')
   @include('contents.mini_apps.modalConfirm')
   <!-- End Modals -->
 
@@ -267,148 +267,177 @@
     <script src="https://cdn.datatables.net/2.3.6/js/dataTables.material.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
       <script>
-      const { createApp,onMounted, ref,nextTick } = Vue;
+      const { createApp,onMounted, ref,nextTick, watch } = Vue;
       createApp({
         setup() {
-          let modal0 = null;
-          let modal3 = null;
-          let modalInquiry = null;
+          let modal_pulsa_prabayar = null;
+          let modal_pln_token = null;
+          let modal_inquiry = null;
           let modalConfirm = null;
           const isModalOpen = ref(true);
           const isEditMode = ref(false);
           const mainData=ref({});
           const modalShowed = ref(null);
+          const statusInquiry = ref();
+          const statusPayment = ref();
           const formInquiry = ref({
             product_code: '',
             reference_number: '',
             reference_number_merchant: '',
             customer_id: '',
             periode: '',
+            product_price:0,
+            admin_fee:0,
+            total:0,
+            pin:"",
+            product_name:'',
+            date_time:'',
+            sn:'',
+            status_code:'',
           });
+          watch(
+            () => formInquiry.value.customer_id,
+            (value) => {
+              if (value.length == 5) {
+              console.log("hit");
+                 getProductFromIDCust();
+              }
+            }
+          );
           const formPayment = ref({
             reference_number:'',
           });
           const openModal = (value) => {
+            formInquiry.value.customer_id="";
+            formInquiry.value.product_code='';
+            formInquiry.value.reference_number='';
+            formInquiry.value.reference_number_merchant='';
             switch (value) {
-              case 0:
-                modalShowed.value = 0;
-                modal0.show();
+              case 'pulsa_prabayar':
+                modalShowed.value = 'pulsa_prabayar';
+                modal_pulsa_prabayar.show();
                 break;
-            case 3:
-                modalShowed.value = 3;
-                modal3.show();
+            case 'pln_token':
+                modalShowed.value = 'pln_token';
+                modal_pln_token.show();
                 break;
               default:
                 break;
             }
           };
           const closeModal = () => {
-            switch (modalShowed.value) {
-              case 0:
-                modal0.hide();
-                break;
-              case 3:
-                modal3.hide();
-                break;
-              default:
-                break;
-            }
+            modal_pulsa_prabayar.hide();
+            modal_pln_token.hide();
+            modal_inquiry.hide();
+            modalConfirm.hide();
             modalShowed.value=null;
+            mainData.value=null;
           };
-         
-          window.updateModal = (idClient) => {
-              for(let a=0;a<mainData.value.length;a++){
-                if (mainData.value[a].id==idClient){
-                  isEditMode.value = true;
-                  modal0.show();
-                }
-              };
-          };
-          window.deleteClient = (idClient) => {
-            console.log("Delete client with ID:", idClient);
-            nextTick(()=>{
-                // Create new client
-               axios.post('{{ route('clients.destroy') }}', { id: idClient })
-                  .then(response => {
-                    refreshDataClient();
-                  })
-                  .catch(error => {
-                    console.error("Error creating client:", error);
-                  });
-            })
-          };
-          const storeClient=()=>{
-            nextTick(()=>{
-                // Create new client
-               axios.post('{{ route('clients.store') }}', formInquiry.value)
-                  .then(response => {
-                    // console.log("Client created:", response.data);
-                    isEditMode.value = false;
-                    closeModal();
-                    refreshDataClient();
-                  })
-                  .catch(error => {
-                    console.error("Error creating client:", error);
-                    alert("Maaf, Anda tidak memiliki izin untuk melihat data ini.");
-
-                  });
-            })
-          };
-          const updateClient=()=>{
-            nextTick(()=>{
-                // Update existing client
-                axios.post('{{ route('clients.update') }}', formInquiry.value)
-                  .then(response => {
-                    isEditMode.value = false;
-                    closeModal();
-                    refreshDataClient();
-                  })
-                  .catch(error => {
-                    console.error("Error updating client:", error);
-                    alert("Maaf, Anda tidak memiliki izin untuk melihat data ini.");
-
-                  });
-            });
+          
+          const funcInputFormInquiry=(idProduk)=>{
+          mainData.value.forEach((item, index) => {
+            console.log(item, index)
+            if (item.id==idProduk){
+              formInquiry.value.product_code=item.product_code;
+              formInquiry.value.reference_number=item.reference_number;
+              formInquiry.value.reference_number_merchant=item.reference_number_merchant;
+            }
+          })
+          inquiry();
           };
           const inquiry=()=>{
+            console.log("PAYLOAD:m ", formInquiry.value);
             nextTick(()=>{
                axios.post('{{ route('mini_apps.inquiry') }}', formInquiry.value)
                   .then(response => {
-                    // console.log("Client created:", response.data);
-                    isEditMode.value = false;
-                    closeModal();
-                    refreshDataClient();
+                    mainData.value=response.data;
+                    // console.log("Client created:", mainData.value.result.reference_number);
+                    olahDataInquiry();
                   })
                   .catch(error => {
                     console.error("Error creating client:", error);
-                    alert("Maaf, Anda tidak memiliki izin untuk melihat data ini.");
-
+                    
                   });
             })
           };
-          const getProductFromIDCust=()=>{
+          const payment=()=>{
+            console.log("PAYLOAD:m ", formInquiry.value);
             nextTick(()=>{
-               axios.post('{{ route('mini_apps.getProductFromIDCust') }}', formInquiry.value)
+               axios.post('{{ route('mini_apps.payment') }}', formInquiry.value)
                   .then(response => {
-                    // console.log("Client created:", response.data);
-                    isEditMode.value = false;
-                    closeModal();
-                    refreshDataClient();
+                    mainData.value=response.data;
+                    olahDataPayment();
                   })
                   .catch(error => {
                     console.error("Error creating client:", error);
-                    alert("Maaf, Anda tidak memiliki izin untuk melihat data ini.");
-
+                    
+                  });
+            })
+          };
+          const olahDataPayment=()=>{
+            switch (mainData.value.responseCode) {
+              case '00','02','03':
+                  formInquiry.value.product_code=mainData.value.result.product_code;
+                  formInquiry.value.reference_number=mainData.value.result.reference_number;
+                  formInquiry.value.reference_number_merchant=mainData.value.result.reference_number_merchant;
+                  formInquiry.value.customer_id=mainData.value.result.customer_id;
+                  formInquiry.value.periode=mainData.value.result.periode;
+                  formInquiry.value.product_price=mainData.value.result.product_price;
+                  formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
+                  formInquiry.value.total=mainData.value.result.transaction_total_amount;
+                  formInquiry.value.product_name=mainData.value.result.product_name;
+                  formInquiry.value.date_time=mainData.value.result.updated_at;
+                  formInquiry.value.sn=mainData.value.result.bill_info.sn;
+                  formInquiry.value.status_code=mainData.value.result.status_code;
+                break;
+            
+              default:
+                break;
+            }
+            isEditMode.value = false;
+            closeModal();
+            //modal inquiry show
+            modalShowed.value='modalConfirm';
+            modalConfirm.show();
+          }
+          const olahDataInquiry=()=>{
+          if(mainData.value.responseCode=='04'){
+            //fill inquiry form
+            formInquiry.value.reference_number=mainData.value.result.reference_number;
+            formInquiry.value.reference_number_merchant=mainData.value.result.reference_number_merchant;
+            formInquiry.value.product_price=mainData.value.result.product_price;
+            formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
+            formInquiry.value.total=mainData.value.result.transaction_total_amount;
+            formInquiry.value.product_code=mainData.value.result.product_code;
+            formInquiry.value.customer_id=mainData.value.result.customer_id;
+            // console.log("Maindata:m ", formInquiry.value);
+            //modal all off
+            isEditMode.value = false;
+            closeModal();
+            //modal inquiry show
+            modalShowed.value='modal_inquiry';
+            modal_inquiry.show();
+          }
+          }
+          const getProductFromIDCust=()=>{
+            nextTick(()=>{
+               axios.post('{{ route('mini_apps.getProductByCustID') }}', formInquiry.value)
+                  .then(response => {
+                    console.log("Client created:", response.data);
+                    mainData.value=response.data.data;
+                  })
+                  .catch(error => {
+                    console.error("Error :", error);
                   });
             })
           };
           onMounted(() => {
-            modal0 = new bootstrap.Modal(document.getElementById('modalPulsaPrabayar'), options);
-            modal3 = new bootstrap.Modal(document.getElementById('modalPlnToken'), options);
-            modalInquiry = new bootstrap.Modal(document.getElementById('modalInquiry'), options);
+            modal_pulsa_prabayar = new bootstrap.Modal(document.getElementById('modalPulsaPrabayar'), options);
+            modal_pln_token = new bootstrap.Modal(document.getElementById('modalPlnToken'), options);
+            modal_inquiry = new bootstrap.Modal(document.getElementById('modalInquiry'), options);
             modalConfirm = new bootstrap.Modal(document.getElementById('modalConfirm'), options);
-            modalInquiry.show();
-            refreshDataClient();
+            // modalConfirm.show();
+            // refreshDataClient();
           });
           return { 
             isModalOpen,
@@ -419,10 +448,10 @@
             formPayment,
             openModal,
             closeModal,
-            updateModal,
-            deleteClient,
-            storeClient,
-            updateClient,
+            funcInputFormInquiry,
+            olahDataInquiry,
+            olahDataPayment,
+            payment,
           };
         }
       }).mount('#app');
