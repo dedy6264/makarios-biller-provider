@@ -10,7 +10,7 @@
                 </div>
                 <div class="col-10">
                     <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '00'">Transaksi Sukses</h5>
-                    <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '02'">Transaksi Sedang Diproses</h5>
+                    <h5 class="modal-title" id="exampleModalLabel" v-else-if="formInquiry.status_code == '02'">Transaksi Sedang Diproses</h5>
                     <h5 class="modal-title" id="exampleModalLabel" v-else>Transaksi Gagal</h5>
                 </div>
             </div>
