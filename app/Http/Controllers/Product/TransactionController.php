@@ -46,7 +46,7 @@ class TransactionController extends Controller
             "draw"=> 1,
             "recordsTotal"=> $response['records_total'],
             "recordsFiltered"=> $response['records_filtered'],
-            "data"=> $response['data'],
+            "data"=> $response['data']?? [],
         ];
         return response()->json($dt);
     }

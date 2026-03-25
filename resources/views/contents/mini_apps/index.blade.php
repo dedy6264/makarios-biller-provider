@@ -268,7 +268,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
       <script>
       const { createApp,onMounted, ref,nextTick, watch } = Vue;
-      createApp({
+      const app = createApp({
         setup() {
           let modal_pulsa_prabayar = null;
           let modal_pln_token = null;
@@ -424,7 +424,7 @@
                   formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
                   formInquiry.value.total=mainData.value.result.transaction_total_amount;
                   formInquiry.value.product_name=mainData.value.result.product_name;
-                  formInquiry.value.date_time=formatTanggal(mainData.value.result.updated_at);
+                  formInquiry.value.date_time=mainData.value.result.updated_at;
                   formInquiry.value.sn=mainData.value.result.bill_info.sn;
                   formInquiry.value.status_code=mainData.value.result.status_code;
                 break;
@@ -462,27 +462,6 @@
             }
             console.log("mainData.value.result.transaction_total_amount::", formInquiry.value.total);
           };
-          const formatTanggal = (isoString) => {
-            const date = new Date(isoString)
-
-            const optionsDate = {
-              day: '2-digit',
-              month: 'short',
-              year: 'numeric'
-            }
-
-            const optionsTime = {
-              hour: '2-digit',
-              minute: '2-digit',
-              // second: '2-digit',
-              hour12: false
-            }
-
-            const tanggal = date.toLocaleDateString('id-ID', optionsDate)
-            const waktu = date.toLocaleTimeString('id-ID', optionsTime)
-
-            return `${tanggal} | ${waktu} WIB`
-          }
 
           onMounted(() => {
             modal_pulsa_prabayar = new bootstrap.Modal(document.getElementById('modalPulsaPrabayar'), options);
@@ -493,7 +472,6 @@
             // refreshDataClient();
           });
           return { 
-            formatTanggal,
             isModalOpen,
             isEditMode,
             mainData,
@@ -509,7 +487,9 @@
             statusTransaksi,
           };
         }
-      }).mount('#app');
+      })
+      app.config.globalProperties.$format = window.format
+      app.mount('#app')
     </script>
   @endpush
 </x-app-layout>

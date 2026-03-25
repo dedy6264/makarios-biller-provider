@@ -35,6 +35,7 @@
   <link href="{{url('/assets/css/nucleo-svg.css')}}" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="{{url('/assets/css/soft-ui-dashboard.css?v=1.0.3')}}" rel="stylesheet" />
+  <script src="/assets/js/utils.js" ></script>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   
   @stack('css')

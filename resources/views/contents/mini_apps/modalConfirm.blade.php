@@ -23,7 +23,19 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">@{{ formatTanggal(formInquiry.date_time) }}</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">@{{ $format.formatTanggal(formInquiry.date_time) }}</p>
+                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
+                  </div>
+                </div>
+                <div class="pt-1 pb-2 text-left col-lg-6 col-12">
+                   <div class="pt-1 numbers">
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">No Reff</p>
+                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
+                  </div>
+                </div>
+                <div class="pt-1 pb-2 text-right col-lg-6 col-12">
+                   <div class="pt-1 numbers">
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">@{{ formInquiry.reference_number_merchant }}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -59,19 +71,31 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp @{{ formInquiry.product_price}}</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold"> @{{$format.formatCurrency( formInquiry.product_price)}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
-                <div class="pt-1 pb-2 text-left col-lg-6 col-12">
+                <div class="pt-1 pb-2 text-left col-lg-6 col-12" v-if="formInquiry.admin_fee!==0">
                    <div class="pt-1 numbers">
                     <p class="mb-0 text-sm text-capitalize font-weight-bold">Biaya Admin</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
-                <div class="pt-1 pb-2 text-right col-lg-6 col-12">
+                <div class="pt-1 pb-2 text-right col-lg-6 col-12" v-if="formInquiry.admin_fee!==0">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp @{{ formInquiry.admin_fee}}</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold"> @{{$format.formatCurrency( formInquiry.admin_fee)}}</p>
+                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
+                  </div>
+                </div>
+                <div class="pt-1 pb-2 text-left col-lg-6 col-12" v-if="formInquiry.sn">
+                   <div class="pt-1 numbers">
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">SN</p>
+                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
+                  </div>
+                </div>
+                <div class="pt-1 pb-2 text-right col-lg-6 col-12" v-if="formInquiry.sn">
+                   <div class="pt-1 numbers">
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold"> @{{$format.formatCurrency( formInquiry.sn)}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -83,7 +107,7 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-gradient text-primary text-capitalize font-weight-bold">Rp @{{ formInquiry.total}}</p>
+                    <p class="mb-0 text-gradient text-primary text-capitalize font-weight-bold"> @{{$format.formatCurrency( formInquiry.total)}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-gradient text-primary text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
