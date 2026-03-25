@@ -17,13 +17,13 @@
               <div class="row">
                 <div class="pt-1 pb-2 text-left col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Date Time</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Date</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">02 Feb 2025 | 09:08:00 WIB</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">@{{ formatTanggal(formInquiry.date_time) }}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -53,37 +53,13 @@
                 </div>
                 <div class="pt-1 pb-2 text-left col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Nominal</p>
-                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
-                  </div>
-                </div>
-                <div class="pt-1 pb-2 text-right col-lg-6 col-12">
-                   <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">100.000</p>
-                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
-                  </div>
-                </div>
-                <div class="pt-1 pb-2 text-left col-lg-6 col-12">
-                   <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Nominal</p>
-                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
-                  </div>
-                </div>
-                <div class="pt-1 pb-2 text-right col-lg-6 col-12">
-                   <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">100.000</p>
-                    {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
-                  </div>
-                </div>
-                <div class="pt-1 pb-2 text-left col-lg-6 col-12">
-                   <div class="pt-1 numbers">
                     <p class="mb-0 text-sm text-capitalize font-weight-bold">Harga</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp 15.500,00</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp @{{ formInquiry.product_price}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -95,7 +71,7 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp 2.500,00</p>
+                    <p class="mb-0 text-sm text-capitalize font-weight-bold">Rp @{{ formInquiry.admin_fee}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
@@ -107,7 +83,7 @@
                 </div>
                 <div class="pt-1 pb-2 text-right col-lg-6 col-12">
                    <div class="pt-1 numbers">
-                    <p class="mb-0 text-gradient text-primary text-capitalize font-weight-bold">Rp 18.000,00</p>
+                    <p class="mb-0 text-gradient text-primary text-capitalize font-weight-bold">Rp @{{ formInquiry.total}}</p>
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-gradient text-primary text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>

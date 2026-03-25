@@ -308,29 +308,6 @@
               }
             }
           );
-          const statusTransaksi= () => {
-            console.log("masuk su::");
-            switch (mainData.value.responseCode) {
-              case "00":
-                icon.value.png='/assets/img/icons/success.gif';
-                icon.value.desc='Transaksi Sukses';
-                break;
-            
-              case "02":
-                icon.value.png='/assets/img/icons/pending.gif';
-                icon.value.desc='Transaksi Dalam Proses';
-                break;
-            
-              default:
-                icon.value.png='/assets/img/icons/failed.gif';
-                icon.value.desc='Transaksi Gagal';
-                break;
-            }    
-            console.log("::::",icon.value);        
-          }
-          const formPayment = ref({
-            reference_number:'',
-          });
           const openModal = (value) => {
             formInquiry.value.customer_id="";
             formInquiry.value.product_code='';
@@ -357,17 +334,53 @@
             modalShowed.value=null;
             mainData.value=null;
           };
-          
+          const getProductFromIDCust=()=>{
+            nextTick(()=>{
+               axios.post('{{ route('mini_apps.getProductByCustID') }}', formInquiry.value)
+                  .then(response => {
+                    console.log("Client created:", response.data);
+                    mainData.value=response.data.data;
+                  })
+                  .catch(error => {
+                    console.error("Error :", error);
+                  });
+            })
+          };
+          const statusTransaksi= () => {
+            console.log("masuk su::");
+            switch (mainData.value.responseCode) {
+              case "00":
+                icon.value.png='/assets/img/icons/success.gif';
+                icon.value.desc='Transaksi Sukses';
+                break;
+            
+              case "02":
+                icon.value.png='/assets/img/icons/pending.gif';
+                icon.value.desc='Transaksi Dalam Proses';
+                break;
+            
+              case "04":
+                icon.value.png='/assets/img/icons/success.gif';
+                icon.value.desc='Konfirmasi Transaksi';
+                break;
+            
+              default:
+                icon.value.png='/assets/img/icons/failed.gif';
+                icon.value.desc='Transaksi Gagal';
+                break;
+            }    
+            console.log("::::",icon.value);        
+          }
           const funcInputFormInquiry=(idProduk)=>{
-          mainData.value.forEach((item, index) => {
-            console.log(item, index)
-            if (item.id==idProduk){
-              formInquiry.value.product_code=item.product_code;
-              formInquiry.value.reference_number=item.reference_number;
-              formInquiry.value.reference_number_merchant=item.reference_number_merchant;
-            }
-          })
-          inquiry();
+            mainData.value.forEach((item, index) => {
+              console.log(item, index)
+              if (item.id==idProduk){
+                formInquiry.value.product_code=item.product_code;
+                formInquiry.value.reference_number=item.reference_number;
+                formInquiry.value.reference_number_merchant=item.reference_number_merchant;
+              }
+            })
+            inquiry();
           };
           const inquiry=()=>{
             console.log("PAYLOAD:m ", formInquiry.value);
@@ -399,9 +412,7 @@
             })
           };
           const olahDataPayment=()=>{
-            console.log("belum");
             statusTransaksi();
-            console.log("sudah");
             switch (mainData.value.responseCode) {
               case '00','02','03':
                   formInquiry.value.product_code=mainData.value.result.product_code;
@@ -413,7 +424,7 @@
                   formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
                   formInquiry.value.total=mainData.value.result.transaction_total_amount;
                   formInquiry.value.product_name=mainData.value.result.product_name;
-                  formInquiry.value.date_time=mainData.value.result.updated_at;
+                  formInquiry.value.date_time=formatTanggal(mainData.value.result.updated_at);
                   formInquiry.value.sn=mainData.value.result.bill_info.sn;
                   formInquiry.value.status_code=mainData.value.result.status_code;
                 break;
@@ -426,38 +437,53 @@
             //modal inquiry show
             modalShowed.value='modalConfirm';
             modalConfirm.show();
-          }
-          const olahDataInquiry=()=>{
-          if(mainData.value.responseCode=='04'){
-            //fill inquiry form
-            formInquiry.value.reference_number=mainData.value.result.reference_number;
-            formInquiry.value.reference_number_merchant=mainData.value.result.reference_number_merchant;
-            formInquiry.value.product_price=mainData.value.result.product_price;
-            formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
-            formInquiry.value.total=mainData.value.result.transaction_total_amount;
-            formInquiry.value.product_code=mainData.value.result.product_code;
-            formInquiry.value.customer_id=mainData.value.result.customer_id;
-            // console.log("Maindata:m ", formInquiry.value);
-            //modal all off
-            isEditMode.value = false;
-            closeModal();
-            //modal inquiry show
-            modalShowed.value='modal_inquiry';
-            modal_inquiry.show();
-          }
-          }
-          const getProductFromIDCust=()=>{
-            nextTick(()=>{
-               axios.post('{{ route('mini_apps.getProductByCustID') }}', formInquiry.value)
-                  .then(response => {
-                    console.log("Client created:", response.data);
-                    mainData.value=response.data.data;
-                  })
-                  .catch(error => {
-                    console.error("Error :", error);
-                  });
-            })
           };
+          const olahDataInquiry=()=>{
+            statusTransaksi();
+            console.log("mainData.value.result.transaction_total_amount::", mainData.value.result.transaction_total_amount);
+            console.log("mainData.value.result.product_price::", mainData.value.result.product_price);
+            if(mainData.value.responseCode=='04'){
+              //fill inquiry form
+              formInquiry.value.reference_number=mainData.value.result.reference_number;
+              formInquiry.value.reference_number_merchant=mainData.value.result.reference_number_merchant;
+              formInquiry.value.product_price=mainData.value.result.product_price;
+              formInquiry.value.admin_fee=mainData.value.result.product_admin_fee;
+              formInquiry.value.total=mainData.value.result.transaction_total_amount;
+              formInquiry.value.product_code=mainData.value.result.product_code;
+              formInquiry.value.customer_id=mainData.value.result.customer_id;
+              formInquiry.value.date_time=mainData.value.result.updated_at;
+              // console.log("Maindata:m ", formInquiry.value);
+              //modal all off
+              isEditMode.value = false;
+              closeModal();
+              //modal inquiry show
+              modalShowed.value='modal_inquiry';
+              modal_inquiry.show();
+            }
+            console.log("mainData.value.result.transaction_total_amount::", formInquiry.value.total);
+          };
+          const formatTanggal = (isoString) => {
+            const date = new Date(isoString)
+
+            const optionsDate = {
+              day: '2-digit',
+              month: 'short',
+              year: 'numeric'
+            }
+
+            const optionsTime = {
+              hour: '2-digit',
+              minute: '2-digit',
+              // second: '2-digit',
+              hour12: false
+            }
+
+            const tanggal = date.toLocaleDateString('id-ID', optionsDate)
+            const waktu = date.toLocaleTimeString('id-ID', optionsTime)
+
+            return `${tanggal} | ${waktu} WIB`
+          }
+
           onMounted(() => {
             modal_pulsa_prabayar = new bootstrap.Modal(document.getElementById('modalPulsaPrabayar'), options);
             modal_pln_token = new bootstrap.Modal(document.getElementById('modalPlnToken'), options);
@@ -467,12 +493,12 @@
             // refreshDataClient();
           });
           return { 
+            formatTanggal,
             isModalOpen,
             isEditMode,
             mainData,
             modalShowed,
             formInquiry,
-            formPayment,
             openModal,
             closeModal,
             funcInputFormInquiry,
