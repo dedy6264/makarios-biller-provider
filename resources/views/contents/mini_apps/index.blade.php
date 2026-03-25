@@ -311,20 +311,21 @@
           const status_transaksi=(key)=>{
             switch (key) {
               case "00":
-                icon.value.png='assets/img/icons/success.gif';
+                icon.value.png='/assets/img/icons/success.gif';
                 icon.value.desc='Transaksi Sukses';
                 break;
             
               case "02":
-                icon.value.png='assets/img/icons/pending.gif';
+                icon.value.png='/assets/img/icons/pending.gif';
                 icon.value.desc='Transaksi Dalam Proses';
                 break;
             
               default:
-                icon.value.png='assets/img/icons/failed.gif';
+                icon.value.png='/assets/img/icons/failed.gif';
                 icon.value.desc='Transaksi Gagal';
                 break;
-            }            
+            }    
+            console.log("::::",icon.value);        
           }
           const formPayment = ref({
             reference_number:'',
