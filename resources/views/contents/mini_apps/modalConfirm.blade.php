@@ -4,9 +4,7 @@
         <div class="modal-header">
             <div class="row">
                 <div class="col-2" >
-                <img src="{{ asset('assets/img/icons/success.gif') }}" alt="" style="max-width: 100%;" v-if="formInquiry.status_code == '00'">
-                <img src="{{ asset('assets/img/icons/pending.gif') }}" alt="" style="max-width: 100%;" v-if="formInquiry.status_code == '02'">
-                <img src="{{ asset('assets/img/icons/failed.gif') }}" alt="" style="max-width: 100%;" v-else>
+                <img src="{{ asset(icon.png) }}" alt="" style="max-width: 100%;" >@{{ icon.desc }}
                 </div>
                 <div class="col-10">
                     <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '00'">Transaksi Sukses</h5>

@@ -280,6 +280,10 @@
           const modalShowed = ref(null);
           const statusInquiry = ref();
           const statusPayment = ref();
+          const icon=ref({
+            png:'',
+            desc:'',
+          });
           const formInquiry = ref({
             product_code: '',
             reference_number: '',
@@ -304,6 +308,24 @@
               }
             }
           );
+          const status_transaksi=(key)=>{
+            switch (key) {
+              case "00":
+                icon.value.png='assets/img/icons/success.gif';
+                icon.value.desc='Transaksi Sukses';
+                break;
+            
+              case "02":
+                icon.value.png='assets/img/icons/pending.gif';
+                icon.value.desc='Transaksi Dalam Proses';
+                break;
+            
+              default:
+                icon.value.png='assets/img/icons/failed.gif';
+                icon.value.desc='Transaksi Gagal';
+                break;
+            }            
+          }
           const formPayment = ref({
             reference_number:'',
           });
@@ -389,6 +411,7 @@
                   formInquiry.value.date_time=mainData.value.result.updated_at;
                   formInquiry.value.sn=mainData.value.result.bill_info.sn;
                   formInquiry.value.status_code=mainData.value.result.status_code;
+                  status_transaksi(mainData.value.responseCode);
                 break;
             
               default:
@@ -452,6 +475,8 @@
             olahDataInquiry,
             olahDataPayment,
             payment,
+            icon,
+            status_transaksi,
           };
         }
       }).mount('#app');
