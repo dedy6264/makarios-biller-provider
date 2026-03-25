@@ -309,7 +309,7 @@
             }
           );
           const statusTransaksi= () => {
-            console.log("masuk su::", key);
+            console.log("masuk su::");
             switch (mainData.value.responseCode) {
               case "00":
                 icon.value.png='/assets/img/icons/success.gif';
