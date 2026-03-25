@@ -4,7 +4,7 @@
         <div class="modal-header">
             <div class="row">
                 <div class="col-2" >
-                <img src="{{icon.png}}" alt="" style="max-width: 100%;" >@{{ icon.desc }}
+                <img :src="{{icon.png}}" alt="" style="max-width: 100%;" >@{{ icon.desc }}
                 </div>
                 <div class="col-10">
                     <h5 class="modal-title" id="exampleModalLabel" v-if="formInquiry.status_code == '00'">Transaksi Sukses</h5>
