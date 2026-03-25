@@ -308,9 +308,9 @@
               }
             }
           );
-          const status_transaksi=(key)=>{
+          const statusTransaksi= () => {
             console.log("masuk su::", key);
-            switch (key) {
+            switch (mainData.value.responseCode) {
               case "00":
                 icon.value.png='/assets/img/icons/success.gif';
                 icon.value.desc='Transaksi Sukses';
@@ -399,6 +399,9 @@
             })
           };
           const olahDataPayment=()=>{
+            console.log("belum");
+            statusTransaksi();
+            console.log("sudah");
             switch (mainData.value.responseCode) {
               case '00','02','03':
                   formInquiry.value.product_code=mainData.value.result.product_code;
@@ -413,7 +416,6 @@
                   formInquiry.value.date_time=mainData.value.result.updated_at;
                   formInquiry.value.sn=mainData.value.result.bill_info.sn;
                   formInquiry.value.status_code=mainData.value.result.status_code;
-                  status_transaksi(mainData.value.responseCode);
                 break;
             
               default:
@@ -478,7 +480,7 @@
             olahDataPayment,
             payment,
             icon,
-            status_transaksi,
+            statusTransaksi,
           };
         }
       }).mount('#app');
