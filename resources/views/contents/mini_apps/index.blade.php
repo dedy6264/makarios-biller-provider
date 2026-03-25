@@ -309,6 +309,7 @@
             }
           );
           const status_transaksi=(key)=>{
+            console.log("masuk su::", key);
             switch (key) {
               case "00":
                 icon.value.png='/assets/img/icons/success.gif';
