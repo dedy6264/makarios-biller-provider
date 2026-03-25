@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Services\HostService;
 class MiniAppController extends Controller
 {
-      protected $hostService;
-     public function __construct(HostService $hostService){
+    protected $hostService;
+    public function __construct(HostService $hostService){
         $this->hostService = $hostService;
     }
       public function index()
@@ -18,7 +18,7 @@ class MiniAppController extends Controller
         session(['activeMenu'=>' Mini App']);
         return view('contents.mini_apps.index');
     }
-    public function getProductByCustID(){
+    public function get_product_by_cust_id(){
         $payload=[
             "subscriberId"=>request()->customer_id,
         ];
@@ -100,4 +100,15 @@ class MiniAppController extends Controller
         // $response = $response['result'];
         return response()->json($response);
     }
+    public function get_balance(){
+        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.A5vysuv6cqVWuxLz4VBn6loiaWbe5c-Am2dcTDO88hA')
+                    ->post($this->hostService->GetUrl('m').'/v0/inquiryBalance')->json();
+                    if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                        return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                    }
+        $response = $response['result'];
+        $response = $response['data'];
+        // dd($response);
+         return response()->json($response);
+        }
 }

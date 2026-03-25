@@ -28,8 +28,9 @@
             </form>
           </div>
         </div>
+        <p>@{{ isEditMode }}</p>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
+          <button type="button" class="btn btn-secondary" :disabled=!isActiveButton @click="closeModal">anjing </button>
           {{-- <button type="button" class="btn btn-primary" @click="inquiry">Lanjutkan</button> --}}
         </div>
       </div>

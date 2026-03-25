@@ -86,8 +86,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" @click="closeModal">Cancel</button>
-          <button type="button" class="btn btn-primary" @click="payment">Bayar</button>
+          <button type="button" class="btn btn-secondary" @click="closeModal" :disabled='!isActiveButton' >Cancel</button>
+          <button type="button" class="btn btn-primary" @click="payment" :disabled='!isActiveButton'>Bayar</button>
         </div>
       </div>
     </div>

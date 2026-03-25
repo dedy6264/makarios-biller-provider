@@ -16,7 +16,7 @@
                   <h6 class="mb-0">Clients</h6>
                 </div>
                 <div class="col-6 text-end">
-                  <a class="mb-0 btn bg-gradient-dark" href="javascript:;" @click="openModal" style="margin-right: 1rem"><i class=" fas fa-plus"></i>&nbsp;&nbsp;Add New </a>
+                  <a class="mb-0 btn bg-gradient-dark" href="javascript:;" v-if="balance!==0" style="margin-right: 1rem"><i class=" fas fa-plus"></i>&nbsp;&nbsp;Saldo : @{{$format.formatCurrency(balance)}} </a>
                 </div>
               </div>
             </div>
@@ -274,9 +274,10 @@
           let modal_pln_token = null;
           let modal_inquiry = null;
           let modalConfirm = null;
-          const isModalOpen = ref(true);
-          const isEditMode = ref(false);
+          // const isModalOpen = ref(true);
+          const isActiveButton = ref(false);
           const mainData=ref({});
+          const balance=ref(0);
           const modalShowed = ref(null);
           const statusInquiry = ref();
           const statusPayment = ref();
@@ -308,12 +309,15 @@
               }
             }
           );
-          const openModal = (value) => {
+          const openModal = (data) => {
+            console.log('open modal yaaaa');
+            isActiveButton.value=true;
+            console.log('open modal yaaaa', isActiveButton.value);
             formInquiry.value.customer_id="";
             formInquiry.value.product_code='';
             formInquiry.value.reference_number='';
             formInquiry.value.reference_number_merchant='';
-            switch (value) {
+            switch (data) {
               case 'pulsa_prabayar':
                 modalShowed.value = 'pulsa_prabayar';
                 modal_pulsa_prabayar.show();
@@ -327,6 +331,7 @@
             }
           };
           const closeModal = () => {
+            isActiveButton.value=false;
             modal_pulsa_prabayar.hide();
             modal_pln_token.hide();
             modal_inquiry.hide();
@@ -336,7 +341,7 @@
           };
           const getProductFromIDCust=()=>{
             nextTick(()=>{
-               axios.post('{{ route('mini_apps.getProductByCustID') }}', formInquiry.value)
+               axios.post('{{ route('mini_apps.get_product_by_cust_id') }}', formInquiry.value)
                   .then(response => {
                     console.log("Client created:", response.data);
                     mainData.value=response.data.data;
@@ -346,8 +351,18 @@
                   });
             })
           };
+          const getBalance=()=>{
+            nextTick(()=>{
+               axios.post('{{ route('mini_apps.get_balance') }}')
+                  .then(response => {
+                    balance.value=response.data.balance;
+                  })
+                  .catch(error => {
+                    console.error("Error :", error);
+                  });
+            })
+          };
           const statusTransaksi= () => {
-            console.log("masuk su::");
             switch (mainData.value.responseCode) {
               case "00":
                 icon.value.png='/assets/img/icons/success.gif';
@@ -368,12 +383,10 @@
                 icon.value.png='/assets/img/icons/failed.gif';
                 icon.value.desc='Transaksi Gagal';
                 break;
-            }    
-            console.log("::::",icon.value);        
+            }         
           }
           const funcInputFormInquiry=(idProduk)=>{
             mainData.value.forEach((item, index) => {
-              console.log(item, index)
               if (item.id==idProduk){
                 formInquiry.value.product_code=item.product_code;
                 formInquiry.value.reference_number=item.reference_number;
@@ -383,12 +396,11 @@
             inquiry();
           };
           const inquiry=()=>{
-            console.log("PAYLOAD:m ", formInquiry.value);
+            isActiveButton.value=false;
             nextTick(()=>{
                axios.post('{{ route('mini_apps.inquiry') }}', formInquiry.value)
                   .then(response => {
                     mainData.value=response.data;
-                    // console.log("Client created:", mainData.value.result.reference_number);
                     olahDataInquiry();
                   })
                   .catch(error => {
@@ -398,7 +410,7 @@
             })
           };
           const payment=()=>{
-            console.log("PAYLOAD:m ", formInquiry.value);
+            isActiveButton.value=false;
             nextTick(()=>{
                axios.post('{{ route('mini_apps.payment') }}', formInquiry.value)
                   .then(response => {
@@ -412,6 +424,7 @@
             })
           };
           const olahDataPayment=()=>{
+            isActiveButton.value=true;
             statusTransaksi();
             switch (mainData.value.responseCode) {
               case '00','02','03':
@@ -432,16 +445,14 @@
               default:
                 break;
             }
-            isEditMode.value = false;
             closeModal();
             //modal inquiry show
             modalShowed.value='modalConfirm';
             modalConfirm.show();
           };
           const olahDataInquiry=()=>{
+            isActiveButton.value=true;
             statusTransaksi();
-            console.log("mainData.value.result.transaction_total_amount::", mainData.value.result.transaction_total_amount);
-            console.log("mainData.value.result.product_price::", mainData.value.result.product_price);
             if(mainData.value.responseCode=='04'){
               //fill inquiry form
               formInquiry.value.reference_number=mainData.value.result.reference_number;
@@ -452,15 +463,12 @@
               formInquiry.value.product_code=mainData.value.result.product_code;
               formInquiry.value.customer_id=mainData.value.result.customer_id;
               formInquiry.value.date_time=mainData.value.result.updated_at;
-              // console.log("Maindata:m ", formInquiry.value);
               //modal all off
-              isEditMode.value = false;
               closeModal();
               //modal inquiry show
               modalShowed.value='modal_inquiry';
               modal_inquiry.show();
             }
-            console.log("mainData.value.result.transaction_total_amount::", formInquiry.value.total);
           };
 
           onMounted(() => {
@@ -468,12 +476,13 @@
             modal_pln_token = new bootstrap.Modal(document.getElementById('modalPlnToken'), options);
             modal_inquiry = new bootstrap.Modal(document.getElementById('modalInquiry'), options);
             modalConfirm = new bootstrap.Modal(document.getElementById('modalConfirm'), options);
+            getBalance();
             // modalConfirm.show();
             // refreshDataClient();
           });
           return { 
-            isModalOpen,
-            isEditMode,
+            balance,
+            isActiveButton,
             mainData,
             modalShowed,
             formInquiry,

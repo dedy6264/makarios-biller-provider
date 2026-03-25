@@ -12,5 +12,6 @@ Route::middleware(['auth','checkRole:ADMT,CLT'])->group(function () {
     Route::post('/mini_apps/inquiry', [MiniAppController::class, 'inquiry'])->name('mini_apps.inquiry');
     Route::post('/mini_apps/payment', [MiniAppController::class, 'payment'])->name('mini_apps.payment');
     Route::post('/mini_apps/advice', [MiniAppController::class, 'advice'])->name('mini_apps.advice');
-    Route::post('/mini_apps/getProductByCustID', [MiniAppController::class, 'getProductByCustID'])->name('mini_apps.getProductByCustID');
+    Route::post('/mini_apps/get_product_by_cust_id', [MiniAppController::class, 'get_product_by_cust_id'])->name('mini_apps.get_product_by_cust_id');
+    Route::post('/mini_apps/get_balance', [MiniAppController::class, 'get_balance'])->name('mini_apps.get_balance');
 });
