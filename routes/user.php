@@ -33,6 +33,5 @@ Route::middleware(['auth','checkRole:ADMT'])->group(function () {
         Route::post('/user_roles/getAll', [UserRoleController::class, 'getAll'])->name('user_roles.getAll');
         Route::post('/user_roles/update', [UserRoleController::class, 'update'])->name('user_roles.update');
         Route::post('/user_roles/destroy', [UserRoleController::class, 'destroy'])->name('user_roles.destroy');
-        
-        Route::get('/mini_app', [MiniAppController::class, 'index'])->name('mini_app.index');
+
 });

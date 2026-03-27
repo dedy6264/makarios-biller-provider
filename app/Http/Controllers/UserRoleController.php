@@ -21,6 +21,8 @@ class UserRoleController extends Controller
         $filter=[
             "id"=>0,
             "client_name"=>"",
+            "merchant_name"=>"",
+            "merchant_outlet_name"=>"",
         ];
         $payload=[
             "start"=>0,
@@ -39,8 +41,20 @@ class UserRoleController extends Controller
         }
         $response = $response['result'];
         $clients=$response['data'];
+        $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/getMerchant', $payload)->json();
+        if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+            return response()->json(['error' => 'Invalid API response format or data type'], 500);
+        }
+        $response = $response['result'];
+        $merchants=$response['data'];
+        $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/getMerchantOutlet', $payload)->json();
+        if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+            return response()->json(['error' => 'Invalid API response format or data type'], 500);
+        }
+        $response = $response['result'];
+        $merchant_outlets=$response['data'];
         // dd($clients);
-        return view('contents.user_roles.index', compact('users', 'roles','clients'));
+        return view('contents.user_roles.index', compact('users', 'roles','clients','merchant_outlets', 'merchants'));
     }
     public function getAll(){
         $data=UserRole::join('roles', 'user_roles.role_id', '=', 'roles.id')
@@ -82,7 +96,7 @@ class UserRoleController extends Controller
             'role_id'       => (int)$request->input('role_id'),
             'client_id'    => (int)$request->input('client_id'),
             'merchant_id'  => (int)$request->input('merchant_id'),
-            'outlet_id'    => (int)$request->input('outlet_id'),
+            'outlet_id'    => (int)$request->input('merchant_outlet_id'),
         ]);
 
         return redirect()->route('user_roles.index');
@@ -90,6 +104,7 @@ class UserRoleController extends Controller
 
     public function update(Request $request)
     {
+        // dd(request()->all());
         $request->validate([
             'user_id'       => 'required',
             'role_id'       => 'required',
@@ -103,7 +118,7 @@ class UserRoleController extends Controller
             'role_id'       => (int)$request->input('role_id'),
             'client_id'    => (int)$request->input('client_id'),
             'merchant_id'  => (int)$request->input('merchant_id'),
-            'outlet_id'    => (int)$request->input('outlet_id'),
+            'outlet_id'    => (int)$request->input('merchant_outlet_id'),
         ]);
         return redirect()->route('user_roles.index');
     }

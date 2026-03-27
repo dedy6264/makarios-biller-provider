@@ -42,6 +42,8 @@ class AuthenticatedSessionController extends Controller
             'role_code'=>$user->role_code,
             'name'=>$user->name,
             'client_id'=>$user->client_id,
+            'merchant_id'=>$user->merchant_id,
+            'outlet_id'=>$user->outlet_id,
         ]);
         return redirect()->intended(route('dashboard', absolute: false));
     }

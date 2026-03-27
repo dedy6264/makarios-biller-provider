@@ -101,7 +101,8 @@ class MiniAppController extends Controller
         return response()->json($response);
     }
     public function get_balance(){
-        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.A5vysuv6cqVWuxLz4VBn6loiaWbe5c-Am2dcTDO88hA')
+
+        $response = Http::withToken($this->hostService->GetToken(session('outlet_id')))
                     ->post($this->hostService->GetUrl('m').'/v0/inquiryBalance')->json();
                     if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                         return response()->json(['error' => 'Invalid API response format or data type'], 500);

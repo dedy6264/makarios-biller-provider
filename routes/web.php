@@ -11,6 +11,7 @@ Route::get('/dashboard', function () {
     session([
         'activeMenu'=>'Dashboard',
     ]);
+    // dd(session('role_code'));
     return view('layoutsviller.content');
 })->middleware(['auth', 'verified'])->name('dashboard');
 

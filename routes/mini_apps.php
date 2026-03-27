@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Product\MiniAppController;
 
 
-Route::middleware(['auth','checkRole:ADMT,CLT'])->group(function () {
+Route::middleware(['auth','checkRole:ADMT,OTL'])->group(function () {
     Route::get('/mini_apps', [MiniAppController::class, 'index'])->name('mini_apps.index');
     Route::post('/mini_apps/store', [MiniAppController::class, 'store'])->name('mini_apps.store');
     Route::post('/mini_apps/getAll', [MiniAppController::class, 'getAll'])->name('mini_apps.getAll');

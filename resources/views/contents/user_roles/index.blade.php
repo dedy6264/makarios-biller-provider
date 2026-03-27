@@ -72,6 +72,8 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">User Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Role Name</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Client Name</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Merchant Name</th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Outlet Name</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created At</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Updated At</th>
                     </tr>
@@ -170,7 +172,7 @@
                         {{-- <div class="col-lg-6"> --}}
                           <div class="mb-3">
                             <label for="user_id" class="form-label">User</label>
-                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select">
+                            <select name="user_id" id="user_id" v-model="form.user_id" class="form-select" :disabled='!isEditRole'>
                               <option value="" disabled>Select User</option>
                               <option v-for="user in users" :key="user.id" :value="user.id">
                                 @{{ user.name }}
@@ -179,19 +181,37 @@
                           </div>
                           <div class="mb-3">
                             <label for="role_id" class="form-label">Role</label>
-                            <select name="role_id" id="role_id" v-model="form.role_id" class="form-select" @click="onRoleChange">
+                            <select name="role_id" id="role_id" v-model="form.role_id" class="form-select" >
                               <option value="" disabled>Select Role</option>
                               <option v-for="role in roles" :key="role.id" :value="role.id">
                                 @{{ role.role_name }}
                               </option>
                             </select>
                           </div>
-                          <div class="mb-3" v-if="form.role_id != 1 ">
+                          <div class="mb-3" v-if="form.role_id == 2 ">
                             <label for="client_id" class="form-label">Client</label>
                             <select name="client_id" id="client_id" v-model="form.client_id" class="form-select">
                               <option value="" disabled>Select Role</option>
                               <option v-for="client in clients" :key="client.id" :value="client.id">
                                 @{{ client.client_name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="mb-3" v-if="form.role_id == 3 ">
+                            <label for="merchant_outlet_id" class="form-label">Merchant Outlet</label>
+                            <select name="merchant_outlet_id" id="merchant_outlet_id" v-model="form.merchant_outlet_id" class="form-select">
+                              <option value="" disabled>Select Role</option>
+                              <option v-for="merchant_outlet in merchant_outlets" :key="merchant_outlet.id" :value="merchant_outlet.id">
+                                @{{ merchant_outlet.merchant_outlet_name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="mb-3" v-if="form.role_id == 4 ">
+                            <label for="merchant_id" class="form-label">Merchant</label>
+                            <select name="merchant_id" id="merchant_id" v-model="form.merchant_id" class="form-select">
+                              <option value="" disabled>Select Role</option>
+                              <option v-for="merchant in merchants" :key="merchant.id" :value="merchant.id">
+                                @{{ merchant.merchant_name }}
                               </option>
                             </select>
                           </div>
@@ -232,8 +252,11 @@
           const users = ref(@json($users));
           const roles = ref(@json($roles));
           const clients = ref(@json($clients));
+          const merchant_outlets = ref(@json($merchant_outlets));
+          const merchants = ref(@json($merchants));
           const isModalOpen = ref(true);
           const isEditMode = ref(false);
+          const isEditRole = ref(true);
           const mainData=ref({});
           let myModal = null;
           const form = ref({
@@ -245,7 +268,7 @@
             role_id: 0,
             client_id: 0,
             merchant_id: 0,
-            outlet_id: 0
+            merchant_outlet_id: 0
           });
           const openModal = () => {
             myModal.show();
@@ -259,18 +282,12 @@
             form.value.role_id= 0;
             form.value.client_id= 0;
             form.value.merchant_id= 0;
-            form.value.outlet_id= 0;
+            form.value.merchant_outlet_id= 0;
             myModal.hide();
             isEditMode.value = false;
+            isEditRole.value = true;
           };
-          const onRoleChange = () => {
-              const selected = roles.value.find(r => r.id == form.value.role_id);
-              if (selected && form.value.role_id==1) {
-                  form.value.role_name = selected.role_name;
-                  form.value.role_code = selected.role_code;
-                  form.value.client_id=0;
-              }
-          };
+          
           const refreshData = () => {
             console.log(roles.value)
             const table = $('#tabeldata').DataTable();
@@ -307,6 +324,8 @@
                         { data: 'user_name' },
                         { data: 'role_name' },
                         { data: 'client_id' },
+                        { data: 'merchant_id' },
+                        { data: 'outlet_id' },
                         { data: 'updated_at' },
                         { data: 'created_at' }
                     ]
@@ -323,8 +342,9 @@
                   form.value.role_id= mainData.value[a].role_id;
                   form.value.client_id= mainData.value[a].client_id;
                   form.value.merchant_id= mainData.value[a].merchant_id;
-                  form.value.outlet_id= mainData.value[a].outlet_id;
+                  form.value.merchant_outlet_id= mainData.value[a].outlet_id;
                   isEditMode.value = true;
+                  isEditRole.value = false;
                   myModal.show();
                 }
               };
@@ -348,16 +368,48 @@
                 form.value.user_name= users.value[a].name;
               }
             };
-            for(let a=0;a<roles.value.length;a++){
-              if (roles.value[a].id==form.value.role_id){
-                form.value.role_name= roles.value[a].role_name;
-                form.value.role_code= roles.value[a].role_code;
-              }
-            };
-            for(let a=0;a<clients.value.length;a++){
-              if (clients.value[a].id==form.value.client_id){
-                form.value.client_name= clients.value[a].client_name;
-              }
+            switch (form.value.role_id) {
+                case 2:
+                  for(let a=0;a<clients.value.length;a++){
+                  if (clients.value[a].id==form.value.client_id){
+                    form.value.client_name= clients.value[a].client_name;
+                    form.value.merchant_outlet_id=0;
+                    form.value.merchant_outlet_name='';
+                    form.value.merchant_id=0;
+                    form.value.merchant_name='';
+                  }
+                };
+                  break;
+                case 3:
+                  for(let a=0;a<merchant_outlets.value.length;a++){
+                    if (merchant_outlets.value[a].id==form.value.merchant_outlet_id){
+                      form.value.merchant_outlet_name= merchant_outlets.value[a].merchant_outlet_name;
+                      form.value.client_name='';
+                      form.value.client_id=0;
+                      form.value.merchant_id=0;
+                      form.value.merchant_name='';
+                    }
+                  };
+                break;
+                case 4:
+                  for(let a=0;a<merchants.value.length;a++){
+                    if (merchants.value[a].id==form.value.merchant_id){
+                      form.value.merchant_name= merchants.value[a].merchant_name;
+                      form.value.client_name='';
+                      form.value.client_id=0;
+                      form.value.merchant_outlet_id=0;
+                      form.value.merchant_outlet_name='';
+                    }
+                  };
+                break;
+                default:
+                  form.value.client_name='';
+                  form.value.client_id=0;
+                  form.value.merchant_outlet_id=0;
+                  form.value.merchant_outlet_name='';
+                  form.value.merchant_id=0;
+                  form.value.merchant_name='';
+                  break;
             };
             nextTick(()=>{
                 // Create new role
@@ -373,25 +425,69 @@
                   });
             })
           };
+           watch(
+            () => form.value.role_id,
+            (value) => {
+              console.log("VALUE:: ", value);
+              for(let a=0;a<roles.value.length;a++){
+                if (roles.value[a].id==value){
+                  form.value.role_name= roles.value[a].role_name;
+                  form.value.role_code= roles.value[a].role_code;
+                }
+              };
+              console.log("FORM:: ", form.value);
+            }
+          );
           const updateUserRole=()=>{
             for(let a=0;a<users.value.length;a++){
               if (users.value[a].id==form.value.id){
                 form.value.user_name= users.value[a].name;
               }
             };
-            for(let a=0;a<roles.value.length;a++){
-              if (roles.value[a].id==form.value.role_id){
-                form.value.role_name= roles.value[a].role_name;
-                form.value.role_code= roles.value[a].role_code;
-              }
-            };
-             for(let a=0;a<clients.value.length;a++){
-              if (clients.value[a].id==form.value.client_id){
-                form.value.client_name= clients.value[a].client_name;
-              }
+            switch (form.value.role_id) {
+                case 2:
+                  for(let a=0;a<clients.value.length;a++){
+                  if (clients.value[a].id==form.value.client_id){
+                    form.value.client_name= clients.value[a].client_name;
+                    form.value.merchant_outlet_id=0;
+                    form.value.merchant_outlet_name='';
+                    form.value.merchant_id=0;
+                    form.value.merchant_name='';
+                  }
+                };
+                  break;
+                case 3:
+                  for(let a=0;a<merchant_outlets.value.length;a++){
+                    if (merchant_outlets.value[a].id==form.value.merchant_outlet_id){
+                      form.value.merchant_outlet_name= merchant_outlets.value[a].merchant_outlet_name;
+                      form.value.client_name='';
+                      form.value.client_id=0;
+                      form.value.merchant_id=0;
+                      form.value.merchant_name='';
+                    }
+                  };
+                break;
+                case 4:
+                  for(let a=0;a<merchants.value.length;a++){
+                    if (merchants.value[a].id==form.value.merchant_id){
+                      form.value.merchant_name= merchants.value[a].merchant_name;
+                      form.value.client_name='';
+                      form.value.client_id=0;
+                      form.value.merchant_outlet_id=0;
+                      form.value.merchant_outlet_name='';
+                    }
+                  };
+                break;
+                default:
+                  form.value.client_name='';
+                  form.value.client_id=0;
+                  form.value.merchant_outlet_id=0;
+                  form.value.merchant_outlet_name='';
+                  form.value.merchant_id=0;
+                  form.value.merchant_name='';
+                  break;
             };
             nextTick(()=>{
-                // Update existing role
                 axios.post('{{ route('user_roles.update') }}', form.value)
                   .then(response => {
                     isEditMode.value = false;
@@ -408,10 +504,22 @@
             refreshData();
           });
           return { 
-watch,onRoleChange,
-            refreshData,isModalOpen,
+            watch,
+            isEditRole,
+            refreshData,
+            isModalOpen,
             openModal,
-            closeModal,updateModal,form,updateUserRole,storeUserRole,isEditMode,users,roles,clients
+            closeModal,
+            updateModal,
+            form,
+            updateUserRole,
+            storeUserRole,
+            isEditMode,
+            users,
+            roles,
+            clients,
+            merchant_outlets,
+            merchants
           };
         }
       }).mount('#app');

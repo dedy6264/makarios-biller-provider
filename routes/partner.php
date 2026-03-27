@@ -16,6 +16,8 @@ use App\Http\Controllers\Product\ProviderController;
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Account\SavingAccountController;
 use App\Http\Controllers\Account\SavingTransactionController;
+use App\Http\Controllers\Product\MiniAppController;
+
 
 Route::middleware(['auth','checkRole:ADMT'])->group(function () {
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
@@ -52,4 +54,6 @@ Route::middleware(['auth','checkRole:ADMT,CLT'])->group(function () {
     Route::post('/merchants/getAll', [MerchantController::class, 'getAll'])->name('merchants.getAll');
     Route::post('/merchants/update', [MerchantController::class, 'update'])->name('merchants.update');
     Route::post('/merchants/destroy', [MerchantController::class, 'destroy'])->name('merchants.destroy');
+
+    
 });

@@ -24,10 +24,11 @@ class CheckRoleSession
             if ($request->ajax()) {
                 return response()->json(['message' => 'Unauthorized.'], 403);
             }
-
+            
             // Jika akses biasa, redirect ke dashboard dengan pesan error
             return redirect()->route('dashboard')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
         }
+        
         return $next($request);
     }
 }
