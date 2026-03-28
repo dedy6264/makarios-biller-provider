@@ -30,8 +30,7 @@
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
-{{-- @dd(session('role_code')) --}}
-      @if(session('role_id')==1)
+        @if(session('role_id')==1)
         <li class="nav-item">
           <a class="nav-link {{Route::is('users.index') ? 'active':''}}" href="{{ route('users.index') }}">
             <div class="text-center bg-white shadow icon icon-shape icon-sm border-radius-md me-2 d-flex align-items-center justify-content-center">
@@ -93,7 +92,8 @@
             <span class="nav-link-text ms-1">User Role</span>
           </a>
         </li>
-      @endif
+        @endif
+        @if(session('role_id')!==1 && session('client_id')!==0)
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownPartner" class="nav-link  {{Route::is(['clients.index', 'merchants.index','groups.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownPartner" role="button" aria-expanded="{{Route::is(['clients.index', 'merchants.index','groups.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -115,14 +115,14 @@
           </a>
           <div class="collapse {{Route::is(['clients.index', 'merchants.index','groups.index']) ?  'show':''}}" id="dropdownPartner" style="">
             <ul class="nav ms-4 ps-3">
-            @if(session('client_id')==0)
+              @if(session('client_id')==0)
               <li class="nav-item {{Route::is('clients.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('clients.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
                   <span class="sidenav-normal"> Client </span>
                 </a>
               </li>
-            @endif
+              @endif
               <li class="nav-item {{Route::is('groups.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('groups.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
@@ -138,6 +138,8 @@
             </ul>
           </div>
         </li>
+        @endif
+        @if(session('role_id')!==1 && session('client_id')!==0)
          <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownProduct" class="nav-link  {{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownProduct" role="button" aria-expanded="{{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -159,13 +161,14 @@
           </a>
           <div class="collapse {{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ?  'show':''}}" id="dropdownProduct" style="">
             <ul class="nav ms-4 ps-3">
-               <li class="nav-item {{Route::is('product_types.index') ?  'active':''}}">
+              @if(session('client_id')==0)
+              <li class="nav-item {{Route::is('product_types.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('product_types.index') }}">
                   <span class="sidenav-mini-icon"> R </span>
                   <span class="sidenav-normal"> Product Type </span>
                 </a>
               </li>
-               <li class="nav-item {{Route::is('product_categories.index') ?  'active':''}}">
+              <li class="nav-item {{Route::is('product_categories.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('product_categories.index') }}">
                   <span class="sidenav-mini-icon"> R </span>
                   <span class="sidenav-normal"> Product Category </span>
@@ -177,13 +180,12 @@
                   <span class="sidenav-normal"> Product Reference </span>
                 </a>
               </li>
-               <li class="nav-item {{Route::is('products.index') ?  'active':''}}">
+              <li class="nav-item {{Route::is('products.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('products.index') }}">
                   <span class="sidenav-mini-icon"> R </span>
                   <span class="sidenav-normal"> Product </span>
                 </a>
               </li>
-              @if(session('client_id')==0)
               <li class="nav-item {{Route::is('providers.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('providers.index') }}">
                   <span class="sidenav-mini-icon"> R </span>
@@ -217,8 +219,9 @@
               </li>
             </ul>
           </div>
+        @endif
         </li>
-        @if(session('client_id')==0)
+        @if(session('role_id')!==1 && session('client_id')!==0)
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownAccount" class="nav-link  {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownAccount" role="button" aria-expanded="{{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -240,6 +243,7 @@
           </a>
           <div class="collapse {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  'show':''}}" id="dropdownAccount" style="">
             <ul class="nav ms-4 ps-3">
+              @if(session('client_id')==0)
               <li class="nav-item {{Route::is('accounts.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('accounts.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
@@ -252,6 +256,7 @@
                   <span class="sidenav-normal"> Saving </span>
                 </a>
               </li>
+              @endif
               <li class="nav-item {{Route::is('saving_transactions.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('saving_transactions.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
@@ -263,7 +268,7 @@
         </li>
         @endif
         <li class="mt-3 nav-item">
-          <h6 class="text-xs ps-4 ms-2 text-uppercase font-weight-bolder opacity-6">Account pages</h6>
+          <h6 class="text-xs ps-4 ms-2 text-uppercase font-weight-bolder opacity-6">Sales pages</h6>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="{{ route('mini_apps.index') }}">

@@ -22,7 +22,7 @@ class MiniAppController extends Controller
         $payload=[
             "subscriberId"=>request()->customer_id,
         ];
-        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.A5vysuv6cqVWuxLz4VBn6loiaWbe5c-Am2dcTDO88hA')
+        $response = Http::withToken($this->hostService->GetToken())
                     ->post($this->hostService->GetUrl('m').'/v1/utils/getproductByReference', $payload)->json();
                     if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                         return response()->json(['error' => 'Invalid API response format or data type'], 500);
@@ -75,8 +75,8 @@ class MiniAppController extends Controller
             "customer_id"=>$request->customer_id,
             "periode"=>"",
         ];
-        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.A5vysuv6cqVWuxLz4VBn6loiaWbe5c-Am2dcTDO88hA')
-                ->post($this->hostService->GetUrl('m').'/v1/inquiry', $payload)->json();
+        $response = Http::withToken($this->hostService->GetToken())
+                ->post($this->hostService->GetUrl('m').'/v0/inquiry', $payload)->json();
         // dd($response);
         
         if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
@@ -90,8 +90,8 @@ class MiniAppController extends Controller
             "reference_number_merchant"=>$request->reference_number_merchant,
             "reference_number"=>$request->reference_number,
         ];
-        $response = Http::withToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.A5vysuv6cqVWuxLz4VBn6loiaWbe5c-Am2dcTDO88hA')
-                ->post($this->hostService->GetUrl('m').'/v1/payment', $payload)->json();
+        $response = Http::withToken($this->hostService->GetToken())
+                ->post($this->hostService->GetUrl('m').'/v0/payment', $payload)->json();
         // dd($response);
         
         if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
@@ -102,7 +102,7 @@ class MiniAppController extends Controller
     }
     public function get_balance(){
 
-        $response = Http::withToken($this->hostService->GetToken(session('outlet_id')))
+        $response = Http::withToken($this->hostService->GetToken())
                     ->post($this->hostService->GetUrl('m').'/v0/inquiryBalance')->json();
                     if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                         return response()->json(['error' => 'Invalid API response format or data type'], 500);

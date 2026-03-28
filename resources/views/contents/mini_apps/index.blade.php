@@ -304,15 +304,12 @@
             () => formInquiry.value.customer_id,
             (value) => {
               if (value.length == 5) {
-              console.log("hit");
                  getProductFromIDCust();
               }
             }
           );
           const openModal = (data) => {
-            console.log('open modal yaaaa');
             isActiveButton.value=true;
-            console.log('open modal yaaaa', isActiveButton.value);
             formInquiry.value.customer_id="";
             formInquiry.value.product_code='';
             formInquiry.value.reference_number='';
@@ -343,7 +340,6 @@
             nextTick(()=>{
                axios.post('{{ route('mini_apps.get_product_by_cust_id') }}', formInquiry.value)
                   .then(response => {
-                    console.log("Client created:", response.data);
                     mainData.value=response.data.data;
                   })
                   .catch(error => {
@@ -451,7 +447,6 @@
             modalConfirm.show();
           };
           const olahDataInquiry=()=>{
-            isActiveButton.value=true;
             statusTransaksi();
             if(mainData.value.responseCode=='04'){
               //fill inquiry form
@@ -466,6 +461,7 @@
               //modal all off
               closeModal();
               //modal inquiry show
+              isActiveButton.value=true;
               modalShowed.value='modal_inquiry';
               modal_inquiry.show();
             }
