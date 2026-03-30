@@ -308,6 +308,8 @@
                             return json.data;           // kembalikan ke DataTable
                         },
                     },
+                    scrollX: true,
+                    scrollY: 200,
                     processing: true,
                     serverSide: false,
                     autoWidth: true,

@@ -376,6 +376,8 @@
                     processing: true,
                     serverSide: false,
                     autoWidth: true,
+                    scrollX: true,
+                    scrollY: 200,
                     columns: [
                         { data: 'id' },
                         { data: 'id',render:function(data,type){

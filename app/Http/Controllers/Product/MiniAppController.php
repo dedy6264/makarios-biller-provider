@@ -111,5 +111,36 @@ class MiniAppController extends Controller
         $response = $response['data'];
         // dd($response);
          return response()->json($response);
+    }
+    public function get_transactions(){
+        $filter=[
+            "id"=>0,
+            "segment_name"=>"",
+        ];
+        $payload=[
+            "start"=>0,
+            "length"=>10,
+            "columns"=>"",
+            "search"=>"",
+            "order"=>"id",
+            "sort"=>"desc",
+            "start_date"=>now(),
+            "end_date"=>now(),
+            "filter"=>$filter,
+        ];
+        $response = Http::withToken($this->hostService->GetToken())->post($this->hostService->GetUrl('m').'/v0/history', $payload)->json();
+        if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+            return response()->json(['error' => 'Invalid API response format or data type'], 500);
         }
+        $response = $response['result'];
+        // $clients=$response['data'];
+
+        $dt=[
+            "draw"=> 1,
+            "recordsTotal"=> $response['records_total'],
+            "recordsFiltered"=> $response['records_filtered'],
+            "data"=> $response['data']?? [],
+        ];
+        return response()->json($dt);
+    }
 }

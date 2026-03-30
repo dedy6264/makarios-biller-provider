@@ -14,4 +14,5 @@ Route::middleware(['auth','checkRole:ADMT,OTL'])->group(function () {
     Route::post('/mini_apps/advice', [MiniAppController::class, 'advice'])->name('mini_apps.advice');
     Route::post('/mini_apps/get_product_by_cust_id', [MiniAppController::class, 'get_product_by_cust_id'])->name('mini_apps.get_product_by_cust_id');
     Route::post('/mini_apps/get_balance', [MiniAppController::class, 'get_balance'])->name('mini_apps.get_balance');
+    Route::post('/mini_apps/get_transactions', [MiniAppController::class, 'get_transactions'])->name('mini_apps.get_transactions');
 });

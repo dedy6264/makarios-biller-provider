@@ -144,45 +144,11 @@
                     {{-- <h5 class="mb-0 font-weight-bolder"> $53,000 <span class="text-sm text-success font-weight-bolder">+55%</span></h5> --}}
                   </div>
                 </div>
-               
-                {{-- <div class="col-lg-6 col-7">
-                  <h6>Clients</h6>
-                </div>
-                <div class="my-auto col-lg-6 col-5 text-end">
-                  <div class="dropdown float-lg-end pe-4">
-                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-ellipsis-v text-secondary"></i>
-                    </a>
-                    <ul class="px-2 py-3 dropdown-menu ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                    </ul>
-                  </div>
-                </div> --}}
               </div>
             </div>
-            {{-- <div class="px-0 pb-2 card-body">
-              <div class="table-responsive">
-                <table id="tabeldata" class="mdl-data-table">
-                  <thead>
-                    <tr >
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Client Name</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created At</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Updated At</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    
-                  </tbody>
-                </table>
-              </div>
-            </div> --}}
           </div>
         </div>
-        <div class="col-lg-4 col-md-6">
+        <div class="mb-4 col-lg-4 col-md-6 ">
           <div class="card h-100">
             <div class="pb-0 card-header">
               <h6>Orders overview</h6>
@@ -192,14 +158,22 @@
               </p>
             </div>
             <div class="p-3 card-body">
-              <div class="timeline timeline-one-side">
-                <div class="mb-3 timeline-block">
+              <div class="timeline timeline-one-side" v-if="mainDataTransactions">
+                <div class="mb-3 timeline-block" v-for=" item in mainDataTransactions">
                   <span class="timeline-step">
-                    <i class="ni ni-bell-55 text-success text-gradient"></i>
+                    <i class="ni ni-bell-55 text-gradient" :class="statusTrx(item.status_code)"></i>
                   </span>
-                  <div class="timeline-content">
-                    <h6 class="mb-0 text-sm text-dark font-weight-bold">$2400, Design changes</h6>
-                    <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">22 DEC 7:20 PM</p>
+                  <div class="timeline-content" >
+                    <div class="row">
+                      <div class="col-6">
+                        <h6 class="mb-0 text-sm text-dark font-weight-bold">@{{ item.product_name }}</h6>
+                        <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">@{{$format.formatTanggal(item.updated_at)}}</p>
+                      </div>
+                      <div class="col-6" style="text-align: right">
+                        <h6 class="mb-0 text-sm text-right text-dark font-weight-bold">@{{item.customer_id}}</h6>
+                        <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">@{{ item.reference_number}}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="mb-3 timeline-block">
@@ -207,8 +181,16 @@
                     <i class="ni ni-html5 text-danger text-gradient"></i>
                   </span>
                   <div class="timeline-content">
-                    <h6 class="mb-0 text-sm text-dark font-weight-bold">New order #1832412</h6>
-                    <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">21 DEC 11 PM</p>
+                    <div class="row" >
+                      <div class="col-6">
+                        <h6 class="mb-0 text-sm text-dark font-weight-bold">Pulsa Telkomsel 5K</h6>
+                        <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">22 DEC 7:20 PM</p>
+                      </div>
+                      <div class="col-6" style="text-align: right">
+                        <h6 class="mb-0 text-sm text-right text-dark font-weight-bold">082137789378</h6>
+                        <p class="mt-1 mb-0 text-xs text-secondary font-weight-bold">DIV-260312-09823</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="mb-3 timeline-block">
@@ -277,6 +259,7 @@
           // const isModalOpen = ref(true);
           const isActiveButton = ref(false);
           const mainData=ref({});
+          const mainDataTransactions=ref({});
           const balance=ref(0);
           const modalShowed = ref(null);
           const statusInquiry = ref();
@@ -466,7 +449,31 @@
               modal_inquiry.show();
             }
           };
-
+          const refreshDataTransaction = () => {
+           nextTick(()=>{
+               axios.post('{{ route('mini_apps.get_transactions') }}', formInquiry.value)
+                  .then(response => {
+                    // console.log(response.data);
+                    mainDataTransactions.value=response.data.data;
+                  })
+                  .catch(error => {
+                    console.error("Error :", error);
+                  });
+            })
+          };
+          const statusTrx=(val)=>{
+            switch (val) {
+              case '00':
+              return 'text-success';
+                break;
+              case '02':
+                return 'text-warning';
+                break
+              default:
+                return 'text-danger'
+                break;
+            }
+          }
           onMounted(() => {
             modal_pulsa_prabayar = new bootstrap.Modal(document.getElementById('modalPulsaPrabayar'), options);
             modal_pln_token = new bootstrap.Modal(document.getElementById('modalPlnToken'), options);
@@ -475,8 +482,11 @@
             getBalance();
             // modalConfirm.show();
             // refreshDataClient();
+            refreshDataTransaction();
           });
           return { 
+            statusTrx,
+            refreshDataTransaction,
             balance,
             isActiveButton,
             mainData,
@@ -490,6 +500,7 @@
             payment,
             icon,
             statusTransaksi,
+            mainDataTransactions,
           };
         }
       })
