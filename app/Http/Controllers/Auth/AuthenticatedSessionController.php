@@ -45,6 +45,9 @@ class AuthenticatedSessionController extends Controller
             'merchant_id'=>$user->merchant_id,
             'outlet_id'=>$user->outlet_id,
         ]);
+        if(session('role_id')==3){
+            return redirect()->route('mini_apps.index');
+        }
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
