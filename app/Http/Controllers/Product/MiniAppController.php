@@ -109,8 +109,7 @@ class MiniAppController extends Controller
                     }
         $response = $response['result'];
         $response = $response['data'];
-        // dd($response);
-         return response()->json($response);
+        return response()->json($response);
     }
     public function get_transactions(){
         $filter=[

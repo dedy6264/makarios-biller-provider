@@ -19,4 +19,5 @@ class UserRole extends Model
         'merchant_id',
         'outlet_id',
     ];
+
 }

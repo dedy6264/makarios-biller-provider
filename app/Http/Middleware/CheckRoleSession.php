@@ -28,7 +28,9 @@ class CheckRoleSession
             // Jika akses biasa, redirect ke dashboard dengan pesan error
             return redirect()->route('dashboard')->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
         }
-        
+        if(session('role_id')==4){
+            return redirect()->route('mini_apps.index');
+        }
         return $next($request);
     }
 }

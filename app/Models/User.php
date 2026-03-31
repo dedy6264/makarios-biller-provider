@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\{UserRole};
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -45,4 +47,29 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the userroles associated with the user.
+     */
+   public static function userDelete($id)
+    {
+        DB::beginTransaction();
+        try {
+            UserRole::where('user_id', $id)->delete();
+            User::where('id', $id)->delete();
+        
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        
+            Log::error('Failed delete user', [
+                'user_id' => $id,
+                'error' => $th->getMessage()
+            ]);
+        
+            return false;
+        }
+    }
+
 }

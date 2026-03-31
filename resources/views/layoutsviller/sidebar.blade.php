@@ -93,7 +93,7 @@
           </a>
         </li>
         @endif
-        @if(session('role_id')!==1 && session('client_id')!==0)
+        @if(session('role_id')==1 || session('role_id')==2)
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownPartner" class="nav-link  {{Route::is(['clients.index', 'merchants.index','groups.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownPartner" role="button" aria-expanded="{{Route::is(['clients.index', 'merchants.index','groups.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -115,7 +115,7 @@
           </a>
           <div class="collapse {{Route::is(['clients.index', 'merchants.index','groups.index']) ?  'show':''}}" id="dropdownPartner" style="">
             <ul class="nav ms-4 ps-3">
-              @if(session('client_id')==0)
+              @if(session('role_id')==1)
               <li class="nav-item {{Route::is('clients.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('clients.index') }}">
                   <span class="sidenav-mini-icon"> O </span>
@@ -139,7 +139,7 @@
           </div>
         </li>
         @endif
-        @if(session('role_id')!==1 && session('client_id')!==0)
+        @if(session('role_id')==1 || session('role_id')==2)
          <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownProduct" class="nav-link  {{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownProduct" role="button" aria-expanded="{{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -161,7 +161,7 @@
           </a>
           <div class="collapse {{Route::is(['segments.index', 'product_segments.index','products.index','product_types.index','product_categories.index','product_references.index','providers.index','product_providers.index','transactions.index']) ?  'show':''}}" id="dropdownProduct" style="">
             <ul class="nav ms-4 ps-3">
-              @if(session('client_id')==0)
+              @if(session('role_id')==1)
               <li class="nav-item {{Route::is('product_types.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('product_types.index') }}">
                   <span class="sidenav-mini-icon"> R </span>
@@ -221,7 +221,7 @@
           </div>
         @endif
         </li>
-        @if(session('role_id')!==1 && session('client_id')!==0)
+        @if(session('role_id')==1 || session('client_id')==2)
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#dropdownAccount" class="nav-link  {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ? 'active collapsed' : ''}}" aria-controls="dropdownAccount" role="button" aria-expanded="{{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  false:true}}">
             <div class="text-center bg-white shadow-sm icon icon-sm border-radius-md d-flex align-items-center justify-content-center me-2">
@@ -243,7 +243,7 @@
           </a>
           <div class="collapse {{Route::is(['accounts.index', 'savings.index','saving_transactions.index']) ?  'show':''}}" id="dropdownAccount" style="">
             <ul class="nav ms-4 ps-3">
-              @if(session('client_id')==0)
+              @if(session('role_id')==1)
               <li class="nav-item {{Route::is('accounts.index') ?  'active':''}}">
                 <a class="nav-link " href="{{ route('accounts.index') }}">
                   <span class="sidenav-mini-icon"> O </span>

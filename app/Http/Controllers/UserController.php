@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         session(['activeMenu'=>'User']);
         return view('contents.users.index');
     }
@@ -46,8 +45,7 @@ class UserController extends Controller
             return Redirect::route('users.index')->with('status', 'user-creation-failed');
         }
     }
-     public function update(Request $request)
-    {
+     public function update(Request $request){
         try {
             if (isset($request->password)){
                 $request->validate([
@@ -76,13 +74,14 @@ class UserController extends Controller
             return Redirect::route('users.index')->with('status', 'profile-update-failed');
         }
     }
-     public function destroy(Request $request)
-    {
-        $user = User::findOrFail($request->id);
-        if($user->id === auth()->user()->id){
-            return Redirect::route('users.index')->with('status', 'cannot-delete-self');
+     public function destroy(Request $request){
+        $deleted = User::userDelete($request->id);
+        if ($deleted) {
+            return Redirect::route('users.index')
+                ->with('status', 'profile-deleted');
         }
-        $user->delete();
-        return Redirect::route('users.index')->with('status', 'profile-deleted');
+
+        return Redirect::route('users.index')
+            ->with('status', 'profile-deletion-failed');
+        }
     }
-}
