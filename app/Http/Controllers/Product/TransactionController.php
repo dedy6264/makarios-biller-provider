@@ -26,10 +26,10 @@ class TransactionController extends Controller
         ];
         $payload=[
             "start"=>0,
-            "length"=>1000,
+            "length"=>100,
             "columns"=>"",
             "search"=>"",
-            "order"=>"id",
+            "order"=>"updated_at",
             "sort"=>"desc",
             "start_date"=>"",
             "end_date"=>"",

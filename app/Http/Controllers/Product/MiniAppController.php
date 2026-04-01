@@ -121,7 +121,7 @@ class MiniAppController extends Controller
             "length"=>10,
             "columns"=>"",
             "search"=>"",
-            "order"=>"id",
+            "order"=>"updated_at",
             "sort"=>"desc",
             "start_date"=>now(),
             "end_date"=>now(),
