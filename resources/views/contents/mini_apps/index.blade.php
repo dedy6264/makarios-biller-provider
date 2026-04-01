@@ -161,7 +161,7 @@
               <div class="timeline timeline-one-side" v-if="mainDataTransactions">
                 <div class="mb-3 timeline-block" v-for=" item in mainDataTransactions">
                   <span class="timeline-step">
-                    <i class="ni ni-bell-55 text-gradient" :class="statusTrx(item.status_code)"></i>
+                    <i class="ni text-gradient" :class="statusTrx(item.status_code)"></i>
                   </span>
                   <div class="timeline-content" >
                     <div class="row">
