@@ -464,13 +464,13 @@
           const statusTrx=(val)=>{
             switch (val) {
               case '00':
-              return 'text-success';
+              return 'text-success ni-check-bold';
                 break;
               case '02':
-                return 'text-warning';
+                return 'text-warning ni-watch-time';
                 break
               default:
-                return 'text-danger'
+                return 'text-danger ni-ambulance'
                 break;
             }
           }
