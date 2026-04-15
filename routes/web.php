@@ -26,3 +26,4 @@ require __DIR__.'/user.php';
 require __DIR__.'/product.php';
 require __DIR__.'/partner.php';
 require __DIR__.'/mini_apps.php';
+require __DIR__.'/msa.php';

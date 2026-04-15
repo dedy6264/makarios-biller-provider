@@ -141,7 +141,7 @@ class ProductSegmentController extends Controller
         ];
         $payload=[
             "start"=>0,
-            "length"=>0,
+            "length"=>100,
             "columns"=>"",
             "search"=>"",
             "order"=>"id",

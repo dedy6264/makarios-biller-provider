@@ -1,8 +1,6 @@
 
 window.format = {
-    cekasu() {
-        return `asuuuuuu`
-    },
+
     formatTanggal(isoString) {
         const date = new Date(isoString)
         const optionsDate = {
