@@ -27,7 +27,7 @@ class MsaController extends Controller
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signin', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 // back to login with alert
-                return redirect()->back()->withInput()->with('error', $response['message'] ?? 'Login failed. Please try again.');
+                return redirect()->back()->withInput()->with('error', $response['message'] ?? 'Wrong user or password, please try again');
             }
             $redirect="/msa/home";
             $origin="signIn";
