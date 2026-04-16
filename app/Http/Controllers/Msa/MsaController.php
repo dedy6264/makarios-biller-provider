@@ -26,10 +26,8 @@ class MsaController extends Controller
             ];
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signin', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
-                if($response['message']=="invalid or expired jwt"){
-                    return response()->json(['error'=>"invalid or expired jwt"],401);
-                }
-                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                // back to login with alert
+                return redirect()->back()->withInput()->with('error', $response['message'] ?? 'Login failed. Please try again.');
             }
             $redirect="/msa/home";
             $origin="signIn";
@@ -73,6 +71,7 @@ class MsaController extends Controller
                 "phone" => $validatedData['phone'],
                 "address" => $validatedData['address'],
             ];
+            dd($payload);
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signup', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 if($response['message']=="invalid or expired jwt"){

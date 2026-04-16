@@ -111,6 +111,13 @@
                 @csrf
                 <div class="space-y-6">
                     <div class="group">
+                        {{-- after login and failed, show alert or notif --}}
+                        @if(session('error'))
+                        <div
+                            class="px-4 py-3 mb-4 text-sm rounded-xl bg-error-container text-on-error-container font-label">
+                            {{ session('error') }}
+                        </div>
+                        @endif
                         <label
                             class="block font-label text-[10px] uppercase tracking-[0.1em] text-on-surface-variant mb-2 ml-1">Email
                             Address</label>
