@@ -4,10 +4,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <title>Security - Enter PIN</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap"
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap"
         rel="stylesheet" />
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
@@ -17,80 +18,86 @@
         rel="stylesheet" />
     <script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-background": "#181c20",
-                        "on-surface": "#181c20",
-                        "on-error-container": "#93000a",
-                        "on-tertiary-fixed": "#3c0800",
-                        "tertiary-fixed": "#ffdbd2",
-                        "primary-fixed": "#dde1ff",
-                        "surface-tint": "#004ced",
-                        "tertiary-container": "#bf3003",
-                        "error-container": "#ffdad6",
-                        "on-tertiary-container": "#ffddd5",
-                        "surface-container-highest": "#e0e2e7",
-                        "tertiary": "#952200",
-                        "background": "#f7f9fe",
-                        "surface-container": "#eceef3",
-                        "primary-container": "#0052ff",
-                        "surface-container-low": "#f1f4f9",
-                        "on-secondary": "#ffffff",
-                        "primary-fixed-dim": "#b7c4ff",
-                        "on-surface-variant": "#434656",
-                        "outline": "#737688",
-                        "on-primary-fixed-variant": "#0038b6",
-                        "inverse-on-surface": "#eff1f6",
-                        "secondary-container": "#95aafe",
-                        "on-primary-container": "#dfe3ff",
-                        "on-primary-fixed": "#001452",
-                        "on-secondary-fixed": "#001452",
-                        "inverse-primary": "#b7c4ff",
-                        "secondary": "#4459a8",
-                        "on-secondary-fixed-variant": "#2b418f",
-                        "on-tertiary-fixed-variant": "#891e00",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-high": "#e6e8ed",
-                        "surface-variant": "#e0e2e7",
-                        "on-error": "#ffffff",
-                        "secondary-fixed-dim": "#b7c4ff",
-                        "on-primary": "#ffffff",
-                        "inverse-surface": "#2d3135",
-                        "surface-bright": "#f7f9fe",
-                        "surface": "#f7f9fe",
-                        "surface-dim": "#d8dadf",
-                        "primary": "#003ec7",
-                        "secondary-fixed": "#dde1ff",
-                        "error": "#ba1a1a",
-                        "on-secondary-container": "#253b89",
-                        "outline-variant": "#c3c5d9",
-                        "on-tertiary": "#ffffff",
-                        "tertiary-fixed-dim": "#ffb4a1"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
-                    }
-                },
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#f7f9fe",
+                    "on-tertiary": "#ffffff",
+                    "on-surface": "#181c20",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#3c0800",
+                    "on-error-container": "#93000a",
+                    "secondary": "#4459a8",
+                    "surface-variant": "#e0e2e7",
+                    "outline-variant": "#c3c5d9",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed-dim": "#b7c4ff",
+                    "surface-container-highest": "#e0e2e7",
+                    "tertiary-fixed": "#ffdbd2",
+                    "primary": "#003ec7",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#0038b6",
+                    "primary-fixed-dim": "#b7c4ff",
+                    "secondary-container": "#95aafe",
+                    "on-secondary-fixed-variant": "#2b418f",
+                    "on-background": "#181c20",
+                    "background": "#f7f9fe",
+                    "surface-container": "#eceef3",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#dde1ff",
+                    "outline": "#737688",
+                    "surface-tint": "#004ced",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#bf3003",
+                    "inverse-on-surface": "#eff1f6",
+                    "tertiary-fixed-dim": "#ffb4a1",
+                    "surface-bright": "#f7f9fe",
+                    "on-primary-fixed": "#001452",
+                    "on-secondary-fixed": "#001452",
+                    "on-surface-variant": "#434656",
+                    "surface-dim": "#d8dadf",
+                    "surface-container-high": "#e6e8ed",
+                    "primary-container": "#0052ff",
+                    "surface-container-low": "#f1f4f9",
+                    "secondary-fixed": "#dde1ff",
+                    "on-tertiary-container": "#ffddd5",
+                    "on-primary-container": "#dfe3ff",
+                    "inverse-surface": "#2d3135",
+                    "on-secondary-container": "#253b89",
+                    "tertiary": "#952200",
+                    "on-tertiary-fixed-variant": "#891e00",
+                    "inverse-primary": "#b7c4ff"
             },
-        }
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
     </script>
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        .receipt-cut {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 95% 100%, 90% 98%, 85% 100%, 80% 98%, 75% 100%, 70% 98%, 65% 100%, 60% 98%, 55% 100%, 50% 98%, 45% 100%, 40% 98%, 35% 100%, 30% 98%, 25% 100%, 20% 98%, 15% 100%, 10% 98%, 5% 100%, 0% 98%);
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Manrope', sans-serif;
         }
     </style>
     <style>
@@ -100,147 +107,78 @@
     </style>
 </head>
 
-<body class="bg-slate-900/50 font-body text-on-surface">
-    <!-- Modal Backdrop Overlay (Simulated for Mobile Focus) -->
-    <div class="fixed inset-0 flex items-end sm:items-center justify-center p-0 sm:p-6 z-[60]">
-        <!-- Modal Content Container -->
-        <div
-            class="w-full max-w-md bg-surface-container-low rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0px_12px_32px_rgba(0,62,199,0.06)] overflow-hidden flex flex-col relative max-h-[839px]">
-            <!-- Handle for Mobile Bottom Sheet feel -->
-            <div class="w-12 h-1.5 bg-outline-variant/30 rounded-full mx-auto mt-4 sm:hidden"></div>
-            <!-- Header Section with Success Icon -->
-            <div class="flex flex-col items-center px-8 pt-8 pb-4">
-                <div
-                    class="flex items-center justify-center w-20 h-20 mb-6 rounded-full bg-emerald-50 ring-8 ring-emerald-50/50">
-                    <span class="text-5xl material-symbols-outlined text-emerald-500"
-                        style="font-variation-settings: 'FILL' 1;">check_circle</span>
-                </div>
-                <h1 class="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Transaction Successful
-                </h1>
-                <p class="mt-1 text-sm font-label text-on-surface-variant">Your payment has been processed</p>
+<body class="flex flex-col items-center min-h-screen bg-surface text-on-surface">
+    <!-- TopAppBar -->
+    <header
+        class="fixed top-0 w-full bg-[#f7f9fe] dark:bg-slate-950 flex justify-between items-center px-6 h-16 w-full z-50">
+        <div class="flex items-center gap-4">
+            <span class="material-symbols-outlined text-[#0052FF] cursor-pointer active:scale-95 duration-150"
+                data-icon="arrow_back">arrow_back</span>
+        </div>
+        <h1 class="font-manrope font-bold text-lg text-[#181c20] dark:text-white">Security</h1>
+        <div class="w-6"></div> <!-- Spacer for centering -->
+    </header>
+    <main class="flex flex-col items-center flex-1 w-full max-w-md px-8 pt-24 pb-12">
+        <!-- Brand/Identity Lockup -->
+        <div class="mb-10 text-center">
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-primary-container/10 rounded-2xl">
+                <span class="text-4xl material-symbols-outlined text-primary-container" data-icon="lock"
+                    style="font-variation-settings: 'FILL' 1;">lock</span>
             </div>
-            <!-- Receipt Card Section -->
-            <div class="px-6 pb-8">
-                <div class="p-6 shadow-sm bg-surface-container-lowest receipt-cut rounded-2xl">
-                    <!-- Top Section: Merchant Info -->
-                    <div class="flex flex-col items-center pb-6 mb-6 border-b border-dashed border-outline-variant/30">
-                        <div class="flex items-center justify-center w-12 h-12 mb-3 bg-primary-fixed rounded-xl">
-                            <span class="material-symbols-outlined text-primary"
-                                style="font-variation-settings: 'FILL' 1;">storefront</span>
-                        </div>
-                        <h2 class="text-lg font-bold font-headline text-on-surface">Viller Merchant</h2>
-                        <span
-                            class="mt-1 text-xs font-semibold tracking-widest uppercase font-label text-primary">Payment
-                            Receipt</span>
-                    </div>
-                    <!-- Breakdown Rows -->
-                    <div class="space-y-5">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Merchant Name</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">Viller Digital Services</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Date</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">Oct 24, 2023 • 14:20</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Transaction ID</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">VLR-882910394</span>
-                        </div>
-                        <!-- Divider -->
-                        <div class="w-full h-px bg-surface-container-high"></div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Product</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">Telkomsel 50k</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Nominal</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">Rp 50.000</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-label text-on-surface-variant">Admin Fee</span>
-                            <span class="text-sm font-semibold font-body text-on-surface">Rp 1.500</span>
-                        </div>
-                        <!-- Divider -->
-                        <div class="w-full h-px bg-surface-container-high"></div>
-                        <div class="flex items-center justify-between pt-2">
-                            <span class="font-bold font-headline text-on-surface">Total Payment</span>
-                            <span class="text-xl font-extrabold tracking-tight font-headline text-primary">Rp
-                                51.500</span>
-                        </div>
-                    </div>
+            <h2 class="mb-3 text-2xl font-extrabold tracking-tight text-on-surface">Enter your 6-digit transaction PIN
+            </h2>
+            <p class="text-sm font-medium text-on-surface-variant">Please enter your secure PIN to authorize this
+                transfer.</p>
+        </div>
+        <!-- PIN Input Visualization -->
+        <div class="flex gap-3 mb-12">
+            <div v-for="i in pinLimit" :key="i"
+                class="flex items-center justify-center w-12 h-12 transition-all duration-200 border-2 shadow-sm rounded-xl"
+                :class="pin.length >= i 
+                ? 'bg-surface-container-lowest border-primary-container' 
+                : 'bg-surface-container-lowest border-outline-variant/30'">
+
+                <div class="w-3 h-3 transition-all duration-200 rounded-full"
+                    :class="pin.length >= i ? 'bg-primary-container scale-110' : 'bg-surface-variant'">
                 </div>
             </div>
-            <!-- Action Buttons -->
-            <div class="flex gap-3 px-6 pb-10 sm:pb-8">
-                <button
-                    class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-transform duration-200 bg-surface-container-highest text-primary font-label rounded-2xl active:scale-95">
-                    <span class="text-xl material-symbols-outlined">print</span>
-                    Print Receipt
-                </button>
-                <button
-                    class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-br from-primary to-primary-container text-on-primary font-label font-bold py-4 px-4 rounded-2xl shadow-[0px_8px_24px_rgba(0,62,199,0.15)] active:scale-95 transition-transform duration-200">
-                    <span class="text-xl material-symbols-outlined">share</span>
-                    Share
-                </button>
-            </div>
-            <!-- Close Action (Absolute) -->
-            <button
-                class="absolute flex items-center justify-center w-10 h-10 transition-transform rounded-full top-6 right-6 bg-surface-container-high text-on-surface-variant active:scale-90">
-                <span class="material-symbols-outlined">close</span>
+        </div>
+        <!-- Numeric Keypad -->
+        <div class="grid grid-cols-3 gap-6 w-full max-w-[320px] mb-10">
+            <button v-for="n in [1,2,3,4,5,6,7,8,9]" :key="n" @click="addNumber(n)"
+                class="aspect-square rounded-full bg-surface-container-lowest text-2xl font-headline font-bold text-on-surface flex items-center justify-center shadow-[0px_4px_12px_rgba(0,62,199,0.04)] active:scale-90 transition-transform duration-150">
+                {{ n }}
+            </button>
+
+            <div class="aspect-square"></div>
+            <button @click="addNumber(0)"
+                class="aspect-square rounded-full bg-surface-container-lowest text-2xl font-headline font-bold text-on-surface flex items-center justify-center shadow-[0px_4px_12px_rgba(0,62,199,0.04)] active:scale-90 transition-transform duration-150">
+                0
+            </button>
+            <button @click="deleteNumber"
+                class="aspect-square rounded-full bg-surface-container-lowest text-on-surface-variant flex items-center justify-center shadow-[0px_4px_12px_rgba(0,62,199,0.04)] active:scale-90 transition-transform duration-150">
+                <span class="text-3xl material-symbols-outlined">backspace</span>
             </button>
         </div>
-    </div>
-    <!-- Background Content Mockup (Blurred) -->
-    <div class="fixed inset-0 p-6 overflow-hidden -z-10">
-        <header
-            class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-[0px_12px_32px_rgba(0,62,199,0.06)] flex justify-between items-center px-6 py-4 max-w-7xl mx-auto left-0 right-0">
-            <div
-                class="text-2xl font-black text-transparent font-manrope bg-gradient-to-br from-blue-700 to-blue-500 bg-clip-text">
-                Viller</div>
-            <div class="flex items-center gap-4">
-                <span class="material-symbols-outlined text-slate-500">menu</span>
-                <div class="w-10 h-10 overflow-hidden rounded-full bg-slate-200">
-                    <img alt="User profile photo" class="object-cover w-full h-full"
-                        data-alt="close-up portrait of a professional businessman in a studio with soft overhead lighting and clean grey background"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA11_gEkzTm0GtxOAoIOJF8DYdMEHwfMH2syeu_b6_SHD3YWxvhupXVbHHYuizYs05rRMP7VGTUpfrkhHI_0A0f9dwAbICqa1Kiz2OV6-wMocF6aEbT33hZve59CJZhTCvxV4QN-0y6pG9XW74BTQBp2PezHqxtGxbCrmAk4UQLdiLx-qFJz9OxJs-qUFCipaHaL3cYX4DIqB5_0g5tlPw2s55UaejED3S0Kdqre_boeuT-D0ifghhrwu_fDNTwLBG4QkRG6G6cSOJu" />
-                </div>
-            </div>
-        </header>
-        <main class="max-w-lg mx-auto mt-24 space-y-8 opacity-20">
-            <div class="bg-white p-8 rounded-[2rem] space-y-4">
-                <div class="w-1/2 h-4 rounded bg-slate-100"></div>
-                <div class="w-full h-24 bg-slate-100 rounded-2xl"></div>
-                <div class="w-full h-24 bg-slate-100 rounded-2xl"></div>
-            </div>
-            <div class="bg-white p-8 rounded-[2rem] space-y-4">
-                <div class="w-1/3 h-4 rounded bg-slate-100"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="h-32 bg-slate-100 rounded-2xl"></div>
-                    <div class="h-32 bg-slate-100 rounded-2xl"></div>
-                </div>
-            </div>
-        </main>
-        <nav
-            class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/70 backdrop-blur-xl shadow-[0px_-8px_24px_rgba(0,62,199,0.04)] rounded-t-3xl opacity-20">
-            <div class="flex flex-col items-center justify-center px-5 py-2 text-slate-400">
-                <span class="material-symbols-outlined">home</span>
-                <span class="font-inter text-[11px] font-semibold uppercase tracking-wider mt-1">Home</span>
-            </div>
-            <div class="flex flex-col items-center justify-center px-5 py-2 text-blue-700 bg-blue-50 rounded-2xl">
-                <span class="material-symbols-outlined">history_edu</span>
-                <span class="font-inter text-[11px] font-semibold uppercase tracking-wider mt-1">Transaction</span>
-            </div>
-            <div class="flex flex-col items-center justify-center px-5 py-2 text-slate-400">
-                <span class="material-symbols-outlined">grid_view</span>
-                <span class="font-inter text-[11px] font-semibold uppercase tracking-wider mt-1">Product</span>
-            </div>
-            <div class="flex flex-col items-center justify-center px-5 py-2 text-slate-400">
-                <span class="material-symbols-outlined">person</span>
-                <span class="font-inter text-[11px] font-semibold uppercase tracking-wider mt-1">Profile</span>
-            </div>
-        </nav>
-    </div>
+        <!-- Secondary Action -->
+        <button
+            class="mb-10 text-sm font-semibold transition-opacity text-primary-container hover:opacity-80 active:scale-95">
+            Forgot PIN?
+        </button>
+        <!-- Primary Action -->
+        <button @click="confirmPin" :disabled="pin.length !== pinLimit"
+            class="w-full h-14 rounded-2xl font-headline font-bold text-lg shadow-[0px_12px_32px_rgba(0,62,199,0.15)] active:scale-[0.98] transition-all duration-300"
+            :class="pin.length === pinLimit 
+            ? 'bg-gradient-to-br from-primary to-primary-container text-white opacity-100' 
+            : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-50'">
+            Confirm
+        </button>
+    </main>
+    <!-- BottomNavBar (Suppressed for focused task per rule, but included contextually if needed as a placeholder for navigation flow) -->
+    <!-- Suppressed based on "Task-Focused" suppression rule in instructions -->
+    <!-- Decorative Liquid Element -->
+    <div class="fixed -bottom-24 -left-24 w-64 h-64 bg-primary/5 blur-[100px] rounded-full -z-10"></div>
+    <div class="fixed top-20 -right-20 w-48 h-48 bg-secondary/5 blur-[80px] rounded-full -z-10"></div>
 </body>
 
 </html>

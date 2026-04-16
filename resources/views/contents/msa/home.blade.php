@@ -81,6 +81,7 @@
                 "body": ["Inter"],
                 "label": ["Inter"]
             }
+            
           },
         },
       }
@@ -123,9 +124,10 @@
       </div>
     </header>
     {{-- modal home --}}
-    @include('contents.msa.modals.msaHome')
-    @include('contents.msa.modals.msaTransactions')
-    @include('contents.msa.modals.msaProfile')
+    @include('contents.msa.navModals.msaHome')
+    @include('contents.msa.navModals.msaTransactions')
+    @include('contents.msa.navModals.msaProfile')
+    @include('contents.msa.modals.product')
     {{-- end modal home --}}
     <!-- BottomNavBar -->
     <nav
@@ -173,6 +175,8 @@
     </nav>
     @include('contents.msa.modals.receipt')
     @include('contents.msa.modals.setPin')
+    @include('contents.msa.modals.inquiry')
+    @include('contents.msa.modals.pin')
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -180,25 +184,29 @@
     const { createApp,onMounted, ref,nextTick, watch } = Vue;
       const app = createApp({
         setup() {
-
-          const isSharing = ref(false);
-          const modalMsaHome = ref(false);
-          const modalMsaProfile = ref(false);
-          const modalMsaTransactions = ref(false);
-          const modalReceipt=ref(false);
-          const isLoadingBalance=ref(true);
-          const isLoadingTransactions=ref(true);
-          const modalSetPin=ref(false);
+          const isModalInquiry = ref(false);//modal page inquiry
+          const isSharing = ref(false);//disable button share saat proses sharing atau download struk
+          const modalProductDetail = ref(false);//modal page input cust id produk pulsa
+          //global constant
+          const customerId=ref('');//variable penampung input cust id
+          const modalMsaHome = ref(false);//modal navigasi Home
+          const modalMsaProfile = ref(false);//modal navigasi profil
+          const modalMsaTransactions = ref(false);//modal navigasi transaksi
+          const modalReceipt=ref(false);//modal page transaksi
+          const isLoadingBalance=ref(true);//gif loading balance
+          const isLoadingTransactions=ref(true);//gif loading get transaksi
+          const modalSetPin=ref(false);//modal page set pin
           //end boolean variable
-          const dataBalance=ref(0);
+          const dataBalance=ref(0);//variable penampung balance
           //end int variable
-          const dataTransactions=ref({});
-          const dataTransaction=ref({});
+          const dataProducts=ref({});//variable penampung data produk detil
+          const dataTransactions=ref({});//variable penampung data lis transaksi
+          const dataTransaction=ref({});//variable penampung data detil transaksi untuk tampil di receipt
           //end interface variable
           const token=localStorage.getItem('token');
           const navigate=localStorage.getItem('navigate');
           //end constant
-          const getBalance=async()=>{
+          const getBalance=async()=>{//proses get balance
             isLoadingBalance.value=true;
             try {
               const response = await axios.get('{{ route('msa.getBalance') }}', {
@@ -210,7 +218,7 @@
               dataBalance.value=response.data.result.account_balance;
               if(response.data.result.is_set_pin=="N"){
                 setTimeout(() => {
-                  openModalSetPin();//open modal set pin, setelah data terupdate semua
+                  modalSetPin.value=true;
                 }, 2000);
               }
               setTimeout(() => {
@@ -224,8 +232,12 @@
                 }
             }
           };
-          const getProfile=()=>{};
-          const getTransactions=async(val)=>{
+          const getProfile=()=>{//proses get detil profile
+             if(dataBalance.value==0){
+              getBalance();
+            };
+          };
+          const getTransactions=async(val)=>{//proses get list transaction
             try {
               const response = await axios.post('{{ route('msa.getTransactions') }}', {
                 'length':parseInt(val, 10),
@@ -246,7 +258,7 @@
             }
           };
           //end api
-          const getDetailTransaction=(val)=>{
+          const getDetailTransaction=(val)=>{//proses get detail transaksi dari list transaksi
             const foundData = dataTransactions.value.find(item => item.reference_number == val);
             if (foundData) {
                 dataTransaction.value = foundData;
@@ -257,17 +269,16 @@
               modalReceipt.value=true;
             }
           };
-          const closeModals = () => {
+          const closeModals = () => {//menutup modal receipt n set pin
               console.log("Fungsi close dipanggil!");
               modalReceipt.value = false;
               modalSetPin.value=false;
           };
-          const closeSession=()=>{
+          const closeSession=()=>{//proses logout
             localStorage.removeItem('token');
             window.location.href = '/msa/sign-in';
           }
-          const shareAsImage = () => {
-            console.log("llll");
+          const shareAsImage = () => {//proses share atau download receipt
             isSharing.value=true;
             const element = document.querySelector(".receipt-cut"); // Target elemen struk
             // Gunakan html2canvas global
@@ -299,10 +310,7 @@
                   isSharing.value=false;
                 }, 1000);
           };
-          const openModalSetPin=()=>{
-            modalSetPin.value=true;
-          };
-          const msaHome=()=>{
+          const msaHome=()=>{//proses navigasi ke home
             localStorage.setItem('navigate', 'msaHome');
             modalMsaTransactions.value = false;
             modalMsaProfile.value = false;
@@ -310,7 +318,7 @@
             getBalance();
             getTransactions(5);
           }
-          const msaTransactions=()=>{
+          const msaTransactions=()=>{//proses navigasi ke transaksi
             localStorage.setItem('navigate', 'msaTransactions');
             dataTransactions.value={};
             modalMsaHome.value = false;
@@ -318,16 +326,14 @@
             modalMsaTransactions.value = true;
             getTransactions(10);
           }
-          const msaProfile=()=>{
+          const msaProfile=()=>{//proses navigasi ke profil
             localStorage.setItem('navigate', 'msaProfile');
-            if(dataBalance.value==0){
-              getBalance();
-            };
             modalMsaHome.value = false;
             modalMsaProfile.value = true;
             modalMsaTransactions.value = false;
+            getProfile();
           }
-          const navigateTo=()=>{
+          const navigateTo=()=>{//cek session to redirect navigate
             switch (navigate) {
               case 'msaProfile':
                 msaProfile();
@@ -340,11 +346,147 @@
                 break;
             }
           };
-          //end utils
+          const productDetail=(val)=>{//proses membuka list detil produk
+            switch (val) {
+              case "pulsa":
+                closeMsaModals();
+                modalProductDetail.value="true";
+                break;
+            
+              default:
+                break;
+            }
+          };
+          const closeMsaModals=()=>{//proses menutup page home saat membuka list produk detil
+            modalProductDetail.value=false;
+            modalMsaHome.value=false;
+            modalMsaProfile.value=false;
+            modalMsaTransactions.value=false;
+            modalReceipt.value=false;
+            modalSetPin.value=false;
+          };
+          const getProductPrefix=async(val)=>{//get produk sesuai dengan operator by input cust id
+            try {
+              const response = await axios.post('{{ route('msa.getProductPrefix') }}', {
+                'customerId':val,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
+              dataProducts.value=response.data.result.data;
+            } catch (error) {
+                console.error("Gagal mengambil product:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
+          };
+          const dataInquiry=ref({});//menampung data response inquiry
+          const isConfirm=()=>{//menampilkan modal page input pin sebelum proses payment
+            isModalInquiry.value=false;
+            isModalPin.value=true;
+          }
+          const payment=async(val)=>{//proses payment, masih ada pr jika pin salah
+            try {
+              const response = await axios.post('{{ route('msa.payment') }}', {
+                'reference_number':dataInquiry.value.reference_number,
+                'pin':val,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
+              dataTransaction.value=response.data.result;
+              isModalPin.value=false;
+              msaTransactions();
+              setTimeout(() => {
+                modalReceipt.value=true;
+                customerId.value='';
+                pin.value='';
+              }, 500);
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
+          };
+          const inquiry=async(val)=>{//proses inquiry
+            try {
+              const response = await axios.post('{{ route('msa.inquiry') }}', {
+                'product_code':val,
+                'customer_id':customerId.value,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
+              dataInquiry.value=response.data.result;
+              setTimeout(() => {
+                modalProductDetail.value=false;
+                isModalInquiry.value=true;
+              }, 500);
+              // formPayment.value.reference_number=dataInquiry.value.reference_number;
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
+          };
+          const isModalPin=ref(false);//modal page input pin
+          const pin = ref(""); // menampung PIN yang diinput
+          const pinLimit = 6;//var validasi max 6 karakter
+
+          // Fungsi untuk menambah angka
+          const addNumber = (num) => {
+              if (pin.value.length < pinLimit) {
+                  pin.value += num.toString();
+              }
+          };
+          // Fungsi hapus (backspace)
+          const deleteNumber = () => {
+              pin.value = pin.value.slice(0, -1);
+          };
+          // Fungsi Konfirmasi
+          const confirmPin = () => {
+              if (pin.value.length === pinLimit) {
+                  console.log("PIN yang dimasukkan:", pin.value);
+                  payment(pin.value);
+              } else {
+                  alert("PIN harus 6 digit");
+              }
+          };
+          watch(  
+            () => customerId.value,
+            (value) => {
+              if (value.length >= 5) {
+                 getProductPrefix(value);
+              }
+            }
+          );
           onMounted(() => {
             navigateTo();
           });
           return { 
+            isConfirm,
+            isModalPin,
+            pin,
+            pinLimit,
+            addNumber,
+            deleteNumber,
+            confirmPin,
+            payment,
+            isModalInquiry,
+            inquiry,
+            dataInquiry,
+            dataProducts,
+            getProductPrefix,
+            customerId,
+            closeMsaModals,
+            productDetail,
+            modalProductDetail,
             navigateTo,
             navigate,
             msaProfile,
@@ -368,7 +510,6 @@
             isLoadingBalance,
             dataBalance,
             modalSetPin,
-            openModalSetPin,
             token,
           };
         }

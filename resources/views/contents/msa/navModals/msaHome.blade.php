@@ -46,9 +46,10 @@
 
 
         </div>
-        <div class="grid grid-cols-3 gap-6  md:grid-cols-6">
+        <div class=" grid grid-cols-3 gap-6 md:grid-cols-6">
                     <!-- Top-Up -->
-                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95">
+                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95"
+                        @click="productDetail('pulsa')">
                         <div
                             class="flex items-center justify-center w-16 h-16 shadow-sm rounded-2xl bg-surface-container-lowest text-primary-container">
                             <span class="text-3xl material-symbols-outlined">smartphone</span>

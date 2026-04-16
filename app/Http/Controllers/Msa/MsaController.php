@@ -112,6 +112,62 @@ class MsaController extends Controller
         return view('contents.msa.profile');
     }
    
+    public function inquiry()
+    {
+        $authHeader = request()->bearerToken();
+        if(request()->isMethod('post')) {
+            $validatedData = request()->validate([
+                'product_code' => 'required|string|max:255',
+                'customer_id' => 'required|string|max:255',
+            ], [
+                'product_code.required' => 'Product code is required.',
+                'customer_id.required' => 'Customer ID is required.',
+            ]);
+            $payload = [
+                "product_code" => $validatedData['product_code'],
+                "customer_id" => $validatedData['customer_id'],
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/inquiry', $payload)->json();
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+        return view('contents.msa.transactions');
+    }
+    public function payment()
+    {
+        $authHeader = request()->bearerToken();
+         if(request()->isMethod('post')) {
+            $validatedData = request()->validate([
+                'reference_number' => 'required|string|max:255',
+                'pin' => 'required|string|max:255',
+            ], [
+                'reference_number.required' => 'Product code is required.',
+                'pin.required' => 'Customer ID is required.',
+            ]);
+            $payload = [
+                "reference_number" => $validatedData['reference_number'],
+                "account_pin" => $validatedData['pin'],
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/payment', $payload)->json();
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+        return view('contents.msa.transactions');
+    }
     public function getTransactions()
     {
         $authHeader = request()->bearerToken();
@@ -143,7 +199,55 @@ class MsaController extends Controller
         }
         return view('contents.msa.transactions');
     }
-    
+    public function getProductPrefix()
+    {
+        // dd(request()->all());
+         if(request()->isMethod('post')) {
+            $dataReference="";
+            $response=[];
+            {//get reference
+                $payload=[
+                    "subscriberId"=>request()->customerId,
+                ];
+                $response = Http::withToken($this->hostService->GetToken())
+                ->post($this->hostService->GetUrl('m').'/v1/utils/getproductByReference', $payload)->json();
+                if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                    if($response['message']=="invalid or expired jwt"){
+                        return response()->json(['error'=>"invalid or expired jwt"],401);
+                    }
+                    return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                }
+                $dataReference=$response['result']['data']['productReferenceCode'];
+            }
+            {
+                $authHeader = request()->bearerToken();
+                $filter=[
+                    "product_reference_code"=>$dataReference,
+                ];
+                $payload=[
+                    "start"=>request()->input('start')?? 0,
+                    "length"=>request()->input('length')?? 10,
+                    "columns"=>request()->input('columns')??'',
+                    "search"=>request()->input('search')??'',
+                    "order"=>request()->input('order')??'',
+                    "sort"=>request()->input('sort')??'',
+                    "start_date" => request()->input('start_date') ?: now()->format('Y-m-d'),
+                    "end_date" => request()->input('end_date') ?: now()->format('Y-m-d'),
+                    "filter"=>$filter,
+                ];
+                $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/get-product', $payload)->json();
+                if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                    if($response['message']=="invalid or expired jwt"){
+                        return response()->json(['error'=>"invalid or expired jwt"],401);
+                    }
+                    return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                }
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -180,8 +284,5 @@ class MsaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    
 }

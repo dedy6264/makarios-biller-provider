@@ -110,7 +110,7 @@
     </div>
   </header> --}}
   <!-- Hero / Content Canvas -->
-  <main class="flex flex-col items-center flex-grow w-full max-w-md px-8 pt-32 pb-40 text-center">
+  <main class="flex flex-col items-center flex-grow w-full max-w-md px-8 pt-8 pb-8 text-center">
     <!-- Visual Anchor -->
     <div class="relative flex items-center justify-center w-full mb-12 aspect-square">
       <!-- Background Decorative Blobs -->
@@ -118,7 +118,7 @@
       </div>
       <!-- Hero Illustration Card -->
       <div
-        class="relative z-10 w-64 h-80 bg-surface-container-lowest rounded-[2.5rem] shadow-[0px_24px_48px_rgba(0,62,199,0.08)] p-6 flex flex-col items-center justify-between border border-white/20">
+        class="relative z-10 w-44 h-60 bg-surface-container-lowest rounded-[2.5rem] shadow-[0px_24px_48px_rgba(0,62,199,0.08)] p-6 flex flex-col items-center justify-between border border-white/20">
         <div class="flex items-center justify-between w-full">
           <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10">
             <span class="text-sm material-symbols-outlined text-primary">contactless</span>
@@ -152,7 +152,7 @@
     </div>
     <!-- Typography Cluster -->
     <div class="mb-12 space-y-4">
-      <h2 class="text-4xl font-extrabold leading-tight tracking-tight font-headline text-on-surface">
+      <h2 class="text-2xl font-extrabold leading-tight tracking-tight font-headline text-on-surface">
         Payments made <span class="text-primary-container">effortless.</span>
       </h2>
       <p class="px-4 leading-relaxed font-body text-on-surface-variant">
@@ -162,12 +162,12 @@
     <!-- Actions -->
     <div class="w-full space-y-4">
       <a href="{{ route('msa.signIn') }}"
-        class="w-full py-5 px-8 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-label font-bold text-lg shadow-[0px_8px_24px_rgba(0,62,199,0.2)] active:scale-[0.98] transition-all duration-200">
+        class="block w-full text-center py-5 px-8 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-label font-bold text-lg shadow-[0px_8px_24px_rgba(0,62,199,0.2)] active:scale-[0.98] transition-all duration-200">
         Login
       </a>
-      <!--button-->
+
       <a href="{{ route('msa.signUp') }}"
-        class="w-full py-5 px-8 bg-transparent text-primary rounded-xl font-label font-bold text-lg border-2 border-primary/10 hover:bg-primary/5 active:scale-[0.98] transition-all duration-200">
+        class="block w-full text-center py-5 px-8 bg-transparent text-primary rounded-xl font-label font-bold text-lg border-2 border-primary/10 hover:bg-primary/5 active:scale-[0.98] transition-all duration-200">
         Sign Up
       </a>
     </div>
