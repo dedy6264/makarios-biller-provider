@@ -172,7 +172,7 @@
         <footer class="mt-16 text-center">
             <p class="text-sm font-label text-on-surface-variant">
                 Don't have an account? <a class="font-bold text-primary hover:underline decoration-2 underline-offset-4"
-                    href="#">Sign Up</a>
+                    href="{{ route('msa.signUp') }}">Sign Up</a>
             </p>
         </footer>
     </main>

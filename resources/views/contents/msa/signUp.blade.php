@@ -173,7 +173,7 @@
                   placeholder="name@viller.com" type="email" name="email/>
               </div>
             </div>
-            <div class=" relative group">
+            <div class="relative  group">
                 <label
                   class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Phone
                   Number</label>
@@ -258,7 +258,7 @@
           style="font-variation-settings: 'wght' 700;">arrow_forward</span>
       </button>
       <p class="text-xs font-medium text-center text-on-surface-variant">
-        Already have an account? <a class="font-bold text-primary" href="#">Log In</a>
+        Already have an account? <a class="font-bold text-primary" href="{{ route('msa.signIn') }}">Log In</a>
       </p>
     </div>
   </form>

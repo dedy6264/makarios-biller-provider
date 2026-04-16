@@ -13,5 +13,5 @@ Route::post('/msa/get-transactions', [MsaController::class, 'getTransactions'])-
 Route::post('/msa/get-product-by-type', [MsaController::class, 'getProductByType'])->name('msa.getProductByType');
 Route::get('/msa/get-profile', [MsaController::class, 'getProfile'])->name('msa.getProfile');
 Route::get('/loading', function(){
-    return view('contents.msa.xxx');
+    return view('contents.msa.transactions');
 });

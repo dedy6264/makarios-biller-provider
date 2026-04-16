@@ -138,7 +138,6 @@ class MsaController extends Controller
                 }
                 return response()->json(['error' => 'Invalid API response format or data type'], 500);
             }
-
             return response()->json($response);
         }else{
             return view('contents.msa.signIn');
