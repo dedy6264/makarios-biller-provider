@@ -387,6 +387,7 @@
             isModalInquiry.value=false;
             isModalPin.value=true;
           }
+          const isWrongPin=ref(false);//status salah pin
           const payment=async(val)=>{//proses payment, masih ada pr jika pin salah
             try {
               const response = await axios.post('{{ route('msa.payment') }}', {
@@ -397,14 +398,20 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              dataTransaction.value=response.data.result;
-              isModalPin.value=false;
-              msaTransactions();
-              setTimeout(() => {
-                modalReceipt.value=true;
-                customerId.value='';
-                pin.value='';
-              }, 500);
+              if(response.data.responseCode=='44'){
+                isWrongPin.value=true;
+              }else{
+                dataTransaction.value=response.data.result;
+                isModalPin.value=false;
+                msaTransactions();
+                dataProducts.value=({}) ;
+                setTimeout(() => {
+                  modalReceipt.value=true;
+                  customerId.value='';
+                  pin.value='';
+                }, 500);
+              }
+              isWrongPin.value=false;
             } catch (error) {
                 console.error("Gagal inquiry:", error.response?.data || error.message);
                 if (error.response?.status === 401) {
@@ -470,6 +477,7 @@
             navigateTo();
           });
           return { 
+            isWrongPin,
             isConfirm,
             isModalPin,
             pin,

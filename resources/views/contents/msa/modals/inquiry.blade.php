@@ -8,7 +8,8 @@
                     data-icon="receipt_long">receipt_long</span>
             </div>
             <p class="mb-1 text-sm font-medium tracking-widest uppercase text-on-surface-variant">Total Payment</p>
-            <h2 class="text-3xl font-extrabold tracking-tight font-headline text-on-surface">Rp 52.500</h2>
+            <h2 class="text-3xl font-extrabold tracking-tight font-headline text-on-surface">
+                @{{$format.formatCurrency(dataInquiry.transaction_total_amount)}}</h2>
         </div>
         <!-- Details Section: Product Information -->
         <section class="mb-8">
@@ -21,7 +22,7 @@
                     <div>
                         <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Product
                             Name</p>
-                        <p class="font-semibold text-on-surface">Telkomsel 50k</p>
+                        <p class="font-semibold text-on-surface">@{{dataInquiry.product_name}}</p>
                     </div>
                     <div
                         class="flex items-center justify-center w-12 h-12 overflow-hidden bg-white shadow-sm rounded-xl">
@@ -33,12 +34,14 @@
                 <div class="flex justify-between">
                     <div>
                         <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Price</p>
-                        <p class="font-semibold text-on-surface">Rp 50.000</p>
+                        <p class="font-semibold text-on-surface"> @{{$format.formatCurrency(dataInquiry.product_price)}}
+                        </p>
                     </div>
                     <div class="text-right">
                         <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Admin Fee
                         </p>
-                        <p class="font-semibold text-on-surface">Rp 2.500</p>
+                        <p class="font-semibold text-on-surface">
+                            @{{$format.formatCurrency(dataInquiry.product_admin_fee)}}</p>
                     </div>
                 </div>
             </div>
@@ -53,16 +56,16 @@
                     <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Customer ID /
                         Number</p>
                     <div class="flex items-center gap-3">
-                        <p class="text-lg font-semibold tracking-wide text-on-surface">0812 3456 7890</p>
+                        <p class="text-lg font-semibold tracking-wide text-on-surface">@{{dataInquiry.customer_id}}</p>
                         <span class="text-lg text-blue-600 material-symbols-outlined"
                             data-icon="content_copy">content_copy</span>
                     </div>
                 </div>
-                <div>
+                {{-- <div>
                     <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Account
                         Holder</p>
                     <p class="font-semibold text-on-surface">Aditya Pratama</p>
-                </div>
+                </div> --}}
             </div>
         </section>
         <!-- Payment Notice -->

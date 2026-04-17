@@ -159,7 +159,11 @@ class MsaController extends Controller
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 if($response['message']=="invalid or expired jwt"){
                     return response()->json(['error'=>"invalid or expired jwt"],401);
-                }
+                }else{
+                    if($response['responseCode']=="44"){
+                        return response()->json($response);
+                }}
+        
                 return response()->json(['error' => 'Invalid API response format or data type'], 500);
             }
             return response()->json($response);
