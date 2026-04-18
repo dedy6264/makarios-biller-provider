@@ -15,6 +15,7 @@ Route::get('/msa/get-profile', [MsaController::class, 'getProfile'])->name('msa.
 Route::post('/msa/get-product-prefix', [MsaController::class, 'getProductPrefix'])->name('msa.getProductPrefix');
 Route::post('/msa/inquiry', [MsaController::class, 'inquiry'])->name('msa.inquiry');
 Route::post('/msa/payment', [MsaController::class, 'payment'])->name('msa.payment');
+Route::post('/msa/set-pin', [MsaController::class, 'setPin'])->name('msa.setPin');
 Route::get('/loading', function(){
     return view('contents.msa.xxx');
 });

@@ -27,7 +27,7 @@ class MsaController extends Controller
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signin', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 // back to login with alert
-                return redirect()->back()->withInput()->with('error', $response['message'] ?? 'Wrong user or password, please try again');
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
             }
             $redirect="/msa/home";
             $origin="signIn";
@@ -39,6 +39,7 @@ class MsaController extends Controller
      public function signUp()
     {
         if(request()->isMethod('post')) {
+
             $validatedData = request()->validate([
                 'username' => 'required|string|max:255',
                 'password' => 'required|string|min:6',
@@ -71,13 +72,14 @@ class MsaController extends Controller
                 "phone" => $validatedData['phone'],
                 "address" => $validatedData['address'],
             ];
-            dd($payload);
+            // dd($payload);
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signup', $payload)->json();
+            // dd($response);
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
-                if($response['message']=="invalid or expired jwt"){
-                    return response()->json(['error'=>"invalid or expired jwt"],401);
-                }
-                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
+            }
+            if($response['responseCode']!=='00'){
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
             }
             $redirect="/msa/sign-in";
             $origin="signIn";
@@ -253,12 +255,36 @@ class MsaController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function setPin()
     {
-        //
+         $authHeader = request()->bearerToken();
+        if (request()->isMethod('post')) {
+            try {
+                $validatedData = request()->validate([
+                    'pin' => 'required|string|max:255',
+                ], [
+                    'pin.required' => 'PIN is required.',
+                ]);
+                $payload = [
+                    "account_pin" => $validatedData['pin'],
+                ];
+                $response = Http::withToken($authHeader)
+                    ->post($this->hostService->GetUrl('m').'/v2/pin-activation', $payload)
+                    ->json();
+                if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                    if (isset($response['message']) && $response['message'] === "invalid or expired jwt") {
+                        return response()->json(['error' => "invalid or expired jwt"], 401);
+                    }
+                    return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                }
+                return response()->json($response);
+            } catch (\Throwable $th) {
+                return response()->json(['error' => 'An internal error occurred'], 500);
+                // return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
+            }
+        } else {
+            return view('contents.msa.signIn');
+        }
     }
 
     /**

@@ -114,6 +114,11 @@
     <h1 class="text-3xl font-black tracking-tight font-headline text-primary">Viller</h1>
     <p class="mt-2 font-medium text-on-surface-variant">Start your premium financial journey</p>
   </header>
+  @if(session('error'))
+  <div class="px-4 py-3 mb-4 text-sm rounded-xl bg-error-container text-on-error-container font-label">
+    {{ session('error') }}
+  </div>
+  @endif
   <!-- Main Form Canvas -->
   <form action="{{ route('msa.signUp') }}" method="post">
     @csrf
@@ -170,73 +175,72 @@
                   class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">alternate_email</span>
                 <input
                   class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="name@viller.com" type="email" name="email/>
+                  placeholder="name@viller.com" type="email" name="email" />
               </div>
             </div>
-            <div class="relative  group">
-                <label
-                  class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Phone
-                  Number</label>
-                <div class="relative flex items-center">
-                  <span
-                    class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">phone_iphone</span>
-                  <input
-                    class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                    placeholder="+1 (555) 000-0000" type="phone" />
-                </div>
-              </div>
-            </div>
-            <!-- Birth Date & Username -->
-            <div class="grid grid-cols-2 gap-4">
-              <div class="relative group">
-                <label
-                  class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Birth
-                  Date</label>
-                <div class="relative flex items-center">
-                  <input
-                    class="w-full px-4 py-4 font-medium transition-all border-none outline-none appearance-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl"
-                    type="date" name="birthdate" />
-                </div>
-              </div>
-              <div class="relative group">
-                <label
-                  class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Username</label>
-                <div class="relative flex items-center">
-                  <input
-                    class="w-full px-4 py-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                    placeholder="@julian" type="text" name="username" />
-                </div>
-              </div>
-            </div>
-            <!-- Password Field -->
             <div class="relative group">
               <label
-                class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Security
-                Password</label>
+                class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Phone
+                Number</label>
               <div class="relative flex items-center">
                 <span
-                  class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">lock</span>
+                  class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">phone_iphone</span>
                 <input
-                  class="w-full py-4 pl-12 pr-12 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="Min. 8 characters" type="password" name="password" />
-                <span
-                  class="material-symbols-outlined absolute right-4 text-outline cursor-pointer hover:text-primary transition-colors text-[20px]">visibility</span>
-              </div>
-            </div>
-            <!-- Address Field -->
-            <div class="relative group">
-              <label
-                class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Home
-                Address</label>
-              <div class="relative flex items-center">
-                <span
-                  class="material-symbols-outlined absolute left-4 top-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">location_on</span>
-                <textarea
-                  class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none resize-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="Street name, building, apartment..." rows="3" name="address"></textarea>
+                  class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                  placeholder="+1 (555) 000-0000" name="phone" type="phone" />
               </div>
             </div>
           </div>
+          <!-- Birth Date & Username -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="relative group">
+              <label
+                class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Birth
+                Date</label>
+              <div class="relative flex items-center">
+                <input
+                  class="w-full px-4 py-4 font-medium transition-all border-none outline-none appearance-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl"
+                  type="date" name="birthdate" />
+              </div>
+            </div>
+            <div class="relative group">
+              <label
+                class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Username</label>
+              <div class="relative flex items-center">
+                <input
+                  class="w-full px-4 py-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                  placeholder="@julian" type="text" name="username" />
+              </div>
+            </div>
+          </div>
+          <!-- Password Field -->
+          <div class="relative group">
+            <label
+              class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Security
+              Password</label>
+            <div class="relative flex items-center">
+              <span
+                class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">lock</span>
+              <input
+                class="w-full py-4 pl-12 pr-12 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                placeholder="Min. 8 characters" type="password" name="password" />
+              <span
+                class="material-symbols-outlined absolute right-4 text-outline cursor-pointer hover:text-primary transition-colors text-[20px]">visibility</span>
+            </div>
+          </div>
+          <!-- Address Field -->
+          <div class="relative group">
+            <label class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Home
+              Address</label>
+            <div class="relative flex items-center">
+              <span
+                class="material-symbols-outlined absolute left-4 top-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">location_on</span>
+              <textarea
+                class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none resize-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                placeholder="Street name, building, apartment..." rows="3" name="address"></textarea>
+            </div>
+          </div>
+        </div>
       </section>
       <!-- Aesthetic FinTech Visual Cue (Sparkline mimic) -->
       <div class="flex items-center gap-4 p-4 mt-8 border-none bg-primary-fixed/30 rounded-xl">
@@ -250,8 +254,8 @@
     </main>
     <!-- Bottom Action Bar (Fixed) -->
     <div
-      class="fixed bottom-0 left-0 z-40 flex flex-col w-full max-w-md gap-4 px-6 pt-4 pb-8 -translate-x-1/2 bg-white/70 backdrop-blur-2xl left-1/2">
-      <button
+      class="fixed bottom-0 z-40 flex flex-col w-full max-w-md gap-4 px-6 pt-4 pb-8 -translate-x-1/2 bg-white/70 backdrop-blur-2xl left-1/2">
+      <button type="submit"
         class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold rounded-xl shadow-[0px_12px_32px_rgba(0,62,199,0.15)] active:scale-95 transition-all duration-200 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
         Continue
         <span class="material-symbols-outlined text-[18px]"

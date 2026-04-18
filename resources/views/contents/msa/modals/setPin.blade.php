@@ -1,10 +1,18 @@
 <div v-if="modalSetPin" class="relative z-50">
+    <transition enter-active-class="transition duration-300 ease-out"
+        enter-from-class="transform -translate-y-2 opacity-0" enter-to-class="transform translate-y-0 opacity-100"
+        leave-active-class="transition duration-200 ease-in" leave-from-class="transform translate-y-0 opacity-100"
+        leave-to-class="transform -translate-y-2 opacity-0">
+        <div v-if="isSetPinAllert" class="px-4 py-3 text-blue-700 bg-blue-100 border-t border-b border-blue-500"
+            role="alert">
+            <p class="font-bold">Aktivasi Pin Sukses</p>
+
+        </div>
+    </transition>
     <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80" @click="modalSetPin = false">
     </div>
-
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div class="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
-
             <div
                 class="relative overflow-hidden text-left transition-all transform bg-white shadow-2xl rounded-2xl sm:my-8 sm:w-full sm:max-w-md dark:bg-gray-800">
 
@@ -19,15 +27,21 @@
                                 Set Security PIN
                             </h3>
                             <p class="mt-2 text-sm leading-relaxed text-gray-500 dark:text-gray-400">
-                                Untuk keamanan transaksi, silakan buat 6 digit PIN keamanan Anda. Jangan bagikan PIN ini
+                                Untuk keamanan transaksi, silakan buat 6 digit PIN keamanan Anda. Jangan bagikan PIN
+                                ini
                                 kepada
                                 siapapun.
                             </p>
                         </div>
-
+                        @if(session('error'))
+                        <div
+                            class="px-4 py-3 mb-4 text-sm rounded-xl bg-error-container text-on-error-container font-label">
+                            {{ session('error') }}
+                        </div>
+                        @endif
                         <div class="w-full mt-8 space-y-4">
                             <div class="relative">
-                                <input type="password" inputmode="numeric" maxlength="6"
+                                <input v-model="pin" type="password" inputmode="numeric" maxlength="6"
                                     class="w-full py-4 text-center text-2xl tracking-[1em] font-bold border-2 border-gray-100 rounded-xl focus:border-primary focus:ring-0 transition-all dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
                             </div>
                         </div>
@@ -35,7 +49,7 @@
                 </div>
 
                 <div class="flex flex-col gap-3 px-6 pb-8 bg-white dark:bg-gray-800">
-                    <button
+                    <button @click="setPin"
                         class="w-full py-4 text-sm font-bold transition-all shadow-lg rounded-xl bg-primary text-on-primary hover:bg-primary/90 shadow-primary/20">
                         Konfirmasi PIN
                     </button>

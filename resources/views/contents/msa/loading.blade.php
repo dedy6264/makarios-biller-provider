@@ -213,8 +213,6 @@
                         isAllertSuccess.value=true; 
                         setTimeout(() => {
                             isAllertSuccess.value=false; 
-                        }, 1000);
-                        setTimeout(() => {
                             window.location.href = redirect;
                         }, 2000);
                     }

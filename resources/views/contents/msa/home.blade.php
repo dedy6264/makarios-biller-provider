@@ -177,6 +177,7 @@
     @include('contents.msa.modals.setPin')
     @include('contents.msa.modals.inquiry')
     @include('contents.msa.modals.pin')
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -217,6 +218,7 @@
               // console.log("BALANCE ", response.data);
               dataBalance.value=response.data.result.account_balance;
               if(response.data.result.is_set_pin=="N"){
+              localStorage.setItem('isSetPin', 'N');
                 setTimeout(() => {
                   modalSetPin.value=true;
                 }, 2000);
@@ -312,25 +314,45 @@
           };
           const msaHome=()=>{//proses navigasi ke home
             localStorage.setItem('navigate', 'msaHome');
-            modalMsaTransactions.value = false;
-            modalMsaProfile.value = false;
             modalMsaHome.value = true;
+            isModalInquiry.value=false;
+            isSharing.value=false;
+            modalProductDetail.value=false;
+            modalMsaProfile.value=false;
+            modalMsaTransactions.value=false;
+            modalReceipt.value=false;
+            isLoadingBalance.value=false;
+            isLoadingTransactions.value=false;
+            modalSetPin.value=false;
             getBalance();
             getTransactions(5);
           }
           const msaTransactions=()=>{//proses navigasi ke transaksi
             localStorage.setItem('navigate', 'msaTransactions');
-            dataTransactions.value={};
-            modalMsaHome.value = false;
-            modalMsaProfile.value = false;
             modalMsaTransactions.value = true;
+            isModalInquiry.value=false;
+            isSharing.value=false;
+            modalProductDetail.value=false;
+            modalMsaHome.value=false;
+            modalMsaProfile.value=false;
+            modalReceipt.value=false;
+            isLoadingBalance.value=false;
+            isLoadingTransactions.value=false;
+            modalSetPin.value=false;
             getTransactions(10);
           }
           const msaProfile=()=>{//proses navigasi ke profil
             localStorage.setItem('navigate', 'msaProfile');
-            modalMsaHome.value = false;
             modalMsaProfile.value = true;
-            modalMsaTransactions.value = false;
+            isModalInquiry.value=false;
+            isSharing.value=false;
+            modalProductDetail.value=false;
+            modalMsaHome.value=false;
+            modalMsaTransactions.value=false;
+            modalReceipt.value=false;
+            isLoadingBalance.value=false;
+            isLoadingTransactions.value=false;
+            modalSetPin.value=false;
             getProfile();
           }
           const navigateTo=()=>{//cek session to redirect navigate
@@ -420,26 +442,30 @@
             }
           };
           const inquiry=async(val)=>{//proses inquiry
-            try {
-              const response = await axios.post('{{ route('msa.inquiry') }}', {
-                'product_code':val,
-                'customer_id':customerId.value,
-              },{
-                  headers: {
-                      Authorization: `Bearer ${token}`,
+            if(localStorage.getItem('isSetPin')){
+              modalSetPin.value=true;
+            }else{
+              try {
+                const response = await axios.post('{{ route('msa.inquiry') }}', {
+                  'product_code':val,
+                  'customer_id':customerId.value,
+                },{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                dataInquiry.value=response.data.result;
+                setTimeout(() => {
+                  modalProductDetail.value=false;
+                  isModalInquiry.value=true;
+                }, 500);
+                // formPayment.value.reference_number=dataInquiry.value.reference_number;
+              } catch (error) {
+                  console.error("Gagal inquiry:", error.response?.data || error.message);
+                  if (error.response?.status === 401) {
+                      closeSession();
                   }
-              });
-              dataInquiry.value=response.data.result;
-              setTimeout(() => {
-                modalProductDetail.value=false;
-                isModalInquiry.value=true;
-              }, 500);
-              // formPayment.value.reference_number=dataInquiry.value.reference_number;
-            } catch (error) {
-                console.error("Gagal inquiry:", error.response?.data || error.message);
-                if (error.response?.status === 401) {
-                    closeSession();
-                }
+              }
             }
           };
           const isModalPin=ref(false);//modal page input pin
@@ -465,6 +491,30 @@
                   alert("PIN harus 6 digit");
               }
           };
+          const isSetPinAllert=ref(false);
+          const setPin=async()=>{
+             try {
+              const response = await axios.post('{{ route('msa.setPin') }}', {
+                'pin':pin.value,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
+              isSetPinAllert.value=true;
+              setTimeout(() => {
+                modalSetPin.value=false;
+                pin.value='';
+                isSetPinAllert.value=false;
+              }, 500);
+              msaHome();
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
+          };
           watch(  
             () => customerId.value,
             (value) => {
@@ -477,6 +527,8 @@
             navigateTo();
           });
           return { 
+            isSetPinAllert,
+            setPin,
             isWrongPin,
             isConfirm,
             isModalPin,
