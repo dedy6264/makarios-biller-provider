@@ -146,13 +146,13 @@
                             Share
                         </template>
                     </button>
-                    <button v-if="dataTransaction.status_code=='00'" @click="closeModals"
-                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-red-600 text-on-primary font-label rounded-2xl active:scale-95">
+                    <button v-if="dataTransaction.status_code=='02'" @click="closeModals"
+                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-yellow-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
                     </button>
                     <button v-else @click="closeModals"
-                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-yellow-600 text-on-primary font-label rounded-2xl active:scale-95">
+                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-red-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
                     </button>
