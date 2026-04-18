@@ -462,6 +462,7 @@
           };
           const inquiry=async(val)=>{//proses inquiry
             if(localStorage.getItem('isSetPin')){
+              console.log("BLM SI DER", localStorage.getItem('isSetPin'));
               modalSetPin.value=true;
             }else{
               try {

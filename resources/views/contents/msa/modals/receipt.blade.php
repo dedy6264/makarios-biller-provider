@@ -18,6 +18,9 @@
                             <span class="text-5xl material-symbols-outlined text-emerald-500"
                                 style=" font-variation-settings: 'FILL' 1;"
                                 v-if="dataTransaction.status_code=='00'">check_circle</span>
+                            <span class="text-5xl text-yellow-500 material-symbols-outlined"
+                                style=" font-variation-settings: 'FILL' 1;"
+                                v-if="dataTransaction.status_code=='02'">hourglass_bottom</span>
                             <span class="text-5xl text-red-500 material-symbols-outlined"
                                 style=" font-variation-settings: 'FILL' 1;" v-else>cancel</span>
                         </div>
@@ -26,6 +29,14 @@
                                 Successful
                             </h1>
                             <p class="mt-1 text-sm text-center font-label text-on-surface-variant">Your payment has been
+                                processed
+                            </p>
+                        </div>
+                        <div v-if="dataTransaction.status_code=='02'">
+                            <h1 class="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Transaction
+                                Pending
+                            </h1>
+                            <p class="mt-1 text-sm text-center font-label text-on-surface-variant">Your payment in
                                 processed
                             </p>
                         </div>
@@ -135,8 +146,13 @@
                             Share
                         </template>
                     </button>
-                    <button v-else @click="closeModals"
+                    <button v-if="dataTransaction.status_code=='00'" @click="closeModals"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-red-600 text-on-primary font-label rounded-2xl active:scale-95">
+                        <span class="text-xl text-white material-symbols-outlined">cancel</span>
+                        Close
+                    </button>
+                    <button v-else @click="closeModals"
+                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-yellow-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
                     </button>
