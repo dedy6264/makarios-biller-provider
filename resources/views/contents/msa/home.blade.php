@@ -202,6 +202,7 @@
           //end int variable
           const dataProducts=ref({});//variable penampung data produk detil
           const dataTransactions=ref({});//variable penampung data lis transaksi
+          const dataProfile=ref({});//variable penampung data lis transaksi
           const dataTransaction=ref({});//variable penampung data detil transaksi untuk tampil di receipt
           //end interface variable
           const token=localStorage.getItem('token');
@@ -234,10 +235,29 @@
                 }
             }
           };
-          const getProfile=()=>{//proses get detil profile
-             if(dataBalance.value==0){
-              getBalance();
-            };
+          const isLoadingProfile=ref(false);
+          const getProfile=async()=>{//proses get detil profile
+            try {
+              const response = await axios.get('{{ route('msa.getProfile') }}',{
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                }
+              });
+              if(response.data.result.data.length>0){
+                dataProfile.value=response.data.result.data[0];
+                setTimeout(() => {
+                  isLoadingProfile.value=false;
+                }, 1000);
+              }
+               if(dataBalance.value==0){
+                getBalance();
+              }
+            } catch (error) {
+                console.error("Gagal mengambil saldo:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
           };
           const getTransactions=async(val)=>{//proses get list transaction
             try {
@@ -272,7 +292,6 @@
             }
           };
           const closeModals = () => {//menutup modal receipt n set pin
-              console.log("Fungsi close dipanggil!");
               modalReceipt.value = false;
               modalSetPin.value=false;
           };
@@ -527,6 +546,8 @@
             navigateTo();
           });
           return { 
+            dataProfile,
+            isLoadingProfile,
             isSetPinAllert,
             setPin,
             isWrongPin,

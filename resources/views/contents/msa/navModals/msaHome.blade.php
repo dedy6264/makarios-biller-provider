@@ -2,7 +2,10 @@
     <main class="px-6 pt-24 pb-32 mx-auto space-y-8 max-w-7xl">
         <!-- Welcome Section -->
         <section class="space-y-1">
-            <h2 class="text-2xl font-bold tracking-tight font-headline text-on-surface">Welcome, Alex Rivera</h2>
+            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingProfile"
+                class="tracking-tight font-headline">
+            <h2 v-else class="text-2xl font-bold tracking-tight font-headline text-on-surface">Welcome, @{{
+                dataProfile.merchant_outlet_name}}</h2>
             <p class="text-sm font-medium text-on-surface-variant">Your financial summary for today</p>
         </section>
         <!-- Balance Card - Liquid Architect Style -->

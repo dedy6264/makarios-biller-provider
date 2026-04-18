@@ -15,13 +15,16 @@
                     <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
                 </div>
             </div>
-            <h2 class="mb-1 text-3xl font-black tracking-tight text-on-surface">Alex Rivera</h2>
-            <div
+            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingProfile"
+                class="tracking-tight font-headline">
+            <h2 class="mb-1 text-3xl font-black tracking-tight text-on-surface" v-else>@{{
+                dataProfile.merchant_outlet_name}}</h2>
+            {{-- <div
                 class="flex items-center gap-2 px-3 py-1 border rounded-full bg-secondary-container/20 border-secondary-container/10">
                 <span class="material-symbols-outlined text-secondary text-[16px]" data-icon="verified"
                     style="font-variation-settings: 'FILL' 1;">verified</span>
                 <span class="text-xs font-semibold tracking-wide uppercase text-secondary">Pro Member</span>
-            </div>
+            </div> --}}
         </section>
         <!-- Stats Bento (High-end UI pattern) -->
         <section class="grid grid-cols-2 gap-4 mb-10">

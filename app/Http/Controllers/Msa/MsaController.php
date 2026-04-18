@@ -111,7 +111,34 @@ class MsaController extends Controller
     }
     public function getProfile()
     {
-        return view('contents.msa.profile');
+        $authHeader = request()->bearerToken();
+        if(request()->isMethod('get')) {
+              $filter=[
+                "reference_number"=>request()->input('reference_number')?? '',
+            ];
+            $payload=[
+                "start"=>request()->input('start')?? 0,
+                "length"=>request()->input('length')?? 10,
+                "columns"=>request()->input('columns')??'',
+                "search"=>request()->input('search')??'',
+                "order"=>request()->input('order')??'',
+                "sort"=>request()->input('sort')??'',
+                "start_date" => request()->input('start_date') ?: now()->format('Y-m-d'),
+                "end_date" => request()->input('end_date') ?: now()->format('Y-m-d'),
+                "filter"=>$filter,
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/get-profile',$payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
     }
    
     public function inquiry()
@@ -140,7 +167,6 @@ class MsaController extends Controller
         }else{
             return view('contents.msa.signIn');
         }
-        return view('contents.msa.transactions');
     }
     public function payment()
     {
@@ -172,7 +198,6 @@ class MsaController extends Controller
         }else{
             return view('contents.msa.signIn');
         }
-        return view('contents.msa.transactions');
     }
     public function getTransactions()
     {
@@ -287,32 +312,5 @@ class MsaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     
 }
