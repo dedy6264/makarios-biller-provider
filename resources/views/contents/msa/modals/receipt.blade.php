@@ -20,7 +20,7 @@
                                 v-if="dataTransaction.status_code=='00'">check_circle</span>
                             <span class="text-5xl text-yellow-500 material-symbols-outlined"
                                 style=" font-variation-settings: 'FILL' 1;"
-                                v-if="dataTransaction.status_code=='02'">hourglass_bottom</span>
+                                v-else-if="dataTransaction.status_code=='02'">hourglass_bottom</span>
                             <span class="text-5xl text-red-500 material-symbols-outlined"
                                 style=" font-variation-settings: 'FILL' 1;" v-else>cancel</span>
                         </div>
@@ -32,7 +32,7 @@
                                 processed
                             </p>
                         </div>
-                        <div v-if="dataTransaction.status_code=='02'">
+                        <div v-else-if="dataTransaction.status_code=='02'">
                             <h1 class="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Transaction
                                 Pending
                             </h1>
@@ -121,32 +121,34 @@
 
                 <div
                     class="flex gap-3 px-6 pt-4 pb-10 border-t bg-surface-container-low border-outline-variant/10 sm:pb-8 shrink-0">
-                    <button v-if="dataTransaction.status_code=='00'"
-                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-surface-container-highest text-primary font-label rounded-2xl active:scale-95">
-                        <span class="text-xl material-symbols-outlined">print</span>
-                        Print
-                    </button>
-                    <button @click="shareAsImage" :disabled="isSharing" v-if="dataTransaction.status_code=='00'"
-                        class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all shadow-lg bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl active:scale-95 disabled:opacity-70">
+                    <div v-if="dataTransaction.status_code=='00'">
+                        <button
+                            class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-surface-container-highest text-primary font-label rounded-2xl active:scale-95">
+                            <span class="text-xl material-symbols-outlined">print</span>
+                            Print
+                        </button>
+                        <button @click="shareAsImage" :disabled="isSharing"
+                            class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all shadow-lg bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl active:scale-95 disabled:opacity-70">
 
-                        <template v-if="isSharing">
-                            <svg class="w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
-                                    stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                </path>
-                            </svg>
-                            Processing...
-                        </template>
+                            <template v-if="isSharing">
+                                <svg class="w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg"
+                                    fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                    </path>
+                                </svg>
+                                Processing...
+                            </template>
 
-                        <template v-else>
-                            <span class="text-xl material-symbols-outlined">share</span>
-                            Share
-                        </template>
-                    </button>
-                    <button v-if="dataTransaction.status_code=='02'" @click="closeModals"
+                            <template v-else>
+                                <span class="text-xl material-symbols-outlined">share</span>
+                                Share
+                            </template>
+                        </button>
+                    </div>
+                    <button v-else-if="dataTransaction.status_code=='02'" @click="closeModals"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-yellow-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
