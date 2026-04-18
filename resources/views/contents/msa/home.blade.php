@@ -176,7 +176,7 @@
     @include('contents.msa.modals.receipt')
     @include('contents.msa.modals.setPin')
     @include('contents.msa.modals.inquiry')
-    @include('contents.msa.modals.pin')
+    @include('contents.msa.modals.pinpad')
 
   </div>
 

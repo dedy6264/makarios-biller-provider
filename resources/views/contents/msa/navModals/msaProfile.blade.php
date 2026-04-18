@@ -98,7 +98,7 @@
                 </div>
             </div>
             <!-- Category: Customization -->
-            <div>
+            {{-- <div>
                 <h4 class="text-on-surface-variant font-bold text-[10px] tracking-[0.1em] uppercase px-2 mb-4">
                     Experience
                 </h4>
@@ -128,7 +128,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- Category: Support -->
             <div>
                 <h4 class="text-on-surface-variant font-bold text-[10px] tracking-[0.1em] uppercase px-2 mb-4">Viller
