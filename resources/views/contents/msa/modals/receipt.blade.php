@@ -34,7 +34,7 @@
                         </div>
                         <div v-else-if="dataTransaction.status_code=='02'">
                             <h1 class="text-2xl font-extrabold tracking-tight font-headline text-on-surface">Transaction
-                                Successful
+                                Process
                             </h1>
                             <p class="mt-1 text-sm text-center font-label text-on-surface-variant">Your payment has
                                 processed
