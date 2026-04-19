@@ -174,10 +174,17 @@
             {{-- ......................... --}}
             <div class="card-body">
               <form role="form text-left">
-                <div class="mb-3" v-if="isEditMode">
-                  <label for="balance" class="form-label">Add Amount</label>
-                  <input type="number" v-model="form.balance" class="form-control" id="balance" placeholder="Rp 1000.-"
-                    aria-label="Rp 1000.-" autofocus>
+                <div v-if="isEditMode">
+                  <div class="mb-3">
+                    <label for="balance" class="form-label">Add Amount</label>
+                    <input type="number" v-model="form.balance" class="form-control" id="balance"
+                      placeholder="Rp 1000.-" aria-label="Rp 1000.-" autofocus>
+                  </div>
+                  <div class="mb-3">
+                    <label for="balance" class="form-label">Method</label>
+                    <input type="text" v-model="form.method" class="form-control" id="mthod"
+                      placeholder="VA Mandiri/Transfer ..." aria-label="VA Mandiri/Transfer ..." autofocus>
+                  </div>
                 </div>
                 <div class="mb-3" v-else>
                   <label for="account_id" class="form-label">Account</label>
@@ -194,7 +201,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" @click="closeModal">Close</button>
-            <button type="button" class="btn btn-primary" @click="isEditMode ? updateSaving() : storeSaving()">Save
+            <button type="button" class="btn btn-primary" @click="isEditMode ? topUpBalance() : storeSaving()">Save
               changes</button>
           </div>
         </div>
@@ -224,6 +231,7 @@
             account_name: '',
             account_id:0,
             account_number:'',
+            method:'',
             balance:0,
           });
           const openModal = () => {
@@ -255,7 +263,6 @@
                       },
                       dataSrc: function (json) {
                             mainData.value = json.data; // simpan ke Vue
-                            // console.log(json.data);
                             return json.data;           // kembalikan ke DataTable
                         },
                     },
@@ -268,8 +275,8 @@
                         { data: 'id' },
                         { data: 'id',render:function(data,type){
                          return `
-                            <button class="btn btn-sm btn-outline-success" onclick="updateModal(${data})">
-                                Edit
+                            <button class="btn btn-sm btn-outline-success" onclick="topUpBalanceModal(${data})">
+                                Topup
                             </button>
                             <button class="btn btn-sm btn-outline-primary" onclick="deleteSegment(${data})">
                                 Delete
@@ -284,15 +291,17 @@
               // }
             });
           };
-          window.updateModal = (idAccount) => {
+          window.topUpBalanceModal = (idAccount) => {
+
               for(let a=0;a<mainData.value.length;a++){
                 if (mainData.value[a].id==idAccount){
                   form.value.id = idAccount;
                   form.value.account_id = mainData.value[a].account_id;
                   form.value.account_name = mainData.value[a].account_name;
+                  form.value.account_number = mainData.value[a].account_number;
                   isEditMode.value = true;
+                  console.log(form);
                   myModal.show();
-                  // console.log(form);
                 }
               };
 
@@ -327,18 +336,11 @@
                   });
             })
           };
-          const updateSaving=()=>{
-            for(let a=0;a<accounts.value.length;a++){
-              if (accounts.value[a].id==form.value.account_id){
-                form.value.account_name= accounts.value[a].account_name;
-                form.value.account_number= accounts.value[a].account_number;
-              }
-            };
+          const topUpBalance=()=>{
             nextTick(()=>{
                 // Create new client
-               axios.post('{{ route('savings.update') }}', form.value)
+               axios.post('{{ route('savings.topUpBalance') }}', form.value)
                   .then(response => {
-                    // console.log("Segment created:", response.data);
                     isEditMode.value = false;
                     closeModal();
                     refreshDataSaving();
@@ -355,8 +357,8 @@
             refreshDataSaving();
           });
           return { 
-            updateSaving,
-            updateModal,
+            topUpBalance,
+            topUpBalanceModal,
             mainData,
             refreshDataSaving,
             isModalOpen,

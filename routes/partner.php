@@ -38,6 +38,7 @@ Route::middleware(['auth','checkRole:ADMT'])->group(function () {
     Route::post('/savings/update', [SavingAccountController::class, 'update'])->name('savings.update');
     Route::post('/savings/destroy', [SavingAccountController::class, 'destroy'])->name('savings.destroy');
     Route::post('/savings/destroy', [SavingAccountController::class, 'destroy'])->name('savings.destroy');
+    Route::post('/savings/topUpBalance', [SavingAccountController::class, 'topUpBalance'])->name('savings.topUpBalance');
     
     Route::get('/saving_transactions', [SavingTransactionController::class, 'index'])->name('saving_transactions.index');
     Route::post('/saving_transactions/getAll', [SavingTransactionController::class, 'getAll'])->name('saving_transactions.getAll');
