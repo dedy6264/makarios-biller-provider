@@ -30,7 +30,7 @@ class TransactionController extends Controller
             "columns"=>"",
             "search"=>"",
             "order"=>"updated_at",
-            "sort"=>"desc",
+            "sort"=>"asc",
             "start_date"=>"",
             "end_date"=>"",
             "filter"=>$filter,

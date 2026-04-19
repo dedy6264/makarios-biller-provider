@@ -93,6 +93,32 @@ class SavingAccountController extends Controller
             return Redirect::route('savings.index')->with('status', 'account-creation-failed');
         }
     }
+    public function update(Request $request)
+    {
+        // dd(strlen($request->balance));
+        $request->validate([
+            'balance' => 'required|integer|max:100000',
+            'account_id' => 'required|integer|max:100',
+        ]);
+        try {
+            $payload=[
+                "account_id"=>(int)$request->account_id,
+                "id"=>(int)$request->account_id,
+                "balance"=>(int)$request->balance,
+                "account_name"=>strtoupper($request->account_name),
+                "account_number"=>strtoupper($request->account_number),
+
+            ];
+            $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/updateSavingAccount', $payload)->json();
+            if (!is_array($response) || !isset($response['result']) || $response['responseCode']!='00') {
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            } 
+            return Redirect::route('savings.index')->with('status', 'account-created');
+        } catch (\Throwable $th) {
+            \Log::error("message", ['error' => $th]);
+            return Redirect::route('savings.index')->with('status', 'account-creation-failed');
+        }
+    }
      
     public function destroy(Request $request)
     {
