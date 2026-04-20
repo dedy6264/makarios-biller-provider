@@ -114,11 +114,7 @@
     <h1 class="text-3xl font-black tracking-tight font-headline text-primary">Viller</h1>
     <p class="mt-2 font-medium text-on-surface-variant">Start your premium financial journey</p>
   </header>
-  @if(session('error'))
-  <div class="px-4 py-3 mb-4 text-sm rounded-xl bg-error-container text-on-error-container font-label">
-    {{ session('error') }}
-  </div>
-  @endif
+
   <!-- Main Form Canvas -->
   <form action="{{ route('msa.signUp') }}" method="post">
     @csrf
@@ -136,6 +132,11 @@
         <div class="space-y-1">
           <h2 class="px-2 text-xl font-bold font-headline">Personal Identity</h2>
           <p class="px-2 text-sm text-on-surface-variant">Fill in your legal details as per your identity card.</p>
+          @if(session('error'))
+          <div class="px-4 py-3 mb-4 text-sm rounded-xl bg-error-container text-on-error-container font-label">
+            {{ session('error') }}
+          </div>
+          @endif
         </div>
         <div class="space-y-4">
           <!-- Full Name Field -->

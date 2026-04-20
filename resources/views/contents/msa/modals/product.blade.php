@@ -24,12 +24,13 @@
                 <span class="text-xs font-bold tracking-widest uppercase font-label text-primary">Popular Choice</span>
             </div>
 
-            <div class="grid grid-cols-3 gap-5 md:grid-cols-3" v-if="dataProducts" v-for="item in dataProducts">
+            <div class="grid grid-cols-3 gap-5 md:grid-cols-3" v-if="dataProducts">
                 <!-- Telkomsel Pulsa -->
-                <div class="group bg-surface-container-lowest p-6 rounded-[2rem] flex flex-col items-center justify-center gap-4 transition-all hover:bg-surface-bright active:scale-[0.98] cursor-pointer"
+                <div v-for="item in dataProducts"
+                    class="group bg-surface-container-lowest p-6 rounded-[2rem] flex flex-col items-center justify-center gap-4 transition-all hover:bg-surface-bright active:scale-[0.98] cursor-pointer"
                     @click="inquiry(item.product_code)">
                     <div
-                        class="flex items-center justify-center shadow-lg w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 shadow-red-500/20">
+                        class="flex items-center justify-center shadow-lg w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-blue-500 shadow-red-500/20">
                         <span class="text-3xl text-white material-symbols-outlined" data-icon="signal_cellular_alt"
                             style="font-variation-settings: 'FILL' 1;">signal_cellular_alt</span>
                     </div>
@@ -37,7 +38,7 @@
                         class="text-sm font-bold text-center font-headline text-on-surface">@{{item.product_name}}</span>
                 </div>
                 <!-- Indosat Data -->
-                <div
+                {{-- <div
                     class="group bg-surface-container-lowest p-6 rounded-[2rem] flex flex-col items-center justify-center gap-4 transition-all hover:bg-surface-bright active:scale-[0.98] cursor-pointer">
                     <div
                         class="flex items-center justify-center shadow-lg w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 shadow-orange-500/20">
@@ -85,7 +86,7 @@
                             style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
                     </div>
                     <span class="text-sm font-bold text-center font-headline text-on-surface">Genshin Crystals</span>
-                </div>
+                </div> --}}
             </div>
             {{-- <div class="scale-[2] flex items-center justify-center" v-if="dataProducts.length==0">
                 <span class="text-gray-200 material-symbols-outlined">

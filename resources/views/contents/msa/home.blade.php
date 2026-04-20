@@ -216,7 +216,6 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              // console.log("BALANCE ", response.data);
               dataBalance.value=response.data.result.account_balance;
               if(response.data.result.is_set_pin=="N"){
               localStorage.setItem('isSetPin', 'N');
@@ -297,6 +296,9 @@
           };
           const closeSession=()=>{//proses logout
             localStorage.removeItem('token');
+            if(localStorage.getItem('isSetPin')){
+              localStorage.removeItem('isSetPin');
+            }
             window.location.href = '/msa/sign-in';
           }
           const shareAsImage = () => {//proses share atau download receipt
@@ -526,8 +528,8 @@
                 modalSetPin.value=false;
                 pin.value='';
                 isSetPinAllert.value=false;
-              }, 500);
-              msaHome();
+                msaHome();
+              }, 1000);
             } catch (error) {
                 console.error("Gagal inquiry:", error.response?.data || error.message);
                 if (error.response?.status === 401) {

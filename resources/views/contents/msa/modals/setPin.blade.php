@@ -1,14 +1,4 @@
 <div v-if="modalSetPin" class="relative z-50">
-    <transition enter-active-class="transition duration-300 ease-out"
-        enter-from-class="transform -translate-y-2 opacity-0" enter-to-class="transform translate-y-0 opacity-100"
-        leave-active-class="transition duration-200 ease-in" leave-from-class="transform translate-y-0 opacity-100"
-        leave-to-class="transform -translate-y-2 opacity-0">
-        <div v-if="isSetPinAllert" class="px-4 py-3 text-blue-700 bg-blue-100 border-t border-b border-blue-500"
-            role="alert">
-            <p class="font-bold">Aktivasi Pin Sukses</p>
-
-        </div>
-    </transition>
     <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80" @click="modalSetPin = false">
     </div>
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -16,6 +6,18 @@
             <div
                 class="relative overflow-hidden text-left transition-all transform bg-white shadow-2xl rounded-2xl sm:my-8 sm:w-full sm:max-w-md dark:bg-gray-800">
 
+                <transition enter-active-class="transition duration-300 ease-out"
+                    enter-from-class="transform -translate-y-2 opacity-0"
+                    enter-to-class="transform translate-y-0 opacity-100"
+                    leave-active-class="transition duration-200 ease-in"
+                    leave-from-class="transform translate-y-0 opacity-100"
+                    leave-to-class="transform -translate-y-2 opacity-0">
+                    <div v-if="isSetPinAllert"
+                        class="px-4 py-3 text-blue-700 bg-blue-100 border-t border-b border-blue-500" role="alert">
+                        <p class="font-bold">Aktivasi Pin Sukses</p>
+
+                    </div>
+                </transition>
                 <div class="px-6 pt-8 pb-6 bg-white dark:bg-gray-800 ">
                     <div class="flex flex-col items-center">
                         <div class="flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-primary/10">

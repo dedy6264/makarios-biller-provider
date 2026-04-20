@@ -82,7 +82,7 @@ class MsaController extends Controller
                 return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
             }
             $redirect="/msa/sign-in";
-            $origin="signIn";
+            $origin="signUp";
             return view('contents.msa.loading', compact('response','redirect','origin'));
         }else{
             return view('contents.msa.signUp');
