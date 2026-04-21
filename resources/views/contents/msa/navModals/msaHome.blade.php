@@ -1,5 +1,6 @@
 <div v-if="modalMsaHome">
-    <main class="px-6 pt-24 pb-32 mx-auto space-y-8 max-w-7xl">
+    <main class="max-w-lg px-6 pt-24 pb-32 mx-auto space-y-8 ">
+        <!--max-w-7xl-->
         <!-- Welcome Section -->
         <section class="space-y-1">
             <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingProfile"

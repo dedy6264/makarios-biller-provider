@@ -375,20 +375,7 @@
             isLoadingTransactions.value=false;
             modalSetPin.value=false;
             getProfile();
-          }
-          const navigateTo=()=>{//cek session to redirect navigate
-            switch (navigate) {
-              case 'msaProfile':
-                msaProfile();
-                break;
-              case 'msaTransactions':
-                msaTransactions();
-                break;
-              default:
-                msaHome();
-                break;
-            }
-          };
+          } 
           const productDetail=(val)=>{//proses membuka list detil produk
             switch (val) {
               case "pulsa":
@@ -537,6 +524,24 @@
                 }
             }
           };
+          const resetModal=(isActive)=>{
+          }
+          const navigateTo=()=>{//cek session to redirect navigate
+            switch (navigate) {
+              case 'msaProfile':
+                msaProfile();
+                break;
+              case 'msaTransactions':
+                msaTransactions();
+                break;
+              // case 'msaProduct':
+                // msaTransactions();
+                // break;
+              default:
+                msaHome();
+                break;
+            }
+          };
           watch(  
             () => customerId.value,
             (value) => {
@@ -549,6 +554,7 @@
             navigateTo();
           });
           return { 
+            resetModal,
             dataProfile,
             isLoadingProfile,
             isSetPinAllert,

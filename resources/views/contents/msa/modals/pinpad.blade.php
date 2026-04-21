@@ -1,6 +1,6 @@
 <div v-if=isModalPin>
     {{-- <main class="flex flex-col items-center flex-1 w-full max-w-md px-8 pt-24 pb-12"> --}}
-        <main class="max-w-md px-6 pt-16 pb-32 mx-auto">
+        <main class="max-w-md px-6 pt-32 pb-32 mx-auto">
             <transition enter-active-class="transition duration-300 ease-out"
                 enter-from-class="transform -translate-y-2 opacity-0"
                 enter-to-class="transform translate-y-0 opacity-100"
