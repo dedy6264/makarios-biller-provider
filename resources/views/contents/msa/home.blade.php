@@ -453,23 +453,36 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              if(response.data.responseCode=='44'){
-                toast.value.show=true;
-                toast.value.message='Pin salah, silahkan coba lagi';
-                toast.value.type='error';
-                setTimeout(() => {
-                  toast.value.show=false;
-                }, 1000);
-              }else{
-                dataTransaction.value=response.data.result;
-                isModalPin.value=false;
-                msaTransactions();
-                dataProducts.value=({}) ;
-                setTimeout(() => {
-                  modalReceipt.value=true;
-                  customerId.value='';
-                  pin.value='';
-                }, 500);
+              switch (response.data.responseCode) {
+                case '44':
+                  toast.value.show=true;
+                  toast.value.message='Pin salah, silahkan coba lagi';
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    toast.value.show=false;
+                  }, 1000);
+                  break;
+              
+                case '36':
+                  toast.value.show=true;
+                  toast.value.message='Saldo tidak mencukupi';
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    toast.value.show=false;
+                  }, 1000);
+                  msaTransactions();
+                  break;
+                default:
+                  dataTransaction.value=response.data.result;
+                  isModalPin.value=false;
+                  msaTransactions();
+                  dataProducts.value=({}) ;
+                  setTimeout(() => {
+                    modalReceipt.value=true;
+                    customerId.value='';
+                    pin.value='';
+                  }, 500);
+                  break;
               }
             } catch (error) {
                 console.error("Gagal inquiry:", error.response?.data || error.message);
