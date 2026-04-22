@@ -1,4 +1,4 @@
-<div v-if=isModalPin>
+<div v-if=modalShower.isModalPin>
     {{-- <main class="flex flex-col items-center flex-1 w-full max-w-md px-8 pt-24 pb-12"> --}}
         <main class="max-w-md px-6 pt-32 pb-32 mx-auto">
             <!-- Brand/Identity Lockup -->

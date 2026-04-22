@@ -1,4 +1,4 @@
-<div v-if="isModalInquiry">
+<div v-if="modalShower.isInquiry">
     <main class="max-w-md px-6 pt-24 pb-32 mx-auto">
         <!-- Summary Header Card -->
         <div
@@ -80,7 +80,7 @@
     <div
         class="fixed bottom-0 left-0 z-50 grid w-full grid-cols-10 gap-2 px-6 py-3 pt-4 pb-10 bg-white/70 backdrop-blur-xl">
 
-        <button @click="msaHome"
+        <button @click="fMsaHome"
             class="flex items-center justify-center col-span-3 gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
             <span class="material-symbols-outlined">
                 arrow_circle_left

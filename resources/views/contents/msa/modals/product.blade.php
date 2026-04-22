@@ -1,4 +1,4 @@
-<div v-if="modalProductDetail">
+<div v-if="modalShower.isProductDetail">
     <main class="max-w-2xl px-6 pt-24 pb-32 mx-auto">
         <!-- Input Section: The Liquid Architect Style -->
         <section class="mb-10">

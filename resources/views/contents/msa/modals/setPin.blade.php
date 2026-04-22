@@ -1,5 +1,6 @@
-<div v-if="modalSetPin" class="relative z-50">
-    <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80" @click="modalSetPin = false">
+<div v-if="modalShower.isSetPin" class="relative z-50">
+    <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80"
+        @click="modalShower.isSetPin = false">
     </div>
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div class="flex items-center justify-center min-h-full p-4 text-center sm:p-0">
@@ -12,7 +13,7 @@
                     leave-active-class="transition duration-200 ease-in"
                     leave-from-class="transform translate-y-0 opacity-100"
                     leave-to-class="transform -translate-y-2 opacity-0">
-                    <div v-if="isSetPinAllert"
+                    <div v-if="modalShower.isSetPinAllert"
                         class="px-4 py-3 text-blue-700 bg-blue-100 border-t border-b border-blue-500" role="alert">
                         <p class="font-bold">Aktivasi Pin Sukses</p>
 
@@ -55,7 +56,7 @@
                         class="w-full py-4 text-sm font-bold transition-all shadow-lg rounded-xl bg-primary text-on-primary hover:bg-primary/90 shadow-primary/20">
                         Konfirmasi PIN
                     </button>
-                    <button @click="modalSetPin = false"
+                    <button @click="modalShower.isSetPin = false"
                         class="w-full py-3 text-sm font-bold text-gray-500 transition-all hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
                         Nanti Saja
                     </button>

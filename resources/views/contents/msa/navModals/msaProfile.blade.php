@@ -15,7 +15,7 @@
                     <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
                 </div>
             </div>
-            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingProfile"
+            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="modalShower.isLoadingProfile"
                 class="tracking-tight font-headline">
             <h2 class="mb-1 text-3xl font-black tracking-tight text-on-surface" v-else>@{{
                 dataProfile.merchant_outlet_name}}</h2>

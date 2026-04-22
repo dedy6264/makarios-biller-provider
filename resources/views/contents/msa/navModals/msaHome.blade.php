@@ -3,7 +3,7 @@
         <!--max-w-7xl-->
         <!-- Welcome Section -->
         <section class="space-y-1">
-            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingProfile"
+            <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="modalShower.isLoadingProfile"
                 class="tracking-tight font-headline">
             <h2 v-else class="text-2xl font-bold tracking-tight font-headline text-on-surface">Welcome, @{{
                 dataProfile.merchant_outlet_name}}</h2>
@@ -25,7 +25,7 @@
                             @{{$format.formatCurrency(dataBalance.balance)}}
                         </h3>
                     </div>
-                    <div class="p-3 bg-white/20 backdrop-blur-md rounded-2xl" @click="modalSavingPage">
+                    <div class="p-3 bg-white/20 backdrop-blur-md rounded-2xl" @click="fModalDeposite">
                         <span class="text-3xl material-symbols-outlined text-on-primary"
                             style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
                     </div>
@@ -147,7 +147,7 @@
                 <h4 class="text-lg font-bold font-headline text-on-surface">Recent Transactions</h4>
                 <button class="text-sm font-bold text-success">See History</button>
             </div>
-            <div v-if="isLoadingTransactions" class="flex justify-center py-4">
+            <div v-if="modalShower.isLoadingTransactions" class="flex justify-center py-4">
                 <img src="{{ url('assets/img/icons/loading1.gif') }}" class="w-20 h-20" alt="Loading...">
             </div>
             <div v-else class="space-y-6" v-for=" item in dataTransactions">

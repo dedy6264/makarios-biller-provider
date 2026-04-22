@@ -36,7 +36,7 @@
                 <span class="font-headline font-bold text-xs uppercase tracking-[0.2em] text-outline">Today</span>
                 <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
             </div>
-            <div v-if="isLoadingTransactions" class="flex justify-center py-4">
+            <div v-if="modalShower.isLoadingTransactions" class="flex justify-center py-4">
                 <img src="{{ url('assets/img/icons/loading1.gif') }}" class="w-20 h-20" alt="Loading...">
             </div>
             <div v-else v-for="item in dataTransactions">

@@ -1,4 +1,4 @@
-<div v-if="isSavingDepositPage">
+<div v-if="modalShower.isDeposite">
     <main class="max-w-2xl px-6 pt-24 pb-32 mx-auto">
         <!-- Hero Balance Context (Liquid Architect Style) -->
         <section class="mb-10 text-center">
@@ -114,12 +114,12 @@
             </div>
         </section>
         <!-- Dynamic CTA -->
-        <div class="mt-12">
+        {{-- <div class="mt-12">
             <button
                 class="w-full h-16 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-[20px] font-bold headline text-lg flex items-center justify-center gap-2 shadow-[0px_12px_32px_rgba(0,62,199,0.2)] active:scale-95 transition-transform">
                 <span>I've Transferred Funds</span>
                 <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
             </button>
-        </div>
+        </div> --}}
     </main>
 </div>

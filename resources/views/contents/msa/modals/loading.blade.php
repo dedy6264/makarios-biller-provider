@@ -1,5 +1,6 @@
-<div v-if="isLoading">
-    <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80" @click="modalSetPin = false">
+<div v-if="modalShower.isLoading">
+    <div class="fixed inset-0 transition-opacity bg-gray-500/75 dark:bg-gray-900/80"
+        @click="modalShower.isSetPin = false">
     </div>
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
         <header class="absolute top-0 left-0 z-50 flex items-center justify-center w-full px-6 py-8 bg-transparent">

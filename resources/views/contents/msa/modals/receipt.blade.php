@@ -1,7 +1,7 @@
 <Transition enter-active-class="duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100"
     leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
 
-    <div v-if="modalReceipt" class="fixed inset-0 z-50 overflow-y-auto">
+    <div v-if="modalShower.isReceipt" class="fixed inset-0 z-50 overflow-y-auto">
         <div class="fixed inset-0 transition-opacity bg-gray-900/60 backdrop-blur-sm" @click="closeModals"></div>
 
         <div class="flex items-end justify-center min-h-full p-0 sm:items-center sm:p-6">
@@ -126,10 +126,11 @@
                         <span class="text-xl material-symbols-outlined">print</span>
                         Print
                     </button>
-                    <button @click="shareAsImage" :disabled="isSharing" v-if="dataTransaction.status_code=='00'"
+                    <button @click="shareAsImage" :disabled="modalShower.isSharing"
+                        v-if="dataTransaction.status_code=='00'"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all shadow-lg bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl active:scale-95 disabled:opacity-70">
 
-                        <template v-if="isSharing">
+                        <template v-if="modalShower.isSharing">
                             <svg class="w-5 h-5 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
