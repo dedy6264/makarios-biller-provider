@@ -132,7 +132,7 @@
     </header>
     <!-- Main Content Canvas -->
     <div id="app">
-        <transition enter-active-class="transition duration-300 ease-out"
+        {{-- <transition enter-active-class="transition duration-300 ease-out"
             enter-from-class="transform -translate-y-2 opacity-0" enter-to-class="transform translate-y-0 opacity-100"
             leave-active-class="transition duration-200 ease-in" leave-from-class="transform translate-y-0 opacity-100"
             leave-to-class="transform -translate-y-2 opacity-0">
@@ -141,7 +141,8 @@
                 role="alert">
                 <p class="font-bold">@{{ allertText }}</p>
             </div>
-        </transition>
+        </transition> --}}
+        @include('contents.msa.modals.toast')
         <main
             class="relative flex flex-col items-center justify-center w-full h-screen bg-gradient-to-br from-surface-bright via-surface-container-low to-surface-container-high v-pattern">
             <!-- Loading Animation Section -->
@@ -190,28 +191,35 @@
         const { createApp,onMounted, ref,nextTick, watch } = Vue;
         const app = createApp({
             setup() {
-                const isAllertSuccess=ref(false);
-                const allertText=ref('');
+                const toast=ref({
+                    show: false,
+                    type: 'success',
+                    title: '',
+                    message: '',
+                    progress: 100
+                });
                 const data = ref(@json($response) ?? []);
                 const redirect= @json($redirect);
                 const origin= @json($origin);
                 const loginRedirect = () => {
                     localStorage.setItem('token', data.value.result.access_token);
                     if(data.value.responseCode=="00"){
-                        allertText.value = "Login Success, Please wait...";
-                        isAllertSuccess.value = true;
+                        toast.value.show=true;
+                        toast.value.type='success';
+                        toast.value.message='Login Success, Please wait...';
                         setTimeout(() => {
-                            isAllertSuccess.value = false;
+                            toast.value.show=false;
                             window.location.href = redirect; 
                         }, 2000);
                     }
                 };
                 const registerRedirect=()=>{
                     if(data.value.responseCode=="00"){
-                        allertText.value="Registration Success, Please Login";
-                        isAllertSuccess.value=true; 
+                        toast.value.show=true;
+                        toast.value.type='success';
+                        toast.value.message='Registration Success, Please Login...';
                         setTimeout(() => {
-                            isAllertSuccess.value=false; 
+                            toast.value.show=false;
                             window.location.href = redirect;
                         }, 2000);
                     }
@@ -230,9 +238,8 @@
                     }
                 });
                 return { 
+                    toast,
                     registerRedirect,
-                    isAllertSuccess,
-                    allertText,
                     data,
                     origin,
                     loginRedirect,

@@ -1,5 +1,5 @@
-<div v-if="modalMsaTransactions">
-    <main class="px-6 pt-24 pb-32 mx-auto space-y-8 max-w-7xl">
+<div v-if="modalNavigation.modalMsaTransactions">
+    <main class="max-w-lg px-6 pt-24 pb-32 mx-auto space-y-8">
 
         <!-- Section Header -->
         <div class="mb-8">

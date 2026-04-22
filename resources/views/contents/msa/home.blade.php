@@ -123,6 +123,7 @@
         </div>
       </div>
     </header>
+
     {{-- modal home --}}
     @include('contents.msa.navModals.msaHome')
     @include('contents.msa.navModals.msaTransactions')
@@ -137,8 +138,8 @@
         <a @click="msaHome"
           class="flex flex-col items-center justify-center px-5 py-2 transition-transform duration-200 active:scale-90"
           :class="{
-     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalMsaHome,
-     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalMsaHome
+     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalNavigation.modalMsaHome,
+     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalNavigation.modalMsaHome
    }" href="#">
           <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
           <span class="font-inter text-[8px] font-semibold uppercase tracking-wider mt-1">Home</span>
@@ -147,8 +148,8 @@
         <a @click="msaTransactions"
           class="flex flex-col items-center justify-center px-5 py-2 transition-transform duration-200 active:scale-90"
           :class="{
-     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalMsaTransactions,
-     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalMsaTransactions
+     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalNavigation.modalMsaTransactions,
+     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalNavigation.modalMsaTransactions
    }" href="#">
           <span class="material-symbols-outlined">history_edu</span>
           <span class="font-inter text-[8px] font-semibold uppercase tracking-wider mt-1">Transaction</span>
@@ -165,8 +166,8 @@
           --}} <a @click="msaProfile"
           class="flex flex-col items-center justify-center px-5 py-2 transition-transform duration-200 active:scale-90"
           :class="{
-     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalMsaProfile,
-     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalMsaProfile
+     'text-blue-700 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl': modalNavigation.modalMsaProfile,
+     'text-slate-400 dark:text-slate-500 hover:text-blue-500': !modalNavigation.modalMsaProfile
    }" href="#">
           <span class="material-symbols-outlined">person</span>
           <span class="font-inter text-[8px] font-semibold uppercase tracking-wider mt-1">Profile</span>
@@ -177,28 +178,47 @@
     @include('contents.msa.modals.setPin')
     @include('contents.msa.modals.inquiry')
     @include('contents.msa.modals.pinpad')
+    @include('contents.msa.modals.savingPage')
+    @include('contents.msa.modals.loading')
 
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
+  <script type="module">
+    import { saving } from '/assets/js/saving.js';
     const { createApp,onMounted, ref,nextTick, watch } = Vue;
       const app = createApp({
         setup() {
+          const toast=ref({
+            show: false,
+            type: 'success',
+            title: '',
+            message: '',
+            progress: 100
+          });
+          const dataBalance=ref({
+            isLoading:false,
+            balance:0,
+          });
+          const isLoading=ref(false);
+          const isPinConfirm=ref(false);
           const isModalInquiry = ref(false);//modal page inquiry
           const isSharing = ref(false);//disable button share saat proses sharing atau download struk
           const modalProductDetail = ref(false);//modal page input cust id produk pulsa
           //global constant
           const customerId=ref('');//variable penampung input cust id
-          const modalMsaHome = ref(false);//modal navigasi Home
-          const modalMsaProfile = ref(false);//modal navigasi profil
-          const modalMsaTransactions = ref(false);//modal navigasi transaksi
+          const modalNavigation=ref({
+            modalMsaHome:false,
+            modalMsaProfile:false,
+            modalMsaTransactions:false,
+          });
+          // const modalMsaHome = ref(false);//modal navigasi Home
+          // const modalMsaProfile = ref(false);//modal navigasi profil
+          // const modalMsaTransactions = ref(false);//modal navigasi transaksi
           const modalReceipt=ref(false);//modal page transaksi
-          const isLoadingBalance=ref(true);//gif loading balance
           const isLoadingTransactions=ref(true);//gif loading get transaksi
           const modalSetPin=ref(false);//modal page set pin
           //end boolean variable
-          const dataBalance=ref(0);//variable penampung balance
           //end int variable
           const dataProducts=ref({});//variable penampung data produk detil
           const dataTransactions=ref({});//variable penampung data lis transaksi
@@ -209,14 +229,14 @@
           const navigate=localStorage.getItem('navigate');
           //end constant
           const getBalance=async()=>{//proses get balance
-            isLoadingBalance.value=true;
+            dataBalance.value.isLoading=true;
             try {
               const response = await axios.get('{{ route('msa.getBalance') }}', {
                   headers: {
                       Authorization: `Bearer ${token}`,
                   }
               });
-              dataBalance.value=response.data.result.account_balance;
+              dataBalance.value.balance=response.data.result.account_balance;
               if(response.data.result.is_set_pin=="N"){
               localStorage.setItem('isSetPin', 'N');
                 setTimeout(() => {
@@ -224,7 +244,7 @@
                 }, 2000);
               }
               setTimeout(() => {
-                isLoadingBalance.value=false;
+                dataBalance.value.isLoading=false;
               }, 1000);
             } catch (error) {
                 console.error("Gagal mengambil saldo:", error.response?.data || error.message);
@@ -248,7 +268,7 @@
                   isLoadingProfile.value=false;
                 }, 1000);
               }
-               if(dataBalance.value==0){
+               if(dataBalance.value.balance==0){
                 getBalance();
               }
             } catch (error) {
@@ -335,14 +355,15 @@
           };
           const msaHome=()=>{//proses navigasi ke home
             localStorage.setItem('navigate', 'msaHome');
-            modalMsaHome.value = true;
+            modalNavigation.value.modalMsaHome = true;
+            // modalMsaHome.value = true;
             isModalInquiry.value=false;
             isSharing.value=false;
             modalProductDetail.value=false;
-            modalMsaProfile.value=false;
-            modalMsaTransactions.value=false;
+            modalNavigation.value.modalMsaProfile=false;
+            modalNavigation.value.modalMsaTransactions=false;
             modalReceipt.value=false;
-            isLoadingBalance.value=false;
+            dataBalance.value.isLoading=false;
             isLoadingTransactions.value=false;
             modalSetPin.value=false;
             getBalance();
@@ -350,32 +371,35 @@
           }
           const msaTransactions=()=>{//proses navigasi ke transaksi
             localStorage.setItem('navigate', 'msaTransactions');
-            modalMsaTransactions.value = true;
+            modalNavigation.value.modalMsaTransactions = true;
             isModalInquiry.value=false;
             isSharing.value=false;
             modalProductDetail.value=false;
-            modalMsaHome.value=false;
-            modalMsaProfile.value=false;
+            modalNavigation.value.modalMsaHome=false;
+            // modalMsaHome.value=false;
+            modalNavigation.value.modalMsaProfile=false;
             modalReceipt.value=false;
-            isLoadingBalance.value=false;
+            dataBalance.value.isLoading=false;
             isLoadingTransactions.value=false;
             modalSetPin.value=false;
             getTransactions(10);
           }
           const msaProfile=()=>{//proses navigasi ke profil
             localStorage.setItem('navigate', 'msaProfile');
-            modalMsaProfile.value = true;
+            modalNavigation.value.modalMsaProfile = true;
             isModalInquiry.value=false;
             isSharing.value=false;
             modalProductDetail.value=false;
-            modalMsaHome.value=false;
-            modalMsaTransactions.value=false;
+            // modalMsaHome.value=false;
+            modalNavigation.value.modalMsaHome=false;
+            modalNavigation.value.modalMsaTransactions=false;
             modalReceipt.value=false;
-            isLoadingBalance.value=false;
+            dataBalance.value.isLoading=false;
             isLoadingTransactions.value=false;
             modalSetPin.value=false;
             getProfile();
           } 
+          const { isSavingPage,modalSavingPage } = saving(modalNavigation.modalMsaHome);
           const productDetail=(val)=>{//proses membuka list detil produk
             switch (val) {
               case "pulsa":
@@ -389,9 +413,10 @@
           };
           const closeMsaModals=()=>{//proses menutup page home saat membuka list produk detil
             modalProductDetail.value=false;
-            modalMsaHome.value=false;
-            modalMsaProfile.value=false;
-            modalMsaTransactions.value=false;
+            modalNavigation.value.modalMsaHome=false;
+            // modalMsaHome.value=false;
+            modalNavigation.value.modalMsaProfile=false;
+            modalNavigation.value.modalMsaTransactions=false;
             modalReceipt.value=false;
             modalSetPin.value=false;
           };
@@ -429,7 +454,12 @@
                   }
               });
               if(response.data.responseCode=='44'){
-                isWrongPin.value=true;
+                toast.value.show=true;
+                toast.value.message='Pin salah, silahkan coba lagi';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
               }else{
                 dataTransaction.value=response.data.result;
                 isModalPin.value=false;
@@ -441,7 +471,6 @@
                   pin.value='';
                 }, 500);
               }
-              isWrongPin.value=false;
             } catch (error) {
                 console.error("Gagal inquiry:", error.response?.data || error.message);
                 if (error.response?.status === 401) {
@@ -454,6 +483,7 @@
               console.log("BLM SI DER", localStorage.getItem('isSetPin'));
               modalSetPin.value=true;
             }else{
+              isLoading.value=true;
               try {
                 const response = await axios.post('{{ route('msa.inquiry') }}', {
                   'product_code':val,
@@ -466,6 +496,7 @@
                 dataInquiry.value=response.data.result;
                 setTimeout(() => {
                   modalProductDetail.value=false;
+                  isLoading.value=false;
                   isModalInquiry.value=true;
                 }, 500);
                 // formPayment.value.reference_number=dataInquiry.value.reference_number;
@@ -554,6 +585,13 @@
             navigateTo();
           });
           return { 
+            modalNavigation,
+            dataBalance,
+            toast,
+            isPinConfirm,
+            isLoading,
+            isSavingPage,
+            modalSavingPage,
             resetModal,
             dataProfile,
             isLoadingProfile,
@@ -580,12 +618,9 @@
             navigateTo,
             navigate,
             msaProfile,
-            modalMsaProfile,
             isLoadingTransactions,
             msaTransactions,
-            modalMsaTransactions,
             msaHome,
-            modalMsaHome,
             dataTransaction,
             getDetailTransaction,
             closeSession,
@@ -597,8 +632,6 @@
             getProfile,
             getTransactions,
             dataTransactions,
-            isLoadingBalance,
-            dataBalance,
             modalSetPin,
             token,
           };

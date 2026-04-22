@@ -1,4 +1,4 @@
-<div v-if="modalMsaHome">
+<div v-if="modalNavigation.modalMsaHome">
     <main class="max-w-lg px-6 pt-24 pb-32 mx-auto space-y-8 ">
         <!--max-w-7xl-->
         <!-- Welcome Section -->
@@ -19,13 +19,13 @@
                             class="text-xs font-semibold tracking-widest uppercase text-on-primary-container/80 font-label">
                             Saving
                             Balance</p>
-                        <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="isLoadingBalance"
+                        <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="dataBalance.isLoading"
                             class="tracking-tight font-headline">
                         <h3 v-else class="text-4xl font-extrabold tracking-tight font-headline text-on-primary">
-                            @{{$format.formatCurrency(dataBalance)}}
+                            @{{$format.formatCurrency(dataBalance.balance)}}
                         </h3>
                     </div>
-                    <div class="p-3 bg-white/20 backdrop-blur-md rounded-2xl">
+                    <div class="p-3 bg-white/20 backdrop-blur-md rounded-2xl" @click="modalSavingPage">
                         <span class="text-3xl material-symbols-outlined text-on-primary"
                             style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
                     </div>

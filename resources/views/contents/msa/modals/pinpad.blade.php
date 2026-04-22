@@ -1,29 +1,11 @@
 <div v-if=isModalPin>
     {{-- <main class="flex flex-col items-center flex-1 w-full max-w-md px-8 pt-24 pb-12"> --}}
         <main class="max-w-md px-6 pt-32 pb-32 mx-auto">
-            <transition enter-active-class="transition duration-300 ease-out"
-                enter-from-class="transform -translate-y-2 opacity-0"
-                enter-to-class="transform translate-y-0 opacity-100"
-                leave-active-class="transition duration-200 ease-in"
-                leave-from-class="transform translate-y-0 opacity-100"
-                leave-to-class="transform -translate-y-2 opacity-0">
-                <div v-if="isWrongPin" class="px-4 py-3 text-red-700 bg-red-100 border-t border-b border-red-500"
-                    role="alert">
-                    <p class="font-bold">Pin salah, silahkan coba lagi</p>
-                </div>
-            </transition>
             <!-- Brand/Identity Lockup -->
             <div class="mb-10 text-center">
-                {{-- <div
-                    class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-primary-container/10 rounded-2xl">
-                    <span class="text-4xl material-symbols-outlined text-primary-container" data-icon="lock"
-                        style="font-variation-settings: 'FILL' 1;">lock</span>
-                </div>
-                <h2 class="mb-3 text-2xl font-extrabold tracking-tight text-on-surface">Enter your 6-digit transaction
-                    PIN
-                </h2> --}}
                 <p class="text-sm font-medium text-on-surface-variant">Please enter your secure PIN to authorize this
                     transfer.</p>
+                @include('contents.msa.modals.toast')
             </div>
             <!-- PIN Input Visualization -->
             <div class="flex gap-3 mb-6">
