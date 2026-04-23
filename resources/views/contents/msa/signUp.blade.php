@@ -241,6 +241,18 @@
                 placeholder="Street name, building, apartment..." rows="3" name="address"></textarea>
             </div>
           </div>
+          <div class="relative group">
+            <label
+              class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Referal
+              Code</label>
+            <div class="relative flex items-center">
+              <span
+                class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">person</span>
+              <input
+                class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                placeholder="3245SR" type="text" name="referalCode" />
+            </div>
+          </div>
         </div>
       </section>
       <!-- Aesthetic FinTech Visual Cue (Sparkline mimic) -->

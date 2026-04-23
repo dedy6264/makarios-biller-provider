@@ -239,7 +239,7 @@
               if(response.data.result.is_set_pin=="N"){
               localStorage.setItem('isSetPin', 'N');
                 setTimeout(() => {
-                  modalShower.isSetPin=true;
+                  modalShower.value.isSetPin=true;
                 }, 2000);
               }
               setTimeout(() => {
@@ -310,7 +310,7 @@
           };
           const closeModals = () => {//menutup modal receipt n set pin
               modalShower.value.isReceipt = false;
-              modalShower.isSetPin=false;
+              modalShower.value.isSetPin=false;
           };
           const closeSession=()=>{//proses logout
             localStorage.removeItem('token');
@@ -475,7 +475,7 @@
           };
           const inquiry=async(val)=>{//proses inquiry
             if(localStorage.getItem('isSetPin')){
-              modalShower.isSetPin=true;
+              modalShower.value.isSetPin=true;
             }else{
               modalShower.value.isLoading=true;
               try {
@@ -536,7 +536,7 @@
               });
               modalShower.value.isSetPinAllert=true;
               setTimeout(() => {
-                modalShower.isSetPin=false;
+                modalShower.value.isSetPin=false;
                 pin.value='';
                 modalShower.value.isSetPinAllert=false;
                 fMsaHome();

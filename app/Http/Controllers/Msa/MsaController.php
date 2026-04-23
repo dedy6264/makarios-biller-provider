@@ -41,6 +41,7 @@ class MsaController extends Controller
         if(request()->isMethod('post')) {
 
             $validatedData = request()->validate([
+                'referalCode' => 'required|string|max:255',
                 'username' => 'required|string|max:255',
                 'password' => 'required|string|min:6',
                 'email' => 'required|email|max:255',
@@ -50,6 +51,7 @@ class MsaController extends Controller
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
             ], [
+                'referalCode.required' => 'referalCode is required.',
                 'username.required' => 'Username is required.',
                 'password.required' => 'Password is required.',
                 'password.min' => 'Password must be at least 6 characters.',
@@ -63,6 +65,7 @@ class MsaController extends Controller
                 'address.required' => 'Address is required.',
             ]);
             $payload = [
+                "referal_code" => $validatedData['referalCode'],
                 "username" => $validatedData['username'],
                 "password" => $validatedData['password'],
                 "email" => $validatedData['email'],

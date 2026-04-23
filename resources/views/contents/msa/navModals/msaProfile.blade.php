@@ -78,6 +78,16 @@
                         <span
                             class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">fingerprint</span>
                     </div>
+                    <div class="flex items-center justify-between group">
+                        <div class="space-y-1">
+                            <p class="text-xs tracking-wider uppercase text-on-surface-variant font-label">Referal Code
+                            </p>
+                            <p class="text-on-surface font-semibold text-base tracking-[0.2em]">
+                                @{{dataProfile.referal_code}}</p>
+                        </div>
+                        <span
+                            class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">fingerprint</span>
+                    </div>
                 </div>
             </div>
             <!-- Contact Info Group -->
