@@ -29,6 +29,9 @@ class MsaController extends Controller
                 // back to login with alert
                 return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
             }
+            if($response['responseCode']=='39'){
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
+            }
             $redirect="/msa/home";
             $origin="signIn";
             return view('contents.msa.loading', compact('response','redirect','origin'));
