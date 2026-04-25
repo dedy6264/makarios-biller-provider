@@ -528,7 +528,7 @@
             if (!text) return;
             navigator.clipboard.writeText(text).then(() => {
               toast.value.show=true;
-              toast.value.message='Rekening berhasil disalin';
+              toast.value.message='Berhasil disalin';
               toast.value.type='success';
               setTimeout(() => {
                 toast.value.show=false;

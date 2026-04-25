@@ -1,5 +1,7 @@
 <div v-if="modalNavigation.modalMsaProfile">
     <main class="max-w-lg px-6 pt-32 pb-32 mx-auto">
+        @include('contents.msa.modals.toast')
+
         <!-- Profile Header Section (The Liquid Architect approach) -->
         <section class="flex flex-col items-center mb-12">
             <div class="relative mb-6 group">
@@ -60,6 +62,14 @@
                         <span
                             class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">person</span>
                     </div>
+                    <div class="flex items-center justify-between group" @click="copyToClipboard(dataProfile.username)">
+                        <div class="space-y-1">
+                            <p class="text-xs tracking-wider uppercase text-on-surface-variant font-label">User Name</p>
+                            <p class="text-base font-semibold text-on-surface">@{{dataProfile.username}}</p>
+                        </div>
+                        <span
+                            class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">person</span>
+                    </div>
                     {{-- <div class="flex items-center justify-between group">
                         <div class="space-y-1">
                             <p class="text-xs tracking-wider uppercase text-on-surface-variant font-label">Date of Birth
@@ -78,7 +88,8 @@
                         <span
                             class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">fingerprint</span>
                     </div>
-                    <div class="flex items-center justify-between group">
+                    <div class="flex items-center justify-between group"
+                        @click="copyToClipboard(dataProfile.referal_code)">
                         <div class="space-y-1">
                             <p class="text-xs tracking-wider uppercase text-on-surface-variant font-label">Referal Code
                             </p>
@@ -86,7 +97,7 @@
                                 @{{dataProfile.referal_code}}</p>
                         </div>
                         <span
-                            class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">fingerprint</span>
+                            class="transition-colors material-symbols-outlined text-primary/30 group-hover:text-primary">diversity_2</span>
                     </div>
                 </div>
             </div>
