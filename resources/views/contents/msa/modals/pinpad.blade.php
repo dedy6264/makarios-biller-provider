@@ -44,9 +44,9 @@
             </button>
             <!-- Primary Action -->
             <div class="fixed bottom-0 left-0 z-50 w-full px-6 pt-4 pb-10 bg-white/70 backdrop-blur-xl">
-                <button @click="confirmPin" :disabled="pin.length !== pinLimit"
+                <button @click="confirmPin" :disabled="modalShower.isConfirm"
                     class="w-full h-14 rounded-2xl font-headline z-50 font-bold text-lg shadow-[0px_12px_32px_rgba(0,62,199,0.15)] active:scale-[0.98] transition-all duration-300"
-                    :class="pin.length === pinLimit 
+                    :class="!modalShower.isConfirm 
             ? 'bg-gradient-to-br from-primary to-primary-container text-white opacity-100' 
             : 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-50'">
                     Confirm

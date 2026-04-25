@@ -355,6 +355,7 @@
           const modalDestroy=()=>{
             customerId.value='';
             dataProducts.value='';
+            modalShower.value.isConfirm=false;
             modalShower.value.isDeposite=false;
             modalShower.value.isInquiry=false;
             modalShower.value.isSharing=false;
@@ -426,9 +427,12 @@
           };
           const fConfirm=()=>{//menampilkan modal page input pin sebelum proses payment
             modalDestroy();
+            modalShower.value.isConfirm=true;
             modalShower.value.isModalPin=true;
-          }
+          };
           const payment=async(val)=>{//proses payment, masih ada pr jika pin salah
+            modalShower.value.isConfirm=true;
+            // console.log("ISCONFIRM",modalShower.value.isConfirm);
             try {
               const response = await axios.post('{{ route('msa.payment') }}', {
                 'reference_number':dataInquiry.value.reference_number,
@@ -446,6 +450,7 @@
                   setTimeout(() => {
                     toast.value.show=false;
                   }, 1000);
+                  modalShower.value.isConfirm=false;
                   break;
               
                 case '36':
@@ -518,6 +523,19 @@
           const deleteNumber = () => {
               pin.value = pin.value.slice(0, -1);
           };
+          const copyToClipboard = (text) => {
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+              toast.value.show=true;
+              toast.value.message='Rekening berhasil disalin';
+              toast.value.type='success';
+              setTimeout(() => {
+                toast.value.show=false;
+              }, 1000);
+            }).catch(err => {
+                console.error('Gagal menyalin: ', err);
+            });
+          };
           // Fungsi Konfirmasi
           const confirmPin = () => {
               if (pin.value.length === pinLimit) {
@@ -568,17 +586,23 @@
             }
           };
           watch(  
-            () => customerId.value,
-            (value) => {
-              if (value.length >= 5) {
-                 getProductPrefix(value);
+            [() => customerId.value,()=>pin.value],
+            ([nCustId, nPin], [oCustId, oPin]) => {
+              if (nCustId.length >= 5) {
+                 getProductPrefix(nCustId);
               }
+              if (nPin.length === pinLimit) {
+                 modalShower.value.isConfirm=false;
+                }else{
+                  modalShower.value.isConfirm=true;
+                }
             }
           );
           onMounted(() => {
             navigateTo();
           });
           return { 
+            copyToClipboard,
             modalDestroy,
             modalShower,
             fModalDeposite,

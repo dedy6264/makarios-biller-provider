@@ -1,9 +1,11 @@
 <div v-if="modalShower.isDeposite">
+    @include('contents.msa.modals.toast')
     <main class="max-w-2xl px-6 pt-24 pb-32 mx-auto">
         <!-- Hero Balance Context (Liquid Architect Style) -->
         <section class="mb-10 text-center">
             <p class="mb-1 text-sm font-medium text-on-surface-variant">Current Balance</p>
-            <h2 class="text-4xl font-extrabold tracking-tight headline text-on-surface">$12,450.80</h2>
+            <h2 class="text-4xl font-extrabold tracking-tight headline text-on-surface">
+                @{{$format.formatCurrency(dataBalance.balance)}}</h2>
         </section>
         <!-- Section 1: Select Deposit Method -->
         <section class="mb-12">
@@ -66,7 +68,7 @@
             <div class="flex items-center gap-3 mb-6">
                 <span class="material-symbols-outlined text-primary" data-icon="info"
                     style="font-variation-settings: 'FILL' 1;">info</span>
-                <h3 class="text-lg font-bold headline">Instructions</h3>
+                <h3 class="text-lg font-bold headline">Langkah-langkah</h3>
             </div>
             <div class="space-y-8">
                 <!-- Step 1 -->
@@ -75,15 +77,15 @@
                         class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold rounded-full bg-primary text-on-primary">
                         1</div>
                     <div class="flex-grow">
-                        <p class="mb-3 text-sm font-medium text-on-surface-variant">Copy Account Number</p>
+                        <p class="mb-3 text-sm font-medium text-on-surface-variant">Salin Nomer rekening</p>
                         <div
                             class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl group">
                             <span class="font-mono font-bold tracking-wider text-on-surface">8829 0012 4492 0182</span>
-                            <button
+                            <button @click="copyToClipboard('8829001244920182')"
                                 class="flex items-center gap-1 text-sm font-semibold transition-transform text-primary active:scale-95">
                                 <span class="text-lg material-symbols-outlined"
                                     data-icon="content_copy">content_copy</span>
-                                <span>Copy</span>
+                                <span>Salin</span>
                             </button>
                         </div>
                     </div>
@@ -94,9 +96,9 @@
                         class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold rounded-full bg-primary text-on-primary">
                         2</div>
                     <div>
-                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Open Banking App</p>
-                        <p class="text-sm leading-relaxed text-on-surface">Complete transfer in your banking app using
-                            the copied account number above. Ensure the recipient name is <span class="font-bold">Viller
+                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Buka Aplikasi MBanking</p>
+                        <p class="text-sm leading-relaxed text-on-surface">Pada mesin ATM atau aplikasi Mbanking,lalu
+                            pilih transfer ke bank BCA <span class="font-bold">Viller
                                 FinCorp Ltd.</span></p>
                     </div>
                 </div>
@@ -106,9 +108,32 @@
                         class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold rounded-full bg-primary text-on-primary">
                         3</div>
                     <div>
-                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Verify Deposit</p>
-                        <p class="text-sm leading-relaxed text-on-surface">Once the transfer is complete, your funds
-                            will automatically appear in your wallet within 5 minutes.</p>
+                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Verifikasi Nomor Tujuan</p>
+                        <p class="text-sm leading-relaxed text-on-surface">Masukkan nomer rekening yag telah di salin
+                            dan pastikan rekenin atas nama <span class="font-bold">Dedy Kusworo.</span></p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-5">
+                    <div
+                        class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold rounded-full bg-primary text-on-primary">
+                        4</div>
+                    <div>
+                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Konfirmasi</p>
+                        <p class="text-sm leading-relaxed text-on-surface">Setelah transfer berhasil, foto atau
+                            screenshoot bukti transfer, lalu konfirmasi admin melalui whatsapp dengan menyertakan bukti
+                            transfer.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex gap-5">
+                    <div
+                        class="flex items-center justify-center flex-shrink-0 w-8 h-8 text-sm font-bold rounded-full bg-primary text-on-primary">
+                        5</div>
+                    <div>
+                        <p class="mb-1 text-sm font-medium text-on-surface-variant">Topup Saldo sukses</p>
+                        <p class="text-sm leading-relaxed text-on-surface">Admin akan memverifikasi dan menambahkan
+                            saldo sesuai dengan nominal transfer.</p>
                     </div>
                 </div>
             </div>
