@@ -155,11 +155,12 @@
           <span class="font-inter text-[8px] font-semibold uppercase tracking-wider mt-1">Transaction</span>
         </a>
         <!-- Product -->
-        <a class="flex flex-col items-center justify-center px-5 py-2 transition-transform duration-200 text-slate-400 dark:text-slate-500 hover:text-blue-500 active:scale-90"
+        {{-- <a
+          class="flex flex-col items-center justify-center px-5 py-2 transition-transform duration-200 text-slate-400 dark:text-slate-500 hover:text-blue-500 active:scale-90"
           href="#">
           <span class="material-symbols-outlined">grid_view</span>
           <span class="font-inter text-[8px] font-semibold uppercase tracking-wider mt-1">Product</span>
-        </a>
+        </a> --}}
         <!-- Profile -->
         {{-- <a
           class="flex flex-col items-center justify-center px-5 py-2 text-blue-700 transition-transform duration-200 bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl active:scale-90"
