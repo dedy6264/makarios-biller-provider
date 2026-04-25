@@ -86,7 +86,7 @@
                 arrow_circle_left
             </span>Back
         </button>
-        <button @click="isConfirm"
+        <button @click="fConfirm"
             class="col-span-7 w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-2xl shadow-[0px_8px_24px_rgba(0,62,199,0.2)] transition-all duration-300 hover:bg-surface-container-high active:scale-95">
             Confirm &amp; Pay
         </button>

@@ -203,6 +203,7 @@
             isDeposite:false,
             isInquiry:false,
             isSharing:false,
+            isConfirm:false,
             isLoadingTransactions:false,
             isLoading:false,
             isProductDetail:false,
@@ -352,6 +353,8 @@
                 }, 1000);
           };
           const modalDestroy=()=>{
+            customerId.value='';
+            dataProducts.value='';
             modalShower.value.isDeposite=false;
             modalShower.value.isInquiry=false;
             modalShower.value.isSharing=false;
@@ -421,7 +424,7 @@
                 }
             }
           };
-          const isConfirm=()=>{//menampilkan modal page input pin sebelum proses payment
+          const fConfirm=()=>{//menampilkan modal page input pin sebelum proses payment
             modalDestroy();
             modalShower.value.isModalPin=true;
           }
@@ -584,7 +587,7 @@
             toast,
             dataProfile,
             setPin,
-            isConfirm,
+            fConfirm,
             pin,
             pinLimit,
             addNumber,
