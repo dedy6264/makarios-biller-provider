@@ -521,7 +521,15 @@
                         Authorization: `Bearer ${token}`,
                     }
                 });
-               switch response.data.responseCode {
+                switch (key) {
+                  case value:
+                    
+                    break;
+                
+                  default:
+                    break;
+                }
+               switch (response.data.responseCode) {
                 case "00":
                   dataInquiry.value=response.data.result;
                   setTimeout(() => {
