@@ -94,11 +94,10 @@
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.customer_id}}</span>
                                 </div>
-                                <div class="flex items-center justify-between"
-                                    v-if="dataTransaction.bill_info.bill_desc.sn">
+                                <div class="flex items-center justify-between" v-if="dataTransaction.bill_info.sn">
                                     <span class="text-sm font-label text-on-surface-variant">Sn</span>
                                     <span
-                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.sn}}</span>
+                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.sn}}</span>
                                 </div>
                                 <div class="flex items-center justify-between"
                                     v-if="dataTransaction.bill_info.bill_desc.customer_name">
