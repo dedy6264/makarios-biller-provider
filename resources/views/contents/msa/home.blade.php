@@ -521,12 +521,25 @@
                         Authorization: `Bearer ${token}`,
                     }
                 });
-                dataInquiry.value=response.data.result;
-                setTimeout(() => {
-                  modalShower.value.isProductDetail=false;
-                  modalShower.value.isLoading=false;
-                  modalShower.value.isInquiry=true;
-                }, 500);
+               switch response.data.responseCode {
+                case "00":
+                  dataInquiry.value=response.data.result;
+                  setTimeout(() => {
+                    modalShower.value.isProductDetail=false;
+                    modalShower.value.isLoading=false;
+                    modalShower.value.isInquiry=true;
+                  }, 500);
+                  break;
+                default:
+                  toast.value.show=true;
+                  toast.value.message='Terjadi Kesalahan';
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    toast.value.show=false;
+                    // fMsaTransactions();
+                  }, 1000);
+                  break;
+                }
                 // formPayment.value.reference_number=dataInquiry.value.reference_number;
               } catch (error) {
                   console.error("Gagal inquiry:", error.response?.data || error.message);
