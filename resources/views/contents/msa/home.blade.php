@@ -501,9 +501,11 @@
                   break;
                 default:
                   dataTransaction.value=response.data.result;
-                  const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
-                  const data = JSON.parse(formattedString);
-                  dataTransaction.value.bill_info.bill_desc=data;
+                  if(dataInquiry.value.bill_info.bill_desc!==''){
+                    const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+                    const data = JSON.parse(formattedString);
+                    dataTransaction.value.bill_info.bill_desc=data;
+                  }
                   modalShower.value.isModalPin=false;
                   fMsaTransactions();
                   dataProducts.value=({}) ;
@@ -538,9 +540,11 @@
                 switch (response.data.responseCode) {
                   case "04":
                     dataInquiry.value=response.data.result;
-                    const formattedString = dataInquiry.value.bill_info.bill_desc.replace(/\n/g, "").trim();
-                    const data = JSON.parse(formattedString);
-                    dataInquiry.value.bill_info.bill_desc=data;
+                    if(dataInquiry.value.bill_info.bill_desc!==''){
+                      const formattedString = dataInquiry.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+                      const data = JSON.parse(formattedString);
+                      dataInquiry.value.bill_info.bill_desc=data;
+                    }
                     setTimeout(() => {
                       modalShower.value.isProductDetail=false;
                       modalShower.value.isLoading=false;
