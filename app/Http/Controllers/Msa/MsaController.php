@@ -44,7 +44,7 @@ class MsaController extends Controller
         if(request()->isMethod('post')) {
 
             $validatedData = request()->validate([
-                'referalCode' => 'required|string|max:255',
+                // 'referalCode' => 'required|string|max:255',
                 'username' => 'required|string|max:255',
                 'password' => 'required|string|min:6',
                 'email' => 'required|email|max:255',
@@ -54,7 +54,7 @@ class MsaController extends Controller
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
             ], [
-                'referalCode.required' => 'referalCode is required.',
+                // 'referalCode.required' => 'referalCode is required.',
                 'username.required' => 'Username is required.',
                 'password.required' => 'Password is required.',
                 'password.min' => 'Password must be at least 6 characters.',
@@ -68,7 +68,7 @@ class MsaController extends Controller
                 'address.required' => 'Address is required.',
             ]);
             $payload = [
-                "referal_code" => $validatedData['referalCode'],
+                "referal_code" => request()->referalCode,
                 "username" => $validatedData['username'],
                 "password" => $validatedData['password'],
                 "email" => $validatedData['email'],
@@ -236,30 +236,15 @@ class MsaController extends Controller
         }
         return view('contents.msa.transactions');
     }
-    public function getProductPrefix()
+    public function getProduct()
     {
         // dd(request()->all());
          if(request()->isMethod('post')) {
-            $dataReference="";
             $response=[];
-            {//get reference
-                $payload=[
-                    "subscriberId"=>request()->customerId,
-                ];
-                $response = Http::withToken($this->hostService->GetToken())
-                ->post($this->hostService->GetUrl('m').'/v1/utils/getproductByReference', $payload)->json();
-                if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
-                    if($response['message']=="invalid or expired jwt"){
-                        return response()->json(['error'=>"invalid or expired jwt"],401);
-                    }
-                    return response()->json(['error' => 'Invalid API response format or data type'], 500);
-                }
-                $dataReference=$response['result']['data']['productReferenceCode'];
-            }
             {
                 $authHeader = request()->bearerToken();
                 $filter=[
-                    "product_reference_code"=>$dataReference,
+                    "product_reference_code"=>request()->productReferenceCode,
                 ];
                 $payload=[
                     "start"=>request()->input('start')?? 0,
@@ -273,6 +258,29 @@ class MsaController extends Controller
                     "filter"=>$filter,
                 ];
                 $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/get-product', $payload)->json();
+                if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                    if($response['message']=="invalid or expired jwt"){
+                        return response()->json(['error'=>"invalid or expired jwt"],401);
+                    }
+                    return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                }
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+    }
+    public function getProductPrefix()
+    {
+        if(request()->isMethod('post')) {
+            $response=[];
+            {//get reference
+                $payload=[
+                    "subscriberId"=>request()->customerId,
+                ];
+                $response = Http::withToken($this->hostService->GetToken())
+                ->post($this->hostService->GetUrl('m').'/v1/utils/getproductByReference', $payload)->json();
+                // dd($response);
                 if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                     if($response['message']=="invalid or expired jwt"){
                         return response()->json(['error'=>"invalid or expired jwt"],401);

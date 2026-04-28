@@ -2,7 +2,8 @@
     leave-active-class="duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
 
     <div v-if="modalShower.isReceipt" class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="fixed inset-0 transition-opacity bg-gray-900/60 backdrop-blur-sm" @click="closeModals"></div>
+        <div class="fixed inset-0 transition-opacity bg-gray-900/60 backdrop-blur-sm"
+            @click="modalShower.isReceipt=false"></div>
 
         <div class="flex items-end justify-center min-h-full p-0 sm:items-center sm:p-6">
 
@@ -147,19 +148,19 @@
                             Share
                         </template>
                     </button>
-                    <button v-else-if="dataTransaction.status_code=='02'" @click="closeModals"
+                    <button v-else-if="dataTransaction.status_code=='02'" @click="modalShower.isReceipt=false"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-yellow-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
                     </button>
-                    <button v-else @click="closeModals"
+                    <button v-else @click="modalShower.isReceipt=false"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-red-600 text-on-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl text-white material-symbols-outlined">cancel</span>
                         Close
                     </button>
                 </div>
 
-                <button @click="closeModals"
+                <button @click="modalShower.isReceipt=false"
                     class="absolute flex items-center justify-center w-10 h-10 rounded-full top-6 right-6 bg-surface-container-high text-on-surface-variant active:scale-90 hover:bg-surface-container-highest transition-colors z-[70]">
                     <span class="material-symbols-outlined">close</span>
                 </button>

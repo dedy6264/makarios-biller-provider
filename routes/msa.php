@@ -13,6 +13,7 @@ Route::post('/msa/get-transactions', [MsaController::class, 'getTransactions'])-
 Route::post('/msa/get-product-by-type', [MsaController::class, 'getProductByType'])->name('msa.getProductByType');
 Route::get('/msa/get-profile', [MsaController::class, 'getProfile'])->name('msa.getProfile');
 Route::post('/msa/get-product-prefix', [MsaController::class, 'getProductPrefix'])->name('msa.getProductPrefix');
+Route::post('/msa/get-product', [MsaController::class, 'getProduct'])->name('msa.getProduct');
 Route::post('/msa/inquiry', [MsaController::class, 'inquiry'])->name('msa.inquiry');
 Route::post('/msa/payment', [MsaController::class, 'payment'])->name('msa.payment');
 Route::post('/msa/set-pin', [MsaController::class, 'setPin'])->name('msa.setPin');

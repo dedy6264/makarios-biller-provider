@@ -62,7 +62,8 @@
                             Top-Up</span>
                     </div>
                     <!-- Electricity -->
-                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95">
+                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95"
+                        @click="productDetail('plnpre')">
                         <div
                             class="flex items-center justify-center w-16 h-16 shadow-sm rounded-2xl bg-surface-container-lowest text-amber-500">
                             <span class="text-3xl material-symbols-outlined">bolt</span>

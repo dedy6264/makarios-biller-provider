@@ -196,6 +196,9 @@
             message: '',
             progress: 100
           });
+          const utils=ref({
+            productReferenceCode:'',
+          });
           const dataBalance=ref({
             isLoading:false,
             balance:0,
@@ -243,6 +246,8 @@
                 setTimeout(() => {
                   modalShower.value.isSetPin=true;
                 }, 2000);
+              }else{
+              localStorage.removeItem('isSetPin');
               }
               setTimeout(() => {
                 dataBalance.value.isLoading=false;
@@ -309,10 +314,6 @@
             if(dataTransaction.value.status_code!='02'){      
               modalShower.value.isReceipt=true;
             }
-          };
-          const closeModals = () => {//menutup modal receipt n set pin
-              modalShower.value.isReceipt = false;
-              modalShower.value.isSetPin=false;
           };
           const closeSession=()=>{//proses logout
             localStorage.removeItem('token');
@@ -398,10 +399,14 @@
             getProfile();
           } 
           const productDetail=(val)=>{//proses membuka list detil produk
-
             switch (val) {
               case "pulsa":
                 modalDestroy();
+                modalShower.value.isProductDetail="true";
+                break;
+              case "plnpre":
+                modalDestroy();
+                utils.value.productReferenceCode='PLNPRE';
                 modalShower.value.isProductDetail="true";
                 break;
             
@@ -418,7 +423,27 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
+              // console.log("===",response.data.result.data.productReferenceCode);
+              getProduct(response.data.result.data.productReferenceCode);
+              //jika sukses, lngsung get product
+            } catch (error) {
+                console.error("Gagal mengambil product:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
+            }
+          };
+          const getProduct=async(val)=>{//get produk sesuai dengan operator by input cust id
+            try {
+              const response = await axios.post('{{ route('msa.getProduct') }}', {
+                'productReferenceCode':val,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
               dataProducts.value=response.data.result.data;
+              //jika sukses, lngsung get product
             } catch (error) {
                 console.error("Gagal mengambil product:", error.response?.data || error.message);
                 if (error.response?.status === 401) {
@@ -460,8 +485,8 @@
                   toast.value.type='error';
                   setTimeout(() => {
                     toast.value.show=false;
+                    fMsaTransactions();
                   }, 1000);
-                  fMsaTransactions();
                   break;
                 default:
                   dataTransaction.value=response.data.result;
@@ -589,8 +614,15 @@
           watch(  
             [() => customerId.value,()=>pin.value],
             ([nCustId, nPin], [oCustId, oPin]) => {
+              console.log("::",nCustId);
               if (nCustId.length >= 5) {
+                if(utils.value.productReferenceCode===""){
+                //jika reference code kosong, lanjut get prefix
                  getProductPrefix(nCustId);
+                //  setelah get prefix langung get product dengan reference code
+                }else{
+                  getProduct(utils.value.productReferenceCode);
+                }
               }
               if (nPin.length === pinLimit) {
                  modalShower.value.isConfirm=false;
@@ -603,6 +635,7 @@
             navigateTo();
           });
           return { 
+            getProduct,
             copyToClipboard,
             modalDestroy,
             modalShower,
@@ -614,6 +647,7 @@
             setPin,
             fConfirm,
             pin,
+            utils,
             pinLimit,
             addNumber,
             deleteNumber,
@@ -634,7 +668,6 @@
             getDetailTransaction,
             closeSession,
             shareAsImage,
-            closeModals,
             getBalance,
             getProfile,
             getTransactions,
