@@ -98,9 +98,6 @@
                                     <span class="text-sm font-label text-on-surface-variant"
                                         v-if="dataTransaction.product_reference_code='PLNPRE'">Sn/Token</span>
                                     <span class="text-sm font-label text-on-surface-variant" v-else>Sn</span>
-                                    <span class="text-sm font-semibold font-body text-on-surface"
-                                        v-if="dataTransaction.product_reference_code='PLNPRE'"
-                                        @click="copyToClipboard(dataTransaction.bill_info.sn)">@{{dataTransaction.bill_info.sn}}</span>
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.sn}}</span>
                                 </div>
