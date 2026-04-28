@@ -61,11 +61,22 @@
                             data-icon="content_copy">content_copy</span>
                     </div>
                 </div>
-                {{-- <div>
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Account
-                        Holder</p>
-                    <p class="font-semibold text-on-surface">Aditya Pratama</p>
-                </div> --}}
+                <div v-if="dataInquiry.bill_info.bill_desc.customer_name">
+                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nama</p>
+                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.customer_name }}</p>
+                </div>
+                <div v-if="dataInquiry.bill_info.bill_desc.daya">
+                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Daya</p>
+                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.daya }}</p>
+                </div>
+                <div v-if="dataInquiry.bill_info.bill_desc.meter_no">
+                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">No Meter</p>
+                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.meter_no }}</p>
+                </div>
+                <div v-if="dataInquiry.bill_info.bill_desc.tarif">
+                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Tarif</p>
+                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.tarif }}</p>
+                </div>
             </div>
         </section>
         <!-- Payment Notice -->

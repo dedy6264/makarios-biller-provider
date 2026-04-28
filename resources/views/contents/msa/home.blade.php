@@ -304,15 +304,26 @@
             }
           };
           //end api
-          const getDetailTransaction=(val)=>{//proses get detail transaksi dari list transaksi
-            const foundData = dataTransactions.value.find(item => item.reference_number == val);
-            if (foundData) {
-                dataTransaction.value = foundData;
-            } else {
-                console.log("Data tidak ditemukan");
-            }
-            if(dataTransaction.value.status_code!='02'){      
+          const getDetailTransaction=async(val)=>{//proses get detail transaksi dari list transaksi
+            try {
+              const response = await axios.post('{{ route('msa.getTransaction') }}', {
+                'reference_number':val,
+              },{
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                  }
+              });
+              dataTransaction.value=response.data.result.data;
+              console.log("DATA::",dataTransaction.value);
+              const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+              const data = JSON.parse(formattedString);
+              dataTransaction.value.bill_info.bill_desc=data;
               modalShower.value.isReceipt=true;
+            } catch (error) {
+                console.error("Gagal mengambil saldo:", error.response?.data || error.message);
+                if (error.response?.status === 401) {
+                    closeSession();
+                }
             }
           };
           const closeSession=()=>{//proses logout
@@ -490,6 +501,9 @@
                   break;
                 default:
                   dataTransaction.value=response.data.result;
+                  const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+                  const data = JSON.parse(formattedString);
+                  dataTransaction.value.bill_info.bill_desc=data;
                   modalShower.value.isModalPin=false;
                   fMsaTransactions();
                   dataProducts.value=({}) ;
@@ -521,24 +535,29 @@
                         Authorization: `Bearer ${token}`,
                     }
                 });
-               switch (response.data.responseCode) {
-                case "04":
-                  dataInquiry.value=response.data.result;
-                  setTimeout(() => {
-                    modalShower.value.isProductDetail=false;
-                    modalShower.value.isLoading=false;
-                    modalShower.value.isInquiry=true;
-                  }, 500);
-                  break;
-                default:
-                  toast.value.show=true;
-                  toast.value.message='Terjadi Kesalahan';
-                  toast.value.type='error';
-                  setTimeout(() => {
-                    toast.value.show=false;
-                    // fMsaTransactions();
-                  }, 1000);
-                  break;
+                switch (response.data.responseCode) {
+                  case "04":
+                    dataInquiry.value=response.data.result;
+                    const formattedString = dataInquiry.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+                    const data = JSON.parse(formattedString);
+                    dataInquiry.value.bill_info.bill_desc=data;
+                    setTimeout(() => {
+                      modalShower.value.isProductDetail=false;
+                      modalShower.value.isLoading=false;
+                      modalShower.value.isInquiry=true;
+                    }, 500);
+                    break;
+                  default:
+                    console.log("PPPP");
+                    toast.value.show=true;
+                    toast.value.message='Terjadi Kesalahan';
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      // fMsaTransactions();
+                      modalShower.value.isLoading=false;
+                    }, 1000);
+                    break;
                 }
                 // formPayment.value.reference_number=dataInquiry.value.reference_number;
               } catch (error) {

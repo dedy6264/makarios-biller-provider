@@ -205,6 +205,37 @@ class MsaController extends Controller
             return view('contents.msa.signIn');
         }
     }
+    public function getTransaction()
+    {
+        $authHeader = request()->bearerToken();
+         if(request()->isMethod('post')) {
+            $filter=[
+                "reference_number"=>request()->input('reference_number')?? '',
+            ];
+            $payload=[
+                "start"=>request()->input('start')?? 0,
+                "length"=>request()->input('length')?? 10,
+                "columns"=>request()->input('columns')??'',
+                "search"=>request()->input('search')??'',
+                "order"=>request()->input('order')??'',
+                "sort"=>request()->input('sort')??'',
+                "start_date" => request()->input('start_date') ?: now()->format('Y-m-d'),
+                "end_date" => request()->input('end_date') ?: now()->format('Y-m-d'),
+                "filter"=>$filter,
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/transaction-detail', $payload)->json();
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+        return view('contents.msa.transactions');
+    }
     public function getTransactions()
     {
         $authHeader = request()->bearerToken();

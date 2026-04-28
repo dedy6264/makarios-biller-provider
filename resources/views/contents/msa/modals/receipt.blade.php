@@ -60,18 +60,19 @@
                                     <span class="material-symbols-outlined text-primary"
                                         style="font-variation-settings: 'FILL' 1;">storefront</span>
                                 </div>
-                                <h2 class="text-lg font-bold font-headline text-on-surface">Viller Merchant</h2>
+                                <h2 class="text-lg font-bold font-headline text-on-surface">
+                                    @{{dataTransaction.merchant_outlet_name}}</h2>
                                 <span
                                     class="mt-1 text-xs font-semibold tracking-widest uppercase font-label text-primary">Payment
                                     Receipt</span>
                             </div>
                             {{-- data detail--}}
                             <div class="space-y-5">
-                                <div class="flex items-center justify-between">
+                                {{-- <div class="flex items-center justify-between">
                                     <span class="text-sm font-label text-on-surface-variant">Merchant Name</span>
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.merchant_outlet_name}}</span>
-                                </div>
+                                </div> --}}
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-label text-on-surface-variant">Date</span>
                                     <span
@@ -93,10 +94,34 @@
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.customer_id}}</span>
                                 </div>
-                                <div class="flex items-center justify-between" v-if="dataTransaction.other_reff!=''">
+                                <div class="flex items-center justify-between" v-if="dataTransaction.other_reff">
                                     <span class="text-sm font-label text-on-surface-variant">Sn</span>
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.other_reff}}</span>
+                                </div>
+                                <div class="flex items-center justify-between"
+                                    v-if="dataTransaction.bill_info.bill_desc.customer_name">
+                                    <span class="text-sm font-label text-on-surface-variant">Customer Name</span>
+                                    <span
+                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.customer_name}}</span>
+                                </div>
+                                <div class="flex items-center justify-between"
+                                    v-if="dataTransaction.bill_info.bill_desc.daya">
+                                    <span class="text-sm font-label text-on-surface-variant">Daya</span>
+                                    <span
+                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.daya}}</span>
+                                </div>
+                                <div class="flex items-center justify-between"
+                                    v-if="dataTransaction.bill_info.bill_desc.meter_no">
+                                    <span class="text-sm font-label text-on-surface-variant">No Meter</span>
+                                    <span
+                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.meter_no}}</span>
+                                </div>
+                                <div class="flex items-center justify-between"
+                                    v-if="dataTransaction.bill_info.bill_desc.tarif">
+                                    <span class="text-sm font-label text-on-surface-variant">Tarif</span>
+                                    <span
+                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.tarif}}</span>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-label text-on-surface-variant">Nominal</span>

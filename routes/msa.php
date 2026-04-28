@@ -10,6 +10,7 @@ Route::post('/msa/sign-in', [MsaController::class, 'signIn'])->name('msa.signIn.
 Route::get('/msa/home', [MsaController::class, 'home'])->name('msa.home');
 Route::get('/msa/get-balance', [MsaController::class, 'getBalance'])->name('msa.getBalance');
 Route::post('/msa/get-transactions', [MsaController::class, 'getTransactions'])->name('msa.getTransactions');
+Route::post('/msa/get-transaction', [MsaController::class, 'getTransaction'])->name('msa.getTransaction');
 Route::post('/msa/get-product-by-type', [MsaController::class, 'getProductByType'])->name('msa.getProductByType');
 Route::get('/msa/get-profile', [MsaController::class, 'getProfile'])->name('msa.getProfile');
 Route::post('/msa/get-product-prefix', [MsaController::class, 'getProductPrefix'])->name('msa.getProductPrefix');
