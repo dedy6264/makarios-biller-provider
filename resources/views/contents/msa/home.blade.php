@@ -522,7 +522,7 @@
                     }
                 });
                switch (response.data.responseCode) {
-                case "00":
+                case "04":
                   dataInquiry.value=response.data.result;
                   setTimeout(() => {
                     modalShower.value.isProductDetail=false;
