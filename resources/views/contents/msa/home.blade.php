@@ -314,10 +314,11 @@
                   }
               });
               dataTransaction.value=response.data.result.data;
-              console.log("DATA::",dataTransaction.value);
-              const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
-              const data = JSON.parse(formattedString);
-              dataTransaction.value.bill_info.bill_desc=data;
+              if(dataTransaction.value.bill_info.bill_desc!==''){
+                const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
+                const data = JSON.parse(formattedString);
+                dataTransaction.value.bill_info.bill_desc=data;
+              }
               modalShower.value.isReceipt=true;
             } catch (error) {
                 console.error("Gagal mengambil saldo:", error.response?.data || error.message);
@@ -434,7 +435,6 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              // console.log("===",response.data.result.data.productReferenceCode);
               getProduct(response.data.result.data.productReferenceCode);
               //jika sukses, lngsung get product
             } catch (error) {
@@ -469,7 +469,6 @@
           };
           const payment=async(val)=>{//proses payment, masih ada pr jika pin salah
             modalShower.value.isConfirm=true;
-            // console.log("ISCONFIRM",modalShower.value.isConfirm);
             try {
               const response = await axios.post('{{ route('msa.payment') }}', {
                 'reference_number':dataInquiry.value.reference_number,
@@ -552,7 +551,6 @@
                     }, 500);
                     break;
                   default:
-                    console.log("PPPP");
                     toast.value.show=true;
                     toast.value.message='Terjadi Kesalahan';
                     toast.value.type='error';
@@ -650,7 +648,6 @@
           watch(  
             [() => customerId.value,()=>pin.value],
             ([nCustId, nPin], [oCustId, oPin]) => {
-              console.log("::",nCustId);
               if (nCustId.length >= 5) {
                 if(utils.value.productReferenceCode===""){
                 //jika reference code kosong, lanjut get prefix

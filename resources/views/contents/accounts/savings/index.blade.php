@@ -307,7 +307,6 @@
 
           };
           window.deleteSegment = (idSaving) => {
-            console.log("Delete client with ID:", idSaving);
             nextTick(()=>{
                 // Create new client
                axios.post('{{ route('savings.destroy') }}', { id: idSaving })
