@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="mb-4 col-lg-8 col-md-6 mb-md-0">
+      <div class="mb-4 col-lg-12 col-md-6 ">
         <div class="mt-4 card">
           <div class="pb-0 card-header">
             <div class="row">
@@ -142,7 +142,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4 col-md-6">
+      {{-- <div class="col-lg-4 col-md-6">
         <div class="card h-100">
           <div class="pb-0 card-header">
             <h6>Orders overview</h6>
@@ -210,7 +210,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> --}}
     </div>
 
 
