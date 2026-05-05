@@ -20,29 +20,87 @@ class MsaController extends Controller
     public function signIn()
     {
         if(request()->isMethod('post')) {
+            // dd(request()->all());
             $payload=[
                 "username"=>request()->input('username'),
                 "password"=>request()->input('password'),
+                "device_uid"=>request()->input('uid'),
             ];
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signin', $payload)->json();
+            // dd($response);
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 // back to login with alert
                 return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
             }
-            if($response['responseCode']=='39'){
-                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
-            }
-            $redirect="/msa/home";
-            $origin="signIn";
-            return view('contents.msa.loading', compact('response','redirect','origin'));
+            // if($response['responseCode']=='39'){
+            //     return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Wrong user or password, please try again');
+            // }
+            return response()->json($response);
+
+            // $redirect="/msa/home";
+            // $origin="signIn";
+            // return view('contents.msa.loading', compact('response','redirect','origin'));
         }else{
             return view('contents.msa.signIn');
         }
     }
+    public function validateOtp(){
+        // dd(request()->all());
+        if(request()->isMethod('post')) {
+            $payload=[
+                "otp"=>request()->input('otp'),
+                "device_uid"=>request()->input('uid'),
+                "identifier"=>request()->input('identifier'),
+            ];
+            $response = Http::post($this->hostService->GetUrl('m').'/v2/validate-otp', $payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                // back to login with alert
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+            }
+            return response()->json($response);
+
+            // if($response['responseCode']=='39'){
+            //     return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+            // }
+            // $redirect="/msa/home";
+            // $origin="validateOtp";
+            // return view('contents.msa.loading', compact('response','redirect','origin'));
+        }else{
+            // return view('contents.msa.validateOtp');
+        }
+    }
+    public function paymentOtp(){
+        $authHeader = request()->bearerToken();
+        if(request()->isMethod('post')) {
+            // dd(request()->all());
+            $payload=[
+                "reference_number"=>request()->input('reference_number'),
+                "device_uid"=>request()->input('uid'),
+                "identifier"=>"payment",
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/payment-otp', $payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                // back to login with alert
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+            }
+            return response()->json($response);
+
+            // if($response['responseCode']=='39'){
+            //     return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+            // }
+            // $redirect="/msa/home";
+            // $origin="validateOtp";
+            // return view('contents.msa.loading', compact('response','redirect','origin'));
+        }else{
+            // return view('contents.msa.validateOtp');
+        }
+    }
      public function signUp()
     {
+        // dd(request()->all());
         if(request()->isMethod('post')) {
-
             $validatedData = request()->validate([
                 // 'referalCode' => 'required|string|max:255',
                 'username' => 'required|string|max:255',
@@ -78,18 +136,19 @@ class MsaController extends Controller
                 "phone" => $validatedData['phone'],
                 "address" => $validatedData['address'],
             ];
-            // dd($payload);
             $response = Http::post($this->hostService->GetUrl('m').'/v2/signup', $payload)->json();
-            // dd($response);
+            // dd(":::",$response);
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
                 return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
             }
-            if($response['responseCode']!=='00'){
-                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
-            }
-            $redirect="/msa/sign-in";
-            $origin="signUp";
-            return view('contents.msa.loading', compact('response','redirect','origin'));
+            // if($response['responseCode']!=='00'){
+            //     return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Terjadi Kesalahan');
+            // }
+            return response()->json($response);
+
+            // $redirect="/msa/sign-in";
+            // $origin="signUp";
+            // return view('contents.msa.loading', compact('response','redirect','origin'));
         }else{
             return view('contents.msa.signUp');
         }
@@ -180,14 +239,17 @@ class MsaController extends Controller
          if(request()->isMethod('post')) {
             $validatedData = request()->validate([
                 'reference_number' => 'required|string|max:255',
-                'pin' => 'required|string|max:255',
+                'otp' => 'required|string|max:255',
+                'uid' => 'required|string|max:255',
             ], [
                 'reference_number.required' => 'Product code is required.',
-                'pin.required' => 'Customer ID is required.',
+                'otp.required' => 'OTP is required.',
+                'uid.required' => 'Device ID is required.',
             ]);
             $payload = [
                 "reference_number" => $validatedData['reference_number'],
-                "account_pin" => $validatedData['pin'],
+                "otp" => $validatedData['otp'],
+                "device_uid" => $validatedData['uid'],
             ];
             $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/payment', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
@@ -197,7 +259,6 @@ class MsaController extends Controller
                     if($response['responseCode']=="44"){
                         return response()->json($response);
                 }}
-        
                 return response()->json(['error' => 'Invalid API response format or data type'], 500);
             }
             return response()->json($response);

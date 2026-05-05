@@ -28,6 +28,7 @@ return new class extends Migration
             $table->timestamps();
         });
          Schema::table('merchant_outlets', function (Blueprint $table) {
+            $table->dropColumn('cif_id');
             $table->string('device_uid', 255)->nullable();//setelah migrasi isi value lalu ubah jadi unique
             $table->string('is_verified')->default("N");
             $table->string('verified_at')->nullable();
@@ -55,8 +56,6 @@ return new class extends Migration
             $table->dropColumn('is_verified');
             $table->dropColumn('verified_at');
             $table->dropColumn('cif_id');
-            
-            
         });
          Schema::table('transactions', function (Blueprint $table) {
             $table->dropColumn('device_uid');

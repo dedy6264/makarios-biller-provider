@@ -101,6 +101,8 @@
   </style>
   <script src="{{ url('assets/css/web-apps/web-apps.css') }}" type="text/css"></script>
 
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 </head>
 
 <body class="flex flex-col items-center min-h-screen antialiased bg-surface font-body text-on-surface">
@@ -114,11 +116,13 @@
     <h1 class="text-3xl font-black tracking-tight font-headline text-primary">Viller</h1>
     <p class="mt-2 font-medium text-on-surface-variant">Start your premium financial journey</p>
   </header>
+  <div id="app">
+    <!-- Main Form Canvas -->
 
-  <!-- Main Form Canvas -->
-  <form action="{{ route('msa.signUp') }}" method="post">
-    @csrf
     <main class="flex-grow w-full max-w-md px-6 pb-32">
+      @include('contents.msa.modals.setPin')
+      @include('contents.msa.modals.toast')
+
       <!-- Step Indicator -->
       <div class="flex items-center justify-between px-2 mb-8">
         <div class="flex items-center gap-2">
@@ -148,7 +152,7 @@
                 class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">person</span>
               <input
                 class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                placeholder="e.g. Julian Alexander" type="text" name="fullname" />
+                placeholder="e.g. Julian Alexander" type="text" name="fullname" v-model="formSignUp.fullname" />
             </div>
           </div>
           <!-- Username & ID (KTP) Row -->
@@ -161,7 +165,7 @@
                   class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">badge</span>
                 <input
                   class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="16-digit ID number" type="text" name="numberid" />
+                  placeholder="16-digit ID number" type="text" name="numberid" v-model="formSignUp.numberid" />
               </div>
             </div>
           </div>
@@ -176,7 +180,7 @@
                   class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">alternate_email</span>
                 <input
                   class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="name@viller.com" type="email" name="email" />
+                  placeholder="name@viller.com" type="email" name="email" v-model="formSignUp.email" />
               </div>
             </div>
             <div class="relative group">
@@ -188,7 +192,7 @@
                   class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">phone_iphone</span>
                 <input
                   class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="+1 (555) 000-0000" name="phone" type="phone" />
+                  placeholder="+1 (555) 000-0000" name="phone" type="phone" v-model="formSignUp.phone" />
               </div>
             </div>
           </div>
@@ -201,7 +205,7 @@
               <div class="relative flex items-center">
                 <input
                   class="w-full px-4 py-4 font-medium transition-all border-none outline-none appearance-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl"
-                  type="date" name="birthdate" />
+                  type="date" name="birthdate" v-model="formSignUp.birthdate" />
               </div>
             </div>
             <div class="relative group">
@@ -210,7 +214,7 @@
               <div class="relative flex items-center">
                 <input
                   class="w-full px-4 py-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                  placeholder="@julian" type="text" name="username" />
+                  placeholder="@julian" type="text" name="username" v-model="formSignUp.username" />
               </div>
             </div>
           </div>
@@ -224,7 +228,7 @@
                 class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">lock</span>
               <input
                 class="w-full py-4 pl-12 pr-12 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                placeholder="Min. 8 characters" type="password" name="password" />
+                placeholder="Min. 8 characters" type="password" name="password" v-model="formSignUp.password" />
               <span
                 class="material-symbols-outlined absolute right-4 text-outline cursor-pointer hover:text-primary transition-colors text-[20px]">visibility</span>
             </div>
@@ -238,7 +242,8 @@
                 class="material-symbols-outlined absolute left-4 top-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">location_on</span>
               <textarea
                 class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none resize-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                placeholder="Street name, building, apartment..." rows="3" name="address"></textarea>
+                placeholder="Street name, building, apartment..." rows="3" v-model="formSignUp.address"
+                name="address"></textarea>
             </div>
           </div>
           <div class="relative group">
@@ -250,7 +255,7 @@
                 class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">person</span>
               <input
                 class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
-                placeholder="3245SR" type="text" name="referalCode" />
+                placeholder="3245SR" type="text" name="referalCode" v-model="formSignUp.referalCode" />
             </div>
           </div>
         </div>
@@ -268,7 +273,7 @@
     <!-- Bottom Action Bar (Fixed) -->
     <div
       class="fixed bottom-0 z-40 flex flex-col w-full max-w-md gap-4 px-6 pt-4 pb-8 -translate-x-1/2 bg-white/70 backdrop-blur-2xl left-1/2">
-      <button type="submit"
+      <button type="submit" @click="signUp"
         class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold rounded-xl shadow-[0px_12px_32px_rgba(0,62,199,0.15)] active:scale-95 transition-all duration-200 uppercase tracking-widest text-sm flex items-center justify-center gap-2">
         Continue
         <span class="material-symbols-outlined text-[18px]"
@@ -278,14 +283,135 @@
         Already have an account? <a class="font-bold text-primary" href="{{ route('msa.signIn') }}">Log In</a>
       </p>
     </div>
-  </form>
-  <!-- Decorative Liquid Background Element -->
-  <div
-    class="fixed top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary-fixed/10 blur-[120px] rounded-full -z-10 pointer-events-none">
+
+    <!-- Decorative Liquid Background Element -->
+    <div
+      class="fixed top-[-10%] right-[-10%] w-[80%] h-[50%] bg-primary-fixed/10 blur-[120px] rounded-full -z-10 pointer-events-none">
+    </div>
+    <div
+      class="fixed bottom-[-10%] left-[-10%] w-[60%] h-[40%] bg-secondary-container/10 blur-[100px] rounded-full -z-10 pointer-events-none">
+    </div>
   </div>
-  <div
-    class="fixed bottom-[-10%] left-[-10%] w-[60%] h-[40%] bg-secondary-container/10 blur-[100px] rounded-full -z-10 pointer-events-none">
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script type="module">
+    const { createApp,onMounted, ref,nextTick, watch } = Vue;
+      const app = createApp({
+        setup() {
+          const formSignUp = ref({
+            referalCode: '',
+            username: '',
+            password: '',
+            email: '',
+            fullname: '',
+            numberid: '',
+            birthdate: '',
+            phone: '',
+            address: '',
+          });
+          const toast=ref({
+            show: false,
+            type: 'success',
+            title: '',
+            message: '',
+            progress: 100
+          });
+          const signUp = async () => {
+             try {
+              const response = await axios.post('{{ route('msa.signUp') }}', formSignUp.value,{
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': '{{ csrf_token() }}',
+                  }
+              });
+              console.log("Response:", response.data);
+              if (response.data.responseCode=="00") {
+                //nampilin page otp
+                localStorage.setItem('uid', response.data.result.device_uid);
+                modalShower.value.isSetPin=true;
+              } else {
+                toast.value.show=true;
+                toast.value.message=response.data.responseMessage || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+              }
+
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                toast.value.show=true;
+                toast.value.message=error.response?.data?.message || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+            }
+          };
+          const confirm=async()=>{
+            try {
+              const response = await axios.post('{{ route('msa.validateOtp') }}', {
+                otp:otp.value,
+                uid:localStorage.getItem('uid'),
+                identifier:'signUp',
+              },{
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': '{{ csrf_token() }}',
+                  }
+              });
+              console.log("Response:", response.data);
+              if (response.data.responseCode=="00") {
+                //nampilin page otp
+                // modalShower.value.isModalOtp=true;
+                toast.value.show=true;
+                toast.value.type='success';
+                toast.value.message='Registration Success, Please Login...';
+                setTimeout(() => {
+                    toast.value.show=false;
+                    window.location.href = "/msa/sign-in";
+                }, 2000);
+              } else {
+                toast.value.show=true;
+                toast.value.message=response.data.responseMessage || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+              }
+
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                toast.value.show=true;
+                toast.value.message=error.response?.data?.message || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+            }
+          }
+          const otp=ref("");
+          const modalShower=ref({
+              isModalOtp:false,
+              isSetPin:false,
+              isModalOtp:false,
+              
+          })
+          onMounted(() => {
+                // modalShower.value.isSetPin=true;
+          });
+          return {
+            confirm,
+            otp,
+            formSignUp,
+            toast,
+            modalShower,
+            signUp,
+          };
+        }
+      })
+      app.config.globalProperties.$format = window.format
+      app.mount('#app')
+  </script>
 </body>
 
 </html>

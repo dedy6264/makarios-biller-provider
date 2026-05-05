@@ -87,6 +87,8 @@
     </script>
 
     <link rel="stylesheet" href="{{ url('assets/css/web-apps/web-apps.css') }}" type="text/css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 </head>
 
 <body class="flex flex-col items-center min-h-screen bg-background font-body text-on-surface">
@@ -97,18 +99,20 @@
         <button
             class="material-symbols-outlined text-[#0052FF] p-2 hover:bg-[#f1f4f9] rounded-full transition-colors active:scale-95 duration-200">help_outline</button>
     </header> --}}
-    <main class="flex flex-col items-center justify-center flex-grow w-full max-w-md px-6 pt-24 pb-12">
-        <div class="w-full mb-12 text-center">
-            <h1 class="mb-4 text-4xl font-extrabold tracking-tight font-headline md:text-5xl text-on-surface">
-                Welcome back
-            </h1>
-            <p class="text-sm tracking-wide font-label text-on-surface-variant opacity-80">
-                Enter your credentials to access your secure wealth portal.
-            </p>
-        </div>
-        <section class="w-full space-y-8">
-            <form action="{{ route('msa.signIn') }}" method="post">
-                @csrf
+    <div id="app">
+        @include('contents.msa.modals.setPin')
+        @include('contents.msa.modals.toast')
+        <main class="flex flex-col items-center justify-center flex-grow w-full max-w-md px-6 pt-24 pb-12">
+            <div class="w-full mb-12 text-center">
+                <h1 class="mb-4 text-4xl font-extrabold tracking-tight font-headline md:text-5xl text-on-surface">
+                    Welcome back
+                </h1>
+                <p class="text-sm tracking-wide font-label text-on-surface-variant opacity-80">
+                    Enter your credentials to access your secure wealth portal.
+                </p>
+            </div>
+            <section class="w-full space-y-8">
+
                 <div class="space-y-6">
                     <div class="group">
                         {{-- after login and failed, show alert or notif --}}
@@ -126,7 +130,10 @@
                                 class="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary opacity-60">alternate_email</span>
                             <input
                                 class="w-full py-4 pl-12 pr-4 transition-all border-none bg-surface-container-lowest rounded-xl focus:ring-2 focus:ring-primary/20 outline outline-1 outline-outline-variant/15 text-on-surface placeholder:text-outline/40"
-                                placeholder="name@viller.com" type="text" name="username" />
+                                placeholder="name@viller.com" type="text" name="username"
+                                v-model="formSignIn.username" />
+                            <input id="uidInput" class="w-full py-4 pl-12 pr-4 ..." placeholder="name@viller.com"
+                                type="text" name="uid" hidden v-model="formSignIn.uid" />
                         </div>
                     </div>
                     <div class="group">
@@ -141,48 +148,50 @@
                                 class="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary opacity-60">lock</span>
                             <input
                                 class="w-full py-4 pl-12 pr-12 transition-all border-none bg-surface-container-lowest rounded-xl focus:ring-2 focus:ring-primary/20 outline outline-1 outline-outline-variant/15 text-on-surface placeholder:text-outline/40"
-                                placeholder="••••••••" type="password" name="password" />
+                                placeholder="••••••••" type="password" name="password" v-model="formSignIn.password" />
                             <button
                                 class="absolute transition-opacity -translate-y-1/2 material-symbols-outlined right-4 top-1/2 text-on-surface-variant opacity-40 hover:opacity-100">visibility</button>
                         </div>
                     </div>
                 </div>
                 <div class="pt-4">
-                    <button type="submit"
+                    <button type="submit" @click="signIn"
                         class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold rounded-xl shadow-[0px_12px_32px_rgba(0,62,199,0.15)] hover:shadow-[0px_12px_48px_rgba(0,62,199,0.25)] active:scale-[0.98] transition-all duration-200">
                         Sign In
                     </button>
                 </div>
-            </form>
-            <div class="flex items-center gap-4 py-2">
-                <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
-                <span class="text-[10px] uppercase tracking-widest text-outline">or secure entry via</span>
-                <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <button
-                    class="flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
-                    <img alt="" class="w-4 h-4"
-                        data-alt="Official Google G logo in bright primary colors for authentication brand identity"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-_dsUzA5wAMyhh6w3Y8RlzhzttACQz4AlQJGgh7Hlmz2p4UAZaE7DChBJSzQmGQPZZGfWJz5QBnVVCJ4LQQWZH5QtA79zNm6BGmUl7ikXPChjNdELXKfetJxARFwo_ARjB4OuO1b-pgzLWp0bdxlerwyBzt-VtZcI0J6cvg_YHTUGixcg-IrHZcu7tYUdqOgRUDnrtEqvhU5W68h3e-dKgsU_L0alFZtY8_pjDjeTdQezVs7JriuBM9T9XScfEJKdO2_G2OwuZDA1" />
-                    Google
-                </button>
-                <button
-                    class="flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
-                    <img alt="" class="w-4 h-4"
-                        data-alt="Sleek black Apple logo representing secure biometric face id or touch id sign in option"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA_NsSpc4tuVpjgZEbwlyjQFVY_xucHhmF6pC_3v-xZzFTyAcaKlztfhQazfFkOvx1Oa-jqRtH9M-LclRma7myN7Gcx2GmSUX8pxcIpk1lWm88cfJdk5U6ZHU0Og3gfzEo5JRieMzDxv8C2En6YMmsnRr1-Qv0ioU4lA8BH_r4eldKJjDnqDKx39FIy7jloXA39-0Kbm2LOgeWdRg7QD767deWisA7yl4MolnNNY5f7cPcg871SN0cPp8y4EDM81fqPr9aKM5lSiXo" />
-                    Apple ID
-                </button>
-            </div>
-        </section>
-        <footer class="mt-16 text-center">
-            <p class="text-sm font-label text-on-surface-variant">
-                Don't have an account? <a class="font-bold text-primary hover:underline decoration-2 underline-offset-4"
-                    href="{{ route('msa.signUp') }}">Sign Up</a>
-            </p>
-        </footer>
-    </main>
+
+                <div class="flex items-center gap-4 py-2">
+                    <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
+                    <span class="text-[10px] uppercase tracking-widest text-outline">or secure entry via</span>
+                    <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <button
+                        class="flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
+                        <img alt="" class="w-4 h-4"
+                            data-alt="Official Google G logo in bright primary colors for authentication brand identity"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-_dsUzA5wAMyhh6w3Y8RlzhzttACQz4AlQJGgh7Hlmz2p4UAZaE7DChBJSzQmGQPZZGfWJz5QBnVVCJ4LQQWZH5QtA79zNm6BGmUl7ikXPChjNdELXKfetJxARFwo_ARjB4OuO1b-pgzLWp0bdxlerwyBzt-VtZcI0J6cvg_YHTUGixcg-IrHZcu7tYUdqOgRUDnrtEqvhU5W68h3e-dKgsU_L0alFZtY8_pjDjeTdQezVs7JriuBM9T9XScfEJKdO2_G2OwuZDA1" />
+                        Google
+                    </button>
+                    <button
+                        class="flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
+                        <img alt="" class="w-4 h-4"
+                            data-alt="Sleek black Apple logo representing secure biometric face id or touch id sign in option"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA_NsSpc4tuVpjgZEbwlyjQFVY_xucHhmF6pC_3v-xZzFTyAcaKlztfhQazfFkOvx1Oa-jqRtH9M-LclRma7myN7Gcx2GmSUX8pxcIpk1lWm88cfJdk5U6ZHU0Og3gfzEo5JRieMzDxv8C2En6YMmsnRr1-Qv0ioU4lA8BH_r4eldKJjDnqDKx39FIy7jloXA39-0Kbm2LOgeWdRg7QD767deWisA7yl4MolnNNY5f7cPcg871SN0cPp8y4EDM81fqPr9aKM5lSiXo" />
+                        Apple ID
+                    </button>
+                </div>
+            </section>
+            <footer class="mt-16 text-center">
+                <p class="text-sm font-label text-on-surface-variant">
+                    Don't have an account? <a
+                        class="font-bold text-primary hover:underline decoration-2 underline-offset-4"
+                        href="{{ route('msa.signUp') }}">Sign Up</a>
+                </p>
+            </footer>
+        </main>
+    </div>
     <footer
         class="flex flex-col items-center justify-between w-full px-12 py-8 mx-auto mt-auto bg-transparent md:flex-row max-w-7xl">
         <div class="font-['Inter'] text-xs uppercase tracking-widest text-[#181c20]/50">
@@ -197,6 +206,125 @@
                 href="#">Security</a>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module">
+        const { createApp,onMounted, ref,nextTick, watch } = Vue;
+      const app = createApp({
+        setup() {
+          const formSignIn = ref({
+            username: '',
+            password: '',
+            uid:localStorage.getItem('uid') || '',
+          });
+          const toast=ref({
+            show: false,
+            type: 'success',
+            title: '',
+            message: '',
+            progress: 100
+          });
+          const signIn = async () => {
+             try {
+              const response = await axios.post('{{ route('msa.signIn') }}', formSignIn.value,{
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': '{{ csrf_token() }}',
+                  }
+              });
+              console.log("Response:", response.data.result.is_otp);
+              if (response.data.responseCode=="00") {
+                  if(response.data.result.is_otp=="Y"){
+                    localStorage.setItem('uid', response.data.result.device_uid);
+                    modalShower.value.isSetPin=true;
+                }else{
+                    localStorage.setItem('token', response.data.result.access_token);
+                    toast.value.show=true;
+                    toast.value.type='success';
+                    toast.value.message='Login Success, Redirecting...';
+                    setTimeout(() => {
+                        toast.value.show=false;
+                        window.location.href = "/msa/home";
+                    }, 2000);
+                }
+              } else {
+                toast.value.show=true;
+                toast.value.message=response.data.responseMessage || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+              }
+
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                toast.value.show=true;
+                toast.value.message=error.response?.data?.message || 'Sign Up Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+            }
+          };
+          const confirm=async()=>{
+            try {
+              const response = await axios.post('{{ route('msa.validateOtp') }}', {
+                otp:otp.value,
+                uid:localStorage.getItem('uid'),
+                identifier:'signIn',
+              },{
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'csrf-token': '{{ csrf_token() }}',
+                  }
+              });
+              console.log("Response:", response.data);
+              if (response.data.responseCode=="00") {
+                toast.value.show=true;
+                toast.value.type='success';
+                toast.value.message='Verification Success, Please Login...';
+                setTimeout(() => {
+                    toast.value.show=false;
+                    window.location.href = "/msa/sign-in";
+                }, 2000);
+              } else {
+                toast.value.show=true;
+                toast.value.message=response.data.responseMessage || 'Sign In Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+              }
+
+            } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                toast.value.show=true;
+                toast.value.message=error.response?.data?.message || 'Sign In Gagal';
+                toast.value.type='error';
+                setTimeout(() => {
+                  toast.value.show=false;
+                }, 1000);
+            }
+          }
+          const otp=ref("");
+          const modalShower=ref({
+              isSetPin:false,
+              
+          })
+          onMounted(() => {
+          });
+          return {
+            formSignIn,
+            toast,
+            signIn,
+            confirm,
+            otp,
+            modalShower,
+          };
+        }
+      })
+      app.config.globalProperties.$format = window.format
+      app.mount('#app')
+    </script>
 </body>
 
 </html>

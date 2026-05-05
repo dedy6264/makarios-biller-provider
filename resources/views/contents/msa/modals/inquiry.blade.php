@@ -86,20 +86,24 @@
                 Please ensure all details are correct. Transactions cannot be cancelled after confirmation.
             </p>
         </div>
-    </main>
-    <!-- Bottom Action Bar -->
-    <div
-        class="fixed bottom-0 left-0 z-50 grid w-full grid-cols-10 gap-2 px-6 py-3 pt-4 pb-10 bg-white/70 backdrop-blur-xl">
 
-        <button @click="fMsaHome"
-            class="flex items-center justify-center col-span-3 gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
-            <span class="material-symbols-outlined">
-                arrow_circle_left
-            </span>Back
-        </button>
-        <button @click="fConfirm"
-            class="col-span-7 w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-2xl shadow-[0px_8px_24px_rgba(0,62,199,0.2)] transition-all duration-300 hover:bg-surface-container-high active:scale-95">
-            Confirm &amp; Pay
-        </button>
-    </div>
+        <!-- Bottom Action Bar -->
+        <div class="fixed bottom-0 left-0 grid w-full grid-cols-10 gap-2 px-6 py-3 pt-4 pb-10 bg-white/70 backdrop-blur-xl"
+            :class="{
+        'z-50': !modalShower.isSetPin,
+        '': modalShower.isSetPin
+      }">
+
+            <button @click="fMsaHome"
+                class="flex items-center justify-center col-span-3 gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
+                <span class="material-symbols-outlined">
+                    arrow_circle_left
+                </span>Back
+            </button>
+            <button @click="otpPayment"
+                class="col-span-7 w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-2xl shadow-[0px_8px_24px_rgba(0,62,199,0.2)] transition-all duration-300 hover:bg-surface-container-high active:scale-95">
+                Confirm &amp; Pay
+            </button>
+        </div>
+    </main>
 </div>

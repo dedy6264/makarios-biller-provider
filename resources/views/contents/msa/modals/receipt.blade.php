@@ -6,7 +6,6 @@
             @click="modalShower.isReceipt=false"></div>
 
         <div class="flex items-end justify-center min-h-full p-0 sm:items-center sm:p-6">
-
             <div
                 class="relative w-full max-w-md bg-surface-container-low rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0px_24px_48px_rgba(0,0,0,0.1)] flex flex-col max-h-[90vh] overflow-hidden transition-all transform">
 

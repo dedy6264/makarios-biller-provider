@@ -129,10 +129,15 @@
     @include('contents.msa.navModals.msaTransactions')
     @include('contents.msa.navModals.msaProfile')
     @include('contents.msa.modals.product')
+    @include('contents.msa.modals.toast')
     {{-- end modal home --}}
     <!-- BottomNavBar -->
     <nav
-      class="fixed bottom-0 left-0 w-full bg-white/70 backdrop-blur-xl z-50 rounded-t-3xl shadow-[0px_-8px_24px_rgba(0,62,199,0.04)]">
+      class="fixed bottom-0 left-0 w-full bg-white/70 backdrop-blur-xl  rounded-t-3xl shadow-[0px_-8px_24px_rgba(0,62,199,0.04)]"
+      :class="{
+        'z-50': !modalShower.isSetPin,
+        '': modalShower.isSetPin
+      }">
       <div class="flex items-center justify-around px-4 pt-3 pb-6">
         <!-- Home (Active) bg-blue-50 dark:bg-blue-900/30 dark:text-blue-300 rounded-2xl text-blue-700-->
         <a @click="fMsaHome"
@@ -182,6 +187,7 @@
     @include('contents.msa.modals.depositPage')
     @include('contents.msa.modals.loading')
 
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -199,6 +205,7 @@
           const utils=ref({
             productReferenceCode:'',
           });
+          const otp=ref("");
           const dataBalance=ref({
             isLoading:false,
             balance:0,
@@ -241,14 +248,14 @@
                   }
               });
               dataBalance.value.balance=response.data.result.account_balance;
-              if(response.data.result.is_set_pin=="N"){
-              localStorage.setItem('isSetPin', 'N');
-                setTimeout(() => {
-                  modalShower.value.isSetPin=true;
-                }, 2000);
-              }else{
-              localStorage.removeItem('isSetPin');
-              }
+              // if(response.data.result.is_set_pin=="N"){
+              // localStorage.setItem('isSetPin', 'N');
+              //   setTimeout(() => {
+              //     modalShower.value.isSetPin=true;
+              //   }, 2000);
+              // }else{
+              // localStorage.removeItem('isSetPin');
+              // }
               setTimeout(() => {
                 dataBalance.value.isLoading=false;
               }, 1000);
@@ -329,9 +336,9 @@
           };
           const closeSession=()=>{//proses logout
             localStorage.removeItem('token');
-            if(localStorage.getItem('isSetPin')){
-              localStorage.removeItem('isSetPin');
-            }
+            // if(localStorage.getItem('isSetPin')){
+            //   localStorage.removeItem('isSetPin');
+            // }
             window.location.href = '/msa/sign-in';
           }
           const shareAsImage = () => {//proses share atau download receipt
@@ -467,12 +474,15 @@
             modalShower.value.isConfirm=true;
             modalShower.value.isModalPin=true;
           };
-          const payment=async(val)=>{//proses payment, masih ada pr jika pin salah
+          const confirm=async(val)=>{//proses payment, masih ada pr jika pin salah
+            modalShower.value.isSetPin=false;
             modalShower.value.isConfirm=true;
             try {
               const response = await axios.post('{{ route('msa.payment') }}', {
                 'reference_number':dataInquiry.value.reference_number,
-                'pin':val,
+                // 'pin':val,
+                'uid':localStorage.getItem('uid') || '',
+                'otp':otp.value,
               },{
                   headers: {
                       Authorization: `Bearer ${token}`,
@@ -490,6 +500,7 @@
                   break;
               
                 case '36':
+                  console.log("Saldo tidak mencukupi");
                   toast.value.show=true;
                   toast.value.message='Saldo tidak mencukupi';
                   toast.value.type='error';
@@ -523,9 +534,9 @@
             }
           };
           const inquiry=async(val)=>{//proses inquiry
-            if(localStorage.getItem('isSetPin')){
-              modalShower.value.isSetPin=true;
-            }else{
+            // if(localStorage.getItem('isSetPin')){
+            //   modalShower.value.isSetPin=true;
+            // }else{
               modalShower.value.isLoading=true;
               try {
                 const response = await axios.post('{{ route('msa.inquiry') }}', {
@@ -568,11 +579,47 @@
                       closeSession();
                   }
               }
-            }
+            // }
           };
           const pin = ref(""); // menampung PIN yang diinput
           const pinLimit = 6;//var validasi max 6 karakter
-
+          const otpPayment=async()=>{
+             try {
+                const response = await axios.post('{{ route('msa.paymentOtp') }}', {
+                  'reference_number':dataInquiry.value.reference_number,
+                  'uid':localStorage.getItem('uid') || '',
+                },{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                  switch (response.data.responseCode) {
+                    case '44':
+                      toast.value.show=true;
+                      toast.value.message='OTP salah, silahkan coba lagi';
+                      toast.value.type='error';
+                      setTimeout(() => {
+                        toast.value.show=false;
+                      }, 1000);
+                      modalShower.value.isConfirm=false;
+                      break;
+                    default:
+                      toast.value.show=true;
+                      toast.value.message='OTP berhasil dikirim, silahkan cek whatsapp Anda';
+                      toast.value.type='success';
+                      setTimeout(() => {
+                        toast.value.show=false;
+                      }, 1000);
+                      modalShower.value.isSetPin=true;
+                      break;
+                  }
+              } catch (error) {
+                  console.error("Gagal inquiry:", error.response?.data || error.message);
+                  if (error.response?.status === 401) {
+                      closeSession();
+                  }
+              }
+          };
           // Fungsi untuk menambah angka
           const addNumber = (num) => {
               if (pin.value.length < pinLimit) {
@@ -668,6 +715,8 @@
             navigateTo();
           });
           return { 
+            otp,
+            otpPayment,
             getProduct,
             copyToClipboard,
             modalDestroy,
@@ -685,7 +734,7 @@
             addNumber,
             deleteNumber,
             confirmPin,
-            payment,
+            confirm,
             inquiry,
             dataInquiry,
             dataProducts,
