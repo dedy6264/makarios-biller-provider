@@ -231,7 +231,6 @@
                     'csrf-token': '{{ csrf_token() }}',
                   }
               });
-              console.log("Response:", response.data.result.is_otp);
               if (response.data.responseCode=="00") {
                   if(response.data.result.is_otp=="Y"){
                     localStorage.setItem('uid', response.data.result.device_uid);
@@ -247,6 +246,7 @@
                     }, 2000);
                 }
               } else {
+                console.log("Response:", response.data);
                 toast.value.show=true;
                 toast.value.message=response.data.responseMessage || 'Sign Up Gagal';
                 toast.value.type='error';
