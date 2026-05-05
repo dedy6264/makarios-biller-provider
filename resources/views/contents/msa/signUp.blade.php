@@ -359,7 +359,7 @@
                     'csrf-token': '{{ csrf_token() }}',
                   }
               });
-              console.log("Response:", response.data);
+              otp.value='';
               if (response.data.responseCode=="00") {
                 //nampilin page otp
                 // modalShower.value.isModalOtp=true;

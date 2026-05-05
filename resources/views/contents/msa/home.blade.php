@@ -488,6 +488,7 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
+              otp.value='';
               switch (response.data.responseCode) {
                 case '44':
                   toast.value.show=true;
