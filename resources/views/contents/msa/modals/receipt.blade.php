@@ -99,6 +99,11 @@
                                     <span class="text-sm font-label text-on-surface-variant" v-else>Sn</span>
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.sn}}</span>
+                                    <button @click="copyToClipboard(dataTransaction.bill_info.sn)"
+                                        class="flex items-center gap-1 text-sm font-semibold transition-transform text-primary active:scale-95">
+                                        <span class="text-lg material-symbols-outlined"
+                                            data-icon="content_copy">content_copy</span>
+                                    </button>
                                 </div>
                                 <div class="flex items-center justify-between"
                                     v-if="dataTransaction.bill_info.bill_desc.customer_name">
