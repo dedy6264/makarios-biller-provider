@@ -10,24 +10,68 @@
         </div>
         <!-- Filters Section - Asymmetric Bento Feel -->
         <div class="grid grid-cols-2 gap-3 mb-10">
+            <!-- DATE FILTER -->
             <div
-                class="bg-surface-container-lowest p-4 rounded-3xl shadow-[0px_8px_20px_rgba(0,62,199,0.03)] border border-outline-variant/15">
-                <span class="text-[10px] uppercase tracking-widest font-bold text-primary mb-2 block">Date
-                    Range</span>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-semibold">7 days</span>
-                    <span class="text-lg material-symbols-outlined text-primary">expand_more</span>
+                class="relative group bg-surface-container-lowest p-4 rounded-3xl shadow-[0px_8px_20px_rgba(0,62,199,0.03)] border border-outline-variant/15 transition-all hover:bg-surface-bright focus-within:ring-2 focus-within:ring-primary/20">
+
+                <!-- Label -->
+                <span class="text-[10px] uppercase tracking-widest font-bold text-primary mb-1 block">
+                    Dari
+                </span>
+
+                <!-- Input Wrapper -->
+                <div class="flex items-center gap-2">
+                    <!-- Input Date disesuaikan agar mengisi ruang dan transparan -->
+                    <input type="date" v-model="utils.startDate"
+                        class="flex-1 w-full text-sm font-bold uppercase bg-transparent border-0 outline-none appearance-none cursor-pointer text-on-surface" />
+
+                    <!-- Ikon Kalender -->
+                    <span class="text-xl pointer-events-none material-symbols-outlined text-primary shrink-0"
+                        style="font-variation-settings: 'FILL' 1">
+                        calendar_today
+                    </span>
                 </div>
             </div>
             <div
-                class="bg-surface-container-lowest p-4 rounded-3xl shadow-[0px_8px_20px_rgba(0,62,199,0.03)] border border-outline-variant/15">
-                <span class="text-[10px] uppercase tracking-widest font-bold text-primary mb-2 block">Product
-                    Type</span>
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-semibold">All Assets</span>
-                    <span class="text-lg material-symbols-outlined text-primary">filter_list</span>
+                class="relative group bg-surface-container-lowest p-4 rounded-3xl shadow-[0px_8px_20px_rgba(0,62,199,0.03)] border border-outline-variant/15 transition-all hover:bg-surface-bright focus-within:ring-2 focus-within:ring-primary/20">
+
+                <!-- Label -->
+                <span class="text-[10px] uppercase tracking-widest font-bold text-primary mb-1 block">
+                    Sampai
+                </span>
+
+                <!-- Input Wrapper -->
+                <div class="flex items-center gap-2">
+                    <!-- Input Date disesuaikan agar mengisi ruang dan transparan -->
+                    <input type="date" v-model="utils.endDate"
+                        class="flex-1 w-full text-sm font-bold uppercase bg-transparent border-0 outline-none appearance-none cursor-pointer text-on-surface" />
+
+                    <!-- Ikon Kalender -->
+                    <span class="text-xl pointer-events-none material-symbols-outlined text-primary shrink-0"
+                        style="font-variation-settings: 'FILL' 1">
+                        calendar_today
+                    </span>
                 </div>
             </div>
+            <div>
+                <button type="submit">Filter</button>
+            </div>
+            <!-- PRODUCT FILTER (Sudah disesuaikan agar seragam) -->
+            {{-- <div
+                class="relative group bg-surface-container-lowest p-4 rounded-3xl shadow-[0px_8px_20px_rgba(0,62,199,0.03)] border border-outline-variant/15 transition-all hover:bg-surface-bright cursor-pointer">
+
+                <span class="text-[10px] uppercase tracking-widest font-bold text-primary mb-1 block">
+                    Product Type
+                </span>
+
+                <div class="flex items-center justify-between gap-2">
+                    <span class="text-sm font-bold text-on-surface">All Assets</span>
+                    <span class="text-xl material-symbols-outlined text-primary shrink-0"
+                        style="font-variation-settings: 'FILL' 1">
+                        filter_list
+                    </span>
+                </div>
+            </div> --}}
         </div>
         <!-- Transaction List -->
         <div class="space-y-6">

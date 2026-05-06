@@ -161,12 +161,12 @@
                     </button>
                 </div>
 
-                <div class="flex items-center gap-4 py-2">
+                {{-- <div class="flex items-center gap-4 py-2">
                     <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
                     <span class="text-[10px] uppercase tracking-widest text-outline">or secure entry via</span>
                     <div class="h-[1px] flex-grow bg-outline-variant/20"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
+                </div> --}}
+                {{-- <div class="grid grid-cols-2 gap-4">
                     <button
                         class="flex items-center justify-center gap-2 py-3 text-xs font-semibold transition-colors duration-200 bg-surface-container-low rounded-xl font-label text-on-surface hover:bg-surface-container-high active:scale-95">
                         <img alt="" class="w-4 h-4"
@@ -181,7 +181,7 @@
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA_NsSpc4tuVpjgZEbwlyjQFVY_xucHhmF6pC_3v-xZzFTyAcaKlztfhQazfFkOvx1Oa-jqRtH9M-LclRma7myN7Gcx2GmSUX8pxcIpk1lWm88cfJdk5U6ZHU0Og3gfzEo5JRieMzDxv8C2En6YMmsnRr1-Qv0ioU4lA8BH_r4eldKJjDnqDKx39FIy7jloXA39-0Kbm2LOgeWdRg7QD767deWisA7yl4MolnNNY5f7cPcg871SN0cPp8y4EDM81fqPr9aKM5lSiXo" />
                         Apple ID
                     </button>
-                </div>
+                </div> --}}
             </section>
             <footer class="mt-16 text-center">
                 <p class="text-sm font-label text-on-surface-variant">

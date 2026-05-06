@@ -204,6 +204,8 @@
           });
           const utils=ref({
             productReferenceCode:'',
+            startDate:'',
+            endDate:'',
           });
           const otp=ref("");
           const dataBalance=ref({
@@ -291,9 +293,12 @@
             }
           };
           const getTransactions=async(val)=>{//proses get list transaction
+            dataTransactions.value={};
             try {
               const response = await axios.post('{{ route('msa.getTransactions') }}', {
                 'length':parseInt(val, 10),
+                'start_date': utils.value.startDate,
+                'end_date': utils.value.endDate
               },{
                   headers: {
                       Authorization: `Bearer ${token}`,
@@ -694,8 +699,8 @@
             }
           };
           watch(  
-            [() => customerId.value,()=>pin.value],
-            ([nCustId, nPin], [oCustId, oPin]) => {
+            [() => customerId.value,()=>pin.value,()=>utils.value.endDate],
+            ([nCustId, nPin, nEndDate], [oCustId, oPin, oEndDate]) => {
               if (nCustId.length >= 5) {
                 if(utils.value.productReferenceCode===""){
                 //jika reference code kosong, lanjut get prefix
@@ -706,10 +711,16 @@
                 }
               }
               if (nPin.length === pinLimit) {
-                 modalShower.value.isConfirm=false;
-                }else{
-                  modalShower.value.isConfirm=true;
+               modalShower.value.isConfirm=false;
+              }else{
+                modalShower.value.isConfirm=true;
+              }
+              if(nEndDate!==''){
+                if(utils.value.startDate!==''){
+                  console.log("end date change");
+                  getTransactions(10);
                 }
+              }
             }
           );
           onMounted(() => {
