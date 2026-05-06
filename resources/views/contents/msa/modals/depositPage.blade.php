@@ -80,8 +80,8 @@
                         <p class="mb-3 text-sm font-medium text-on-surface-variant">Salin Nomer rekening</p>
                         <div
                             class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-2xl group">
-                            <span class="font-mono font-bold tracking-wider text-on-surface">8829 0012 4492 0182</span>
-                            <button @click="copyToClipboard('8829001244920182')"
+                            <span class="font-mono font-bold tracking-wider text-on-surface">0092163383</span>
+                            <button @click="copyToClipboard('0092163383')"
                                 class="flex items-center gap-1 text-sm font-semibold transition-transform text-primary active:scale-95">
                                 <span class="text-lg material-symbols-outlined"
                                     data-icon="content_copy">content_copy</span>
@@ -98,8 +98,7 @@
                     <div>
                         <p class="mb-1 text-sm font-medium text-on-surface-variant">Buka Aplikasi MBanking</p>
                         <p class="text-sm leading-relaxed text-on-surface">Pada mesin ATM atau aplikasi Mbanking,lalu
-                            pilih transfer ke bank BCA <span class="font-bold">Viller
-                                FinCorp Ltd.</span></p>
+                            pilih transfer ke <span class="font-bold">BCA</span></p>
                     </div>
                 </div>
                 <!-- Step 3 -->
@@ -122,7 +121,7 @@
                         <p class="mb-1 text-sm font-medium text-on-surface-variant">Konfirmasi</p>
                         <p class="text-sm leading-relaxed text-on-surface">Setelah transfer berhasil, foto atau
                             screenshoot bukti transfer, lalu konfirmasi admin melalui whatsapp dengan menyertakan bukti
-                            transfer.</p>
+                            transfer dan username.</p>
                     </div>
                 </div>
                 <!-- Step 3 -->
