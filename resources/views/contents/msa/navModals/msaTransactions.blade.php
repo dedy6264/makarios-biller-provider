@@ -82,6 +82,9 @@
             </div>
             <div v-if="modalShower.isLoadingTransactions" class="flex justify-center py-4">
                 <img src="{{ url('assets/img/icons/loading1.gif') }}" class="w-20 h-20" alt="Loading...">
+                {{-- <span class="text-primary animate-spin material-symbols-outlined">
+                    progress_activity
+                </span> --}}
             </div>
             <div v-else v-for="item in dataTransactions">
                 <!-- Transaction Item: Success -->

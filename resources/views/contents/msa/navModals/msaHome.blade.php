@@ -21,6 +21,7 @@
                             Balance</p>
                         <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="dataBalance.isLoading"
                             class="tracking-tight font-headline">
+
                         <h3 v-else class="text-4xl font-extrabold tracking-tight font-headline text-on-primary">
                             @{{$format.formatCurrency(dataBalance.balance)}}
                         </h3>

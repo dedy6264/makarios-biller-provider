@@ -87,6 +87,19 @@
       }
   </script>
   <style>
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      background: transparent;
+      bottom: 0;
+      color: transparent;
+      cursor: pointer;
+      height: auto;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: auto;
+    }
+
     .receipt-cut {
       clip-path: polygon(0% 0%, 100% 0%, 100% 98%, 95% 100%, 90% 98%, 85% 100%, 80% 98%, 75% 100%, 70% 98%, 65% 100%, 60% 98%, 55% 100%, 50% 98%, 45% 100%, 40% 98%, 35% 100%, 30% 98%, 25% 100%, 20% 98%, 15% 100%, 10% 98%, 5% 100%, 0% 98%);
     }
@@ -293,6 +306,7 @@
             }
           };
           const getTransactions=async(val)=>{//proses get list transaction
+            modalShower.value.isLoadingTransactions=true;
             dataTransactions.value={};
             try {
               const response = await axios.post('{{ route('msa.getTransactions') }}', {
@@ -304,10 +318,16 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              dataTransactions.value=response.data.result.data;
-              setTimeout(() => {
-                modalShower.value.isLoadingTransactions=false;
-              }, 1000);
+              if(response.data.records_filtered==0){
+                console.log(modalShower.value.isLoadingTransactions);
+              }else{
+                dataTransactions.value=response.data.result.data;
+                setTimeout(() => {
+                  modalShower.value.isLoadingTransactions=false;
+                }, 1000);
+              }
+                console.log(modalShower.value.isLoadingTransactions);
+
             } catch (error) {
                 console.error("Gagal mengambil saldo:", error.response?.data || error.message);
                 if (error.response?.status === 401) {
