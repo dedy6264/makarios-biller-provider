@@ -12,14 +12,14 @@ window.format = {
             day: '2-digit',
             month: 'short',
             year: 'numeric',
-            timeZone: 'Asia/Jakarta'
+            // timeZone: 'Asia/Jakarta'
         }
 
         const optionsTime = {
             hour: '2-digit',
             minute: '2-digit',
             hour12: false,
-            timeZone: 'Asia/Jakarta'
+            // timeZone: 'Asia/Jakarta'
         }
         const tanggal = date.toLocaleDateString('id-ID', optionsDate)
         const waktu = date.toLocaleTimeString('id-ID', optionsTime)
