@@ -33,7 +33,7 @@
         <section class="grid grid-cols-2 gap-4 mb-10">
             <div
                 class="bg-surface-container-lowest p-5 rounded-2xl shadow-[0px_4px_16px_rgba(0,62,199,0.03)] border border-outline-variant/10">
-                <p class="mb-1 text-xs font-medium text-on-surface-variant">Total Savings</p>
+                <p class="mb-1 text-xs font-medium text-on-surface-variant">Total Wallet Amount</p>
                 <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="dataBalance.isLoading"
                     class="tracking-tight font-headline">
                 <h3 v-else class="text-xl font-bold text-primary"> @{{$format.formatCurrency(dataBalance.balance)}}
@@ -179,7 +179,8 @@
                                 <span class="material-symbols-outlined text-primary"
                                     data-icon="help_center">help_center</span>
                             </div>
-                            <span class="font-semibold text-on-surface">Help Center</span>
+                            <a href="https://wa.me/62896789671119"><span class="font-semibold text-on-surface">Help
+                                    Center</span></a>
                         </div>
                         <span class="material-symbols-outlined text-outline-variant"
                             data-icon="chevron_right">chevron_right</span>
@@ -190,7 +191,8 @@
                             <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/5">
                                 <span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
                             </div>
-                            <span class="font-semibold text-on-surface">Contact Us</span>
+                            <a href="https://wa.me/62896789671119"><span class="font-semibold text-on-surface">Contact
+                                    Us</span></a>
                         </div>
                         <span class="material-symbols-outlined text-outline-variant"
                             data-icon="chevron_right">chevron_right</span>

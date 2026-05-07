@@ -6,7 +6,7 @@
             <h2 class="mb-2 text-3xl font-extrabold tracking-tight font-headline text-on-surface">Transaction
                 History
             </h2>
-            <p class="text-sm font-medium text-on-surface-variant">Monitor and manage your liquid assets flow</p>
+            <p class="text-sm font-medium text-on-surface-variant">Pantau setiap transaksimu disini</p>
         </div>
         <!-- Filters Section - Asymmetric Bento Feel -->
         <div class="grid grid-cols-2 gap-3 mb-10">

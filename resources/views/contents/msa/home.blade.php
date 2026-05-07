@@ -326,6 +326,7 @@
                 
               }else{
                 dataTransactions.value=response.data.result.data;
+                console.log(dataTransactions.value[0].created_at);
                 setTimeout(() => {
                   modalShower.value.isLoadingTransactions=false;
                 }, 1000);
@@ -350,6 +351,7 @@
                   }
               });
               dataTransaction.value=response.data.result.data;
+              console.log(dataTransaction.value.created_at);
               if(dataTransaction.value.bill_info.bill_desc!==''){
                 const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
                 const data = JSON.parse(formattedString);

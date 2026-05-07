@@ -15,7 +15,7 @@
         <section class="mb-8">
             <div class="flex items-center justify-between px-2 mb-4">
                 <h3 class="font-bold font-headline text-on-surface">Product Information</h3>
-                <span class="text-blue-600 text-[11px] font-bold tracking-widest uppercase">Verified</span>
+                {{-- <span class="text-blue-600 text-[11px] font-bold tracking-widest uppercase">Verified</span> --}}
             </div>
             <div class="p-6 space-y-6 bg-surface-container-low rounded-3xl">
                 <div class="flex items-start justify-between">
@@ -37,7 +37,7 @@
                         <p class="font-semibold text-on-surface"> @{{$format.formatCurrency(dataInquiry.product_price)}}
                         </p>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right" v-if="dataInquiry.product_admin_fee!=0">
                         <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Admin Fee
                         </p>
                         <p class="font-semibold text-on-surface">

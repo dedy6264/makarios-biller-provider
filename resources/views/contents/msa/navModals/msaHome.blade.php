@@ -7,7 +7,7 @@
                 class="tracking-tight font-headline">
             <h2 v-else class="text-2xl font-bold tracking-tight font-headline text-on-surface">Welcome, @{{
                 dataProfile.merchant_outlet_name}}</h2>
-            <p class="text-sm font-medium text-on-surface-variant">Your financial summary for today</p>
+            <p class="text-sm font-medium text-on-surface-variant">Semangat baru untuk beraktivitas hari ini</p>
         </section>
         <!-- Balance Card - Liquid Architect Style -->
         <section
@@ -17,7 +17,7 @@
                     <div class="space-y-1">
                         <p
                             class="text-xs font-semibold tracking-widest uppercase text-on-primary-container/80 font-label">
-                            Saving
+                            Wallet
                             Balance</p>
                         <img src="{{ url('assets/img/icons/loading.gif') }}" alt="" v-if="dataBalance.isLoading"
                             class="tracking-tight font-headline">
@@ -31,13 +31,13 @@
                             style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
+                {{-- <div class="flex items-center gap-4">
                     <div class="bg-emerald-400/20 px-3 py-1.5 rounded-full flex items-center gap-1.5">
                         <span class="text-sm material-symbols-outlined text-emerald-300">trending_up</span>
                         <span class="text-xs font-bold text-emerald-50">+2.4%</span>
                     </div>
                     <p class="text-xs font-medium text-on-primary-container/60">Last updated: 2 mins ago</p>
-                </div>
+                </div> --}}
             </div>
             <!-- Decorative Liquid Elements -->
             <div class="absolute w-48 h-48 rounded-full -right-12 -top-12 bg-white/10 blur-3xl"></div>
@@ -47,7 +47,7 @@
         <section class="space-y-6">
             <div class="flex items-end justify-between">
                 <h4 class="text-lg font-bold font-headline text-on-surface">Quick Actions</h4>
-                <button class="text-sm font-bold text-primary" ">View All</button>
+                {{-- <button class="text-sm font-bold text-primary" ">View All</button> --}}
 
 
         </div>
@@ -59,8 +59,7 @@
                             class="flex items-center justify-center w-16 h-16 shadow-sm rounded-2xl bg-surface-container-lowest text-primary-container">
                             <span class="text-3xl material-symbols-outlined">smartphone</span>
                         </div>
-                        <span class="text-xs font-semibold text-center font-label text-on-surface-variant">Mobile
-                            Top-Up</span>
+                        <span class="text-xs font-semibold text-center font-label text-on-surface-variant">Pulsa</span>
                     </div>
                     <!-- Electricity -->
                     <div class="flex flex-col items-center gap-3 transition-all active:scale-95"
@@ -69,7 +68,7 @@
                             class="flex items-center justify-center w-16 h-16 shadow-sm rounded-2xl bg-surface-container-lowest text-amber-500">
                             <span class="text-3xl material-symbols-outlined">bolt</span>
                         </div>
-                        <span class="text-xs font-semibold text-center font-label text-on-surface-variant">Electricity
+                        <span class="text-xs font-semibold text-center font-label text-on-surface-variant">PLN
                             Token</span>
                     </div>
                     <!-- Games -->
@@ -118,13 +117,12 @@
                 <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
                     <img alt="Promo 1" class="object-cover w-full h-full"
                         data-alt="abstract fluid gradient background with vibrant blue and purple swirls and soft grain texture"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoIf-3BTqa8BoLFbhlGQcxcz1W4myHY5WvndX3_s_Yx5fV1GjVdAdycBFTgnFJwYf0oJppPtCZrmxajlaH-gh26-U8DcIRYd4Yob9KBzed7BQXf82HHbztVdZDbBhE19payCHE_lusnAD7raicjXm3yywFPKhiPnmpoleg3x3jIzjZXbrOT82dkHORJju3cYAwzoYoQvn0_jvRZp5Reu0hVJLYeuq2cLDWTrWXmNAgRE4zscd9--6VjH6P0jM8w8II6VSvA6KWGIrH" />
+                        src="{{ url('assets/img/illustrations/tawci1.png') }}" />
                     <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
                         <span
                             class="bg-primary text-on-primary text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Promotion</span>
                         <h5 class="text-xl font-bold leading-tight text-white font-headline">Get 15% Cashback on
-                            Electricity
-                            Bill
+                            payment with Qris(soon)
                         </h5>
                     </div>
                 </div>
@@ -137,7 +135,20 @@
                         <span
                             class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
                         <h5 class="text-xl font-bold leading-tight text-white font-headline">New Game Vouchers: Up to
-                            50% Off
+                            50% Off(soon)
+                        </h5>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
+                    <img alt="Promo 2" class="object-cover w-full h-full"
+                        data-alt="high-end electronic gadgets on a clean minimalist surface with soft teal and blue ambient lighting"
+                        src="{{ url('assets/img/illustrations/tawci.png') }}" />
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
+                        <span
+                            class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
+                        <h5 class="text-xl font-bold leading-tight text-white font-headline">Tawci Vouchers: Up to
+                            50% Off(soon)
                         </h5>
                     </div>
                 </div>
@@ -147,7 +158,7 @@
         <section class="space-y-6">
             <div class="flex items-end justify-between">
                 <h4 class="text-lg font-bold font-headline text-on-surface">Recent Transactions</h4>
-                <button class="text-sm font-bold text-success">See History</button>
+                <button class="text-sm font-bold text-success" @click="fMsaTransactions">See History</button>
             </div>
             <div v-if="modalShower.isLoadingTransactions" class="flex justify-center py-4">
                 <img src="{{ url('assets/img/icons/loading1.gif') }}" class="w-20 h-20" alt="Loading...">
