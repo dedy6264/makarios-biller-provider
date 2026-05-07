@@ -21,8 +21,8 @@ window.format = {
             hour12: false,
             // timeZone: 'Asia/Jakarta'
         }
-        const tanggal = date.toLocaleDateString('id-ID', optionsDate)
-        const waktu = date.toLocaleTimeString('id-ID', optionsTime)
+        const tanggal = date.toLocaleDateString(optionsDate)
+        const waktu = date.toLocaleTimeString(optionsTime)
         return `${tanggal} | ${waktu} WIB`
     },
 
