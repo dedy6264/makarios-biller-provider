@@ -152,6 +152,11 @@
             <div v-if="modalShower.isLoadingTransactions" class="flex justify-center py-4">
                 <img src="{{ url('assets/img/icons/loading1.gif') }}" class="w-20 h-20" alt="Loading...">
             </div>
+            <div v-else-if="!dataTransactions" class="flex flex-col items-center gap-3 py-10">
+                <span class="text-4xl material-symbols-outlined text-on-surface-variant">receipt_long</span>
+                <p class="text-sm font-medium text-on-surface-variant">No transactions found for the selected period.
+                </p>
+            </div>
             <div v-else class="space-y-6" v-for=" item in dataTransactions">
                 <!-- Item 1 -->
                 <div class="flex items-center active:scale-[0.98] justify-between p-4 transition-colors bg-surface-container-lowest rounded-3xl hover:bg-surface-bright"

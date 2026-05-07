@@ -319,7 +319,11 @@
                   }
               });
               if(response.data.records_filtered==0){
-                console.log(modalShower.value.isLoadingTransactions);
+                // console.log(modalShower.value.isLoadingTransactions);
+                setTimeout(() => {
+                  modalShower.value.isLoadingTransactions=false;
+                }, 1000);
+                
               }else{
                 dataTransactions.value=response.data.result.data;
                 setTimeout(() => {
