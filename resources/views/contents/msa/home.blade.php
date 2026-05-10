@@ -635,6 +635,16 @@
                       }, 1000);
                       modalShower.value.isConfirm=false;
                       break;
+                    case '39':
+                      toast.value.show=true;
+                      toast.value.message=response.data?.responseMessage||'Invalid request';
+                      toast.value.type='error';
+                      setTimeout(() => {
+                        toast.value.show=false;
+                        closeSession();
+                      }, 1000);
+                      modalShower.value.isConfirm=false;
+                      break;
                     default:
                       toast.value.show=true;
                       toast.value.message='OTP berhasil dikirim, silahkan cek whatsapp Anda';

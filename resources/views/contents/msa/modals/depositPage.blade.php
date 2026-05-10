@@ -121,7 +121,9 @@
                         <p class="mb-1 text-sm font-medium text-on-surface-variant">Konfirmasi</p>
                         <p class="text-sm leading-relaxed text-on-surface">Setelah transfer berhasil, foto atau
                             screenshoot bukti transfer, lalu konfirmasi admin melalui whatsapp dengan menyertakan bukti
-                            transfer dan username.</p>
+                            transfer dan username. </p>
+                        <a href="https://wa.me/62896789671119"><span class="font-semibold text-on-surface">Contact
+                                Admin</span></a>
                     </div>
                 </div>
                 <!-- Step 3 -->
