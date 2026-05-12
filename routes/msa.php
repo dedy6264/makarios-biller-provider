@@ -20,6 +20,7 @@ Route::post('/msa/payment', [MsaController::class, 'payment'])->name('msa.paymen
 Route::post('/msa/payment-otp', [MsaController::class, 'paymentOtp'])->name('msa.paymentOtp');
 Route::post('/msa/set-pin', [MsaController::class, 'setPin'])->name('msa.setPin');
 Route::post('/msa/validate-otp', [MsaController::class, 'validateOtp'])->name('msa.validateOtp');
+Route::post('/msa/resend-otp', [MsaController::class, 'resendOtp'])->name('msa.resendOtp');
 Route::get('/loading', function(){
     return view('contents.msa.xxx');
 });

@@ -44,6 +44,23 @@ class MsaController extends Controller
             return view('contents.msa.signIn');
         }
     }
+    public function resendOtp(){
+        // dd(request()->all());
+        if(request()->isMethod('post')) {
+            $payload=[
+                "device_uid"=>request()->input('uid'),
+                "identifier"=>request()->input('identifier'),
+            ];
+            $response = Http::post($this->hostService->GetUrl('m').'/v2/resend-otp', $payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+            }
+            return response()->json($response);
+        }else{
+            return redirect()->back()->withInput()->with('error', $response['responseMessage'] ?? 'Invalid OTP, please try again');
+        }
+    }
     public function validateOtp(){
         // dd(request()->all());
         if(request()->isMethod('post')) {
