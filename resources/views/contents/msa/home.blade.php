@@ -763,6 +763,7 @@
             navigateTo();
           });
           return { 
+            print,
             otp,
             otpPayment,
             getProduct,

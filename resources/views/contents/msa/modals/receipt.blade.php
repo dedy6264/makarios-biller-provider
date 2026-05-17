@@ -153,11 +153,12 @@
 
                 <div
                     class="flex gap-3 px-6 pt-4 pb-10 border-t bg-surface-container-low border-outline-variant/10 sm:pb-8 shrink-0">
-                    <button v-if="dataTransaction.status_code=='00'"
+                    <a v-if="dataTransaction.status_code=='00'"
+                        :href="`my.bluetoothprint.scheme://http://10.19.214.228:8000/msa/print/${ dataTransaction.reference_number }/${ token }`"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all bg-surface-container-highest text-primary font-label rounded-2xl active:scale-95">
                         <span class="text-xl material-symbols-outlined">print</span>
                         Print
-                    </button>
+                    </a>
                     <button @click="shareAsImage" :disabled="modalShower.isSharing"
                         v-if="dataTransaction.status_code=='00'"
                         class="flex items-center justify-center flex-1 gap-2 px-4 py-4 font-bold transition-all shadow-lg bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl active:scale-95 disabled:opacity-70">

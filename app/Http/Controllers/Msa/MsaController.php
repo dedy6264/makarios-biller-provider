@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Services\HostService;
-
+use stdClass;
+use Illuminate\Support\Number;
 class MsaController extends Controller
 {
     protected $hostService;
@@ -283,6 +284,206 @@ class MsaController extends Controller
             return view('contents.msa.signIn');
         }
     }
+    function numbFormatted($amnt){
+        $formatted = "Rp " . number_format($amnt, 0, ',', '.');
+        return $formatted;
+    }
+    public function print($id,$t){
+        $filter=[
+                "reference_number"=>$id,
+            ];
+        $payload=[
+            "start"=>request()->input('start')?? 0,
+            "length"=>request()->input('length')?? 10,
+            "columns"=>request()->input('columns')??'',
+            "search"=>request()->input('search')??'',
+            "order"=>request()->input('order')??'',
+            "sort"=>request()->input('sort')??'',
+            "start_date" => request()->input('start_date') ?: now()->format('Y-m-d'),
+            "end_date" => request()->input('end_date') ?: now()->format('Y-m-d'),
+            "filter"=>$filter,
+        ];
+        $response = Http::withToken($t)->post($this->hostService->GetUrl('m').'/v2/transaction-detail', $payload)->json();
+        if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+            if($response['message']=="invalid or expired jwt"){
+                return response()->json(['error'=>"invalid or expired jwt"],401);
+            }
+            return response()->json(['error' => 'Invalid API response format or data type'], 500);
+        }
+        $data=$response['result']['data'];
+        $addText="";
+        if($data['bill_info'] && $data['bill_info']['bill_desc'] && $data['bill_info']['bill_desc']!==""){
+            $cleanData = json_decode($data['bill_info']['bill_desc'], true);
+            switch ($data['product_category_id']) {
+                case 1:
+                     $addText= $addText."
+                     <tr>
+                     <td style=' font-size:7px;text-align:left;'>Sn</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['bill_info']['sn']."</td>
+                     </tr>
+                     <tr>
+                         <td style=' font-size:7px;text-align:left;'>Product Price</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$this->numbFormatted($data['product_price'])."</td>
+                     </tr>
+                        ";
+                    break;
+                case 6:
+                     $addText= $addText."
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Sn</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['bill_info']['sn']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Lembar Tagihan </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['bill_info']['lemb_tag']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Customer Name </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$cleanData['customer_name']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>No Meter </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$cleanData['meter_no']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Tarif/Daya </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$cleanData['tarif']."/".$cleanData['daya']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Kwh </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$cleanData['kwh']."</td>
+                        </tr>
+                        <tr>
+                            <td style=' font-size:7px;text-align:left;'>Token </td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['bill_info']['sn']."</td>
+                        </tr>
+                         <tr>
+                            <td style=' font-size:7px;text-align:left;'>Product Price</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$this->numbFormatted($data['product_price'])."</td>
+                        </tr>
+                        ";
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
+        $text="
+        <table style='width: 100%; border-collapse: collapse;'>
+        <tr>
+        <td style=' font-size:7px;text-align:left;'>
+        Product Name
+        </td>
+        <td>:</td>
+        <td style=' font-size:7px;text-align:right;'>".$data['product_name']."</td>
+        </tr>".$addText."
+        </table>";
+        $a = [];
+
+        // --- 1. HEADER TOKO ---
+        $obj = new stdClass();
+        $obj->type = 4; 
+        $obj->content = "
+        <table style='width: 100%; border-collapse: collapse;'>".
+            "<td style='font-weight:bold; font-size:12px; text-align:center'>".
+            $data['merchant_outlet_name'].
+            " Outlet</td>".
+        "</table>";
+        $obj->bold = 1;
+        $obj->align = 1; // Center
+        $obj->format = 3; // Double Width
+        $a[] = $obj;
+
+        // Garis Pembatas
+        $a[] = $this->createSeparator();
+
+        // --- 2. METADATA TRANSAKSI ---
+        $obj = new stdClass();
+        $obj->type = 4; 
+        $obj->content = "
+        <table style='width: 100%; border-collapse: collapse;'>
+            <tr>
+                <td style=' font-size:7px;text-align:left;'>
+                    No Reff
+                </td>
+                <td>:</td>
+                <td style=' font-size:7px;text-align:right;'>".$data['reference_number']."</td>
+            </tr>
+            <tr>
+                <td style=' font-size:7px;text-align:left;'>
+                    Tanggal
+                </td>
+                <td>:</td>
+                <td style=' font-size:7px;text-align:right;'>".$data['updated_at']."</td>
+            </tr>
+        </table>";
+        $obj->bold = 1;
+        $obj->align = 1; // Center
+        $obj->format = 3; // Double Width
+        $a[] = $obj;
+
+        $a[] = $this->createSeparator();
+
+        // --- 3. DAFTAR ITEM BELANJA ---
+        $obj = new stdClass();
+        $obj->type = 4; 
+        $obj->content = $text;
+        $obj->bold = 1;
+        $obj->align = 1; // Center
+        $obj->format = 3; // Double Width
+        $a[] = $obj;
+
+        $a[] = $this->createSeparator();
+
+        // --- 4. TOTAL, BAYAR, KEMBALI ---
+       $obj = new stdClass();
+        $obj->type = 4; 
+        $obj->content = "
+        <table style='width: 100%; border-collapse: collapse;'>
+            <tr>
+                <td style='font-weight:bold; font-size:7px;text-align:left;'>
+                    Total Amount
+                </td>
+                <td>:</td>
+                <td style='font-weight:bold; font-size:7px;text-align:right;'>".$this->numbFormatted($data['transaction_total_amount'])."</td>
+            </tr>
+        </table>";
+        $obj->bold = 1;
+        $obj->align = 1; // Center
+        $obj->format = 3; // Double Width
+        $a[] = $obj;
+
+        $a[] = $this->createSeparator();
+
+        // --- 5. FOOTER & QR CODE ---
+        $obj = new stdClass();
+        $obj->type = 4;
+        $obj->content = '<p>Terima Kasih Atas Kunjungan Anda<br />Barang yang sudah dibeli tidak dapat ditukar</p>';
+        $obj->bold = 0;
+        $obj->align = 1; // Center
+        $obj->format = 4; // Small
+        $a[] = $obj;
+        
+        $obj = new stdClass();
+        $obj->type = 4;
+        $obj->content = '<p><br/></p>';
+        $obj->bold = 0;
+        $obj->align = 1; // Center
+        $obj->format = 4; // Small
+        $a[] = $obj;
+        
+        // Return dengan format JSON Object ter-force
+        return response()->json($a, 200, [], JSON_FORCE_OBJECT);
+    }
+    private function createSeparator()
+    {
+        $obj = new stdClass();
+        $obj->type = 4;
+        $obj->content = "<table style='width: 100%; border-collapse: collapse;'>
+            <tr>
+                <td style='font-weight:bold; font-size:7px;text-align:center;'>
+                <p>---------------------------</p>
+                </td>
+            </tr>
+        </table>";
+        $obj->bold = 0;
+        $obj->align = 1; // Center
+        $obj->format = 4; // Small text
+        return $obj;
+    }
+
+   
     public function getTransaction()
     {
         $authHeader = request()->bearerToken();
