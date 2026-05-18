@@ -95,15 +95,10 @@
                                 </div>
                                 <div class="flex items-center justify-between" v-if="dataTransaction.bill_info.sn">
                                     <span class="text-sm font-label text-on-surface-variant"
-                                        v-if="dataTransaction.product_reference_code='PLNPRE'">Sn/Token</span>
+                                        v-if="dataTransaction.product_reference_code=='PLNPRE'">Sn/Token</span>
                                     <span class="text-sm font-label text-on-surface-variant" v-else>Sn</span>
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.sn}}</span>
-                                    <button @click="copyToClipboard(dataTransaction.bill_info.sn)"
-                                        class="flex items-center gap-1 text-sm font-semibold transition-transform text-primary active:scale-95">
-                                        <span class="text-lg material-symbols-outlined"
-                                            data-icon="content_copy">content_copy</span>
-                                    </button>
                                 </div>
                                 <div class="flex items-center justify-between"
                                     v-if="dataTransaction.bill_info.bill_desc.customer_name">
@@ -111,28 +106,50 @@
                                     <span
                                         class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.customer_name}}</span>
                                 </div>
-                                <div class="flex items-center justify-between"
-                                    v-if="dataTransaction.bill_info.bill_desc.daya">
-                                    <span class="text-sm font-label text-on-surface-variant">Daya</span>
-                                    <span
-                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.daya}}</span>
+                                <div v-if="dataTransaction.product_category_id==6">
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.daya">
+                                        <span class="text-sm font-label text-on-surface-variant">Daya</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.daya}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.meter_no">
+                                        <span class="text-sm font-label text-on-surface-variant">No Meter</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.meter_no}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.tarif">
+                                        <span class="text-sm font-label text-on-surface-variant">Tarif</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.tarif}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-label text-on-surface-variant">Nominal</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{$format.formatCurrency(dataTransaction.product_price)}}</span>
+                                    </div>
                                 </div>
-                                <div class="flex items-center justify-between"
-                                    v-if="dataTransaction.bill_info.bill_desc.meter_no">
-                                    <span class="text-sm font-label text-on-surface-variant">No Meter</span>
-                                    <span
-                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.meter_no}}</span>
-                                </div>
-                                <div class="flex items-center justify-between"
-                                    v-if="dataTransaction.bill_info.bill_desc.tarif">
-                                    <span class="text-sm font-label text-on-surface-variant">Tarif</span>
-                                    <span
-                                        class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.tarif}}</span>
-                                </div>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-label text-on-surface-variant">Nominal</span>
-                                    <span
-                                        class="text-sm font-semibold font-body text-on-surface">@{{$format.formatCurrency(dataTransaction.product_price)}}</span>
+                                <div v-else-if="dataTransaction.product_category_id==5">
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.details[0].periode">
+                                        <span class="text-sm font-label text-on-surface-variant">Angsuran Ke</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.details[0].periode}}/@{{dataTransaction.bill_info.bill_desc.details[0].tenor}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.details[0].tagihan">
+                                        <span class="text-sm font-label text-on-surface-variant">Tagihan</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{$format.formatCurrency(dataTransaction.bill_info.bill_desc.details[0].tagihan)}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.details[0].denda">
+                                        <span class="text-sm font-label text-on-surface-variant">Denda</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{$format.formatCurrency(dataTransaction.bill_info.bill_desc.details[0].denda)}}</span>
+                                    </div>
                                 </div>
                                 <div class="flex items-center justify-between"
                                     v-if="dataTransaction.product_admin_fee!==0">

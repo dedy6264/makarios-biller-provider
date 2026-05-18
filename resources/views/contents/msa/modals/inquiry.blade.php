@@ -43,6 +43,7 @@
                         <p class="font-semibold text-on-surface">
                             @{{$format.formatCurrency(dataInquiry.product_admin_fee)}}</p>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -65,17 +66,43 @@
                     <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Nama</p>
                     <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.customer_name }}</p>
                 </div>
-                <div v-if="dataInquiry.bill_info.bill_desc.daya">
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Daya</p>
-                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.daya }}</p>
+                <div v-if="dataInquiry.product_category_id==6">
+                    <div v-if="dataInquiry.bill_info.bill_desc.daya">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Daya</p>
+                        <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.daya }}</p>
+                    </div>
+                    <div v-if="dataInquiry.bill_info.bill_desc.meter_no">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">No Meter
+                        </p>
+                        <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.meter_no }}</p>
+                    </div>
+                    <div v-if="dataInquiry.bill_info.bill_desc.tarif">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Tarif</p>
+                        <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.tarif }}</p>
+                    </div>
                 </div>
-                <div v-if="dataInquiry.bill_info.bill_desc.meter_no">
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">No Meter</p>
-                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.meter_no }}</p>
-                </div>
-                <div v-if="dataInquiry.bill_info.bill_desc.tarif">
-                    <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Tarif</p>
-                    <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.tarif }}</p>
+                <div v-if="dataInquiry.product_category_id==5">
+                    <div v-if="dataInquiry.bill_info.bill_desc.details[0].periode">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Angsuran
+                            Ke</p>
+                        <p class="font-semibold text-on-surface">@{{ dataInquiry.bill_info.bill_desc.details[0].periode
+                            }}/@{{dataInquiry.bill_info.bill_desc.details[0].tenor}}
+                        </p>
+                    </div>
+                    <div v-if="dataInquiry.bill_info.bill_desc.details[0].tagihan">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Tagihan
+                        </p>
+                        <p class="font-semibold text-on-surface">
+                            @{{$format.formatCurrency(dataInquiry.bill_info.bill_desc.details[0].tagihan)
+                            }}
+                        </p>
+                    </div>
+                    <div v-if="dataInquiry.bill_info.bill_desc.details[0].denda">
+                        <p class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Denda</p>
+                        <p class="font-semibold text-on-surface">
+                            @{{$format.formatCurrency(dataInquiry.bill_info.bill_desc.details[0].denda) }}
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>

@@ -226,6 +226,7 @@
             balance:0,
           });
           const modalShower=ref({
+            isOption:false,
             isDeposite:false,
             isInquiry:false,
             isSharing:false,
@@ -351,7 +352,7 @@
                   }
               });
               dataTransaction.value=response.data.result.data;
-              console.log(dataTransaction.value.created_at);
+              // console.log(dataTransaction.value.created_at);
               if(dataTransaction.value.bill_info.bill_desc!==''){
                 const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
                 const data = JSON.parse(formattedString);
@@ -454,10 +455,19 @@
                 modalDestroy();
                 modalShower.value.isProductDetail="true";
                 break;
+                
               case "plnpre":
                 modalDestroy();
                 utils.value.productReferenceCode='PLNPRE';
                 modalShower.value.isProductDetail="true";
+                break;
+                
+              case "finance":
+                modalDestroy();
+                utils.value.productReferenceCode='FINANCE';
+                modalShower.value.isProductDetail="true";
+                modalShower.value.isOption=true;
+                getProduct('FINANCE');
                 break;
             
               default:
@@ -492,6 +502,7 @@
                   }
               });
               dataProducts.value=response.data.result.data;
+              console.log("PP:: ",dataProducts.value);
               //jika sukses, lngsung get product
             } catch (error) {
                 console.error("Gagal mengambil product:", error.response?.data || error.message);
@@ -586,6 +597,7 @@
                       const formattedString = dataInquiry.value.bill_info.bill_desc.replace(/\n/g, "").trim();
                       const data = JSON.parse(formattedString);
                       dataInquiry.value.bill_info.bill_desc=data;
+                      console.log("OOOO: ", dataInquiry.value.bill_info.bill_desc);
                     }
                     setTimeout(() => {
                       modalShower.value.isProductDetail=false;

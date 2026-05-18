@@ -115,12 +115,12 @@ class MsaController extends Controller
             // return view('contents.msa.validateOtp');
         }
     }
-     public function signUp()
+    public function signUp()
     {
         // dd(request()->all());
         if(request()->isMethod('post')) {
             $validatedData = request()->validate([
-                // 'referalCode' => 'required|string|max:255',
+                'referalCode' => 'required|string|max:255',
                 'username' => 'required|string|max:255',
                 'password' => 'required|string|min:6',
                 'email' => 'required|email|max:255',
@@ -130,7 +130,7 @@ class MsaController extends Controller
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string|max:255',
             ], [
-                // 'referalCode.required' => 'referalCode is required.',
+                'referalCode.required' => 'referalCode is required.',
                 'username.required' => 'Username is required.',
                 'password.required' => 'Password is required.',
                 'password.min' => 'Password must be at least 6 characters.',
@@ -223,7 +223,6 @@ class MsaController extends Controller
             return view('contents.msa.signIn');
         }
     }
-   
     public function inquiry()
     {
         $authHeader = request()->bearerToken();
@@ -361,13 +360,9 @@ class MsaController extends Controller
         }
         $text="
         <table style='width: 100%; border-collapse: collapse;'>
-        <tr>
-        <td style=' font-size:7px;text-align:left;'>
-        Product Name
-        </td>
-        <td>:</td>
-        <td style=' font-size:7px;text-align:right;'>".$data['product_name']."</td>
-        </tr>".$addText."
+        <tr><td style=' font-size:7px;text-align:left;'>Product Name</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['product_name']."</td></tr>
+        <tr><td style=' font-size:7px;text-align:left;'>Customer ID</td><td>:</td><td style=' font-size:7px;text-align:right;'>".$data['customer_id']."</td></tr>
+        ".$addText."
         </table>";
         $a = [];
 
@@ -482,8 +477,6 @@ class MsaController extends Controller
         $obj->format = 4; // Small text
         return $obj;
     }
-
-   
     public function getTransaction()
     {
         $authHeader = request()->bearerToken();
@@ -636,6 +629,4 @@ class MsaController extends Controller
             return view('contents.msa.signIn');
         }
     }
-
-    
 }
