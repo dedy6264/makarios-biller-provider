@@ -226,6 +226,7 @@
             balance:0,
           });
           const modalShower=ref({
+            isProductDisable:true,
             isOption:false,
             isDeposite:false,
             isInquiry:false,
@@ -320,19 +321,16 @@
                   }
               });
               if(response.data.records_filtered==0){
-                // console.log(modalShower.value.isLoadingTransactions);
                 setTimeout(() => {
                   modalShower.value.isLoadingTransactions=false;
                 }, 1000);
                 
               }else{
                 dataTransactions.value=response.data.result.data;
-                console.log(dataTransactions.value[0].created_at);
                 setTimeout(() => {
                   modalShower.value.isLoadingTransactions=false;
                 }, 1000);
               }
-                console.log(modalShower.value.isLoadingTransactions);
 
             } catch (error) {
                 console.error("Gagal mengambil saldo:", error.response?.data || error.message);
@@ -352,7 +350,6 @@
                   }
               });
               dataTransaction.value=response.data.result.data;
-              // console.log(dataTransaction.value.created_at);
               if(dataTransaction.value.bill_info.bill_desc!==''){
                 const formattedString = dataTransaction.value.bill_info.bill_desc.replace(/\n/g, "").trim();
                 const data = JSON.parse(formattedString);
@@ -436,6 +433,7 @@
             modalNavigation.value.modalMsaHome = true;
             getBalance();
             getTransactions(5);
+            utils.value.productReferenceCode='';
           }
           const fMsaTransactions=()=>{//proses navigasi ke transaksi
             localStorage.setItem('navigate', 'msaTransactions');
@@ -450,6 +448,7 @@
             getProfile();
           } 
           const productDetail=(val)=>{//proses membuka list detil produk
+            console.log("::",val);
             switch (val) {
               case "pulsa":
                 modalDestroy();
@@ -483,12 +482,31 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              getProduct(response.data.result.data.productReferenceCode);
+              switch (response.data.responseCode) {
+                case "00":
+                  getProduct(response.data.result.data.productReferenceCode);
+                  break;
+                default:
+                  toast.value.show=true;
+                  toast.value.message='Terjadi Kesalahan';
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    toast.value.show=false;
+                  }, 1000);
+                  break;
+              }
               //jika sukses, lngsung get product
             } catch (error) {
                 console.error("Gagal mengambil product:", error.response?.data || error.message);
                 if (error.response?.status === 401) {
                     closeSession();
+                }else{
+                  toast.value.show=true;
+                    toast.value.message=error.response.data.message;
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      }, 1000);
                 }
             }
           };
@@ -501,8 +519,19 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
-              dataProducts.value=response.data.result.data;
-              console.log("PP:: ",dataProducts.value);
+              switch (response.data.responseCode) {
+                case "00":
+                  dataProducts.value=response.data.result.data;
+                  break;
+                default:
+                  toast.value.show=true;
+                  toast.value.message='Terjadi Kesalahan';
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    toast.value.show=false;
+                  }, 1000);
+                  break;
+              }
               //jika sukses, lngsung get product
             } catch (error) {
                 console.error("Gagal mengambil product:", error.response?.data || error.message);
@@ -543,7 +572,6 @@
                   break;
               
                 case '36':
-                  console.log("Saldo tidak mencukupi");
                   toast.value.show=true;
                   toast.value.message='Saldo tidak mencukupi';
                   toast.value.type='error';
@@ -597,7 +625,6 @@
                       const formattedString = dataInquiry.value.bill_info.bill_desc.replace(/\n/g, "").trim();
                       const data = JSON.parse(formattedString);
                       dataInquiry.value.bill_info.bill_desc=data;
-                      console.log("OOOO: ", dataInquiry.value.bill_info.bill_desc);
                     }
                     setTimeout(() => {
                       modalShower.value.isProductDetail=false;
@@ -613,12 +640,22 @@
                       toast.value.show=false;
                       // fMsaTransactions();
                       modalShower.value.isLoading=false;
+                      dataProducts.value=[];
                     }, 1000);
                     break;
                 }
                 // formPayment.value.reference_number=dataInquiry.value.reference_number;
               } catch (error) {
-                  console.error("Gagal inquiry:", error.response?.data || error.message);
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                  if (error.response?.status === 422) {
+                    toast.value.show=true;
+                    toast.value.message=error.response.data.message;
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      modalShower.value.isLoading=false;
+                      }, 1000);
+                  }
                   if (error.response?.status === 401) {
                       closeSession();
                   }
@@ -750,6 +787,7 @@
             [() => customerId.value,()=>pin.value,()=>utils.value.endDate],
             ([nCustId, nPin, nEndDate], [oCustId, oPin, oEndDate]) => {
               if (nCustId.length >= 5) {
+                modalShower.value.isProductDisable=false;
                 if(utils.value.productReferenceCode===""){
                 //jika reference code kosong, lanjut get prefix
                  getProductPrefix(nCustId);
@@ -757,6 +795,8 @@
                 }else{
                   getProduct(utils.value.productReferenceCode);
                 }
+              }else{
+                modalShower.value.isProductDisable=true;
               }
               if (nPin.length === pinLimit) {
                modalShower.value.isConfirm=false;
@@ -765,7 +805,6 @@
               }
               if(nEndDate!==''){
                 if(utils.value.startDate!==''){
-                  console.log("end date change");
                   getTransactions(10);
                 }
               }

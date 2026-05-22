@@ -28,7 +28,7 @@
                 <!-- Telkomsel Pulsa -->
                 <div v-for="item in dataProducts"
                     class="group bg-surface-container-lowest p-6 rounded-[2rem] flex flex-col items-center justify-center gap-4 transition-all hover:bg-surface-bright active:scale-[0.98] cursor-pointer"
-                    @click="inquiry(item.product_code)">
+                    @click="!modalShower.isProductDisable && inquiry(item.product_code)">
                     <div
                         class="flex items-center justify-center shadow-lg w-14 h-14 rounded-2xl bg-gradient-to-br from-red-500 to-blue-500 shadow-red-500/20">
                         <span class="text-3xl text-white material-symbols-outlined" data-icon="signal_cellular_alt"
