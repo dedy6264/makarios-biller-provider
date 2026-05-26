@@ -43,6 +43,51 @@
             <div class="absolute w-48 h-48 rounded-full -right-12 -top-12 bg-white/10 blur-3xl"></div>
             <div class="absolute w-64 h-64 rounded-full -left-12 -bottom-12 bg-blue-400/10 blur-3xl"></div>
         </section>
+        <!-- Carousel Banner -->
+        <section class="space-y-4">
+            <h4 class="text-lg font-bold font-headline text-on-surface">Exclusive Offers</h4>
+            <div class="flex gap-4 px-6 pb-4 -mx-6 overflow-x-auto hide-scrollbar">
+                <!-- Slide 1 -->
+                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
+                    <img alt="Promo 1" class="object-cover w-full h-full"
+                        data-alt="abstract fluid gradient background with vibrant blue and purple swirls and soft grain texture"
+                        src="{{ url('assets/img/illustrations/tawci1.png') }}" />
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
+                        <span
+                            class="bg-primary text-on-primary text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Promotion</span>
+                        <h5 class="text-xl font-bold leading-tight text-white font-headline">Get 15% Cashback on
+                            payment with Qris(soon)
+                        </h5>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
+                    <img alt="Promo 2" class="object-cover w-full h-full"
+                        data-alt="high-end electronic gadgets on a clean minimalist surface with soft teal and blue ambient lighting"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcmprmn7JqRKHNbuYcKF2BSrZvLVcEsI6Ou9hzrHwlPb5l4ubBCXHOLCgf3iUC-IGiMi7Ec9Tt-BCcCJW0bey5cgOPm9htNl5YqolkKwEOkBfPG-Vh5pZtLsitzGsKGpW2-yLEQSmowBWDaADZHOGn8pm7DGHMmdsVPeoreTtwX4ZomXjl4mrJTKWDxkRS9lYvBBBJ8q1dbJjsQPovLidRhA5DlRLmDXdXoutj_8xFdvse458lDF4RPVSbnfKUY11QxpAgSqb7Tyjv" />
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
+                        <span
+                            class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
+                        <h5 class="text-xl font-bold leading-tight text-white font-headline">New Game Vouchers: Up to
+                            50% Off(soon)
+                        </h5>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
+                    <img alt="Promo 2" class="object-cover w-full h-full"
+                        data-alt="high-end electronic gadgets on a clean minimalist surface with soft teal and blue ambient lighting"
+                        src="{{ url('assets/img/illustrations/tawci.png') }}" />
+                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
+                        <span
+                            class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
+                        <h5 class="text-xl font-bold leading-tight text-white font-headline">Tawci Vouchers: Up to
+                            50% Off(soon)
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </section>
         <!-- Shortcut Icons Grid -->
         <section class="space-y-6">
             <div class="flex items-end justify-between">
@@ -110,51 +155,7 @@
                     </div>
             </div>
         </section>
-        <!-- Carousel Banner -->
-        <section class="space-y-4">
-            <h4 class="text-lg font-bold font-headline text-on-surface">Exclusive Offers</h4>
-            <div class="flex gap-4 px-6 pb-4 -mx-6 overflow-x-auto hide-scrollbar">
-                <!-- Slide 1 -->
-                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
-                    <img alt="Promo 1" class="object-cover w-full h-full"
-                        data-alt="abstract fluid gradient background with vibrant blue and purple swirls and soft grain texture"
-                        src="{{ url('assets/img/illustrations/tawci1.png') }}" />
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
-                        <span
-                            class="bg-primary text-on-primary text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Promotion</span>
-                        <h5 class="text-xl font-bold leading-tight text-white font-headline">Get 15% Cashback on
-                            payment with Qris(soon)
-                        </h5>
-                    </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
-                    <img alt="Promo 2" class="object-cover w-full h-full"
-                        data-alt="high-end electronic gadgets on a clean minimalist surface with soft teal and blue ambient lighting"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcmprmn7JqRKHNbuYcKF2BSrZvLVcEsI6Ou9hzrHwlPb5l4ubBCXHOLCgf3iUC-IGiMi7Ec9Tt-BCcCJW0bey5cgOPm9htNl5YqolkKwEOkBfPG-Vh5pZtLsitzGsKGpW2-yLEQSmowBWDaADZHOGn8pm7DGHMmdsVPeoreTtwX4ZomXjl4mrJTKWDxkRS9lYvBBBJ8q1dbJjsQPovLidRhA5DlRLmDXdXoutj_8xFdvse458lDF4RPVSbnfKUY11QxpAgSqb7Tyjv" />
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
-                        <span
-                            class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
-                        <h5 class="text-xl font-bold leading-tight text-white font-headline">New Game Vouchers: Up to
-                            50% Off(soon)
-                        </h5>
-                    </div>
-                </div>
-                <!-- Slide 3 -->
-                <div class="min-w-[85%] md:min-w-[400px] h-48 rounded-3xl overflow-hidden relative shadow-lg">
-                    <img alt="Promo 2" class="object-cover w-full h-full"
-                        data-alt="high-end electronic gadgets on a clean minimalist surface with soft teal and blue ambient lighting"
-                        src="{{ url('assets/img/illustrations/tawci.png') }}" />
-                    <div class="absolute inset-0 flex flex-col justify-end p-6 bg-black/30">
-                        <span
-                            class="bg-emerald-500 text-white text-[10px] font-bold uppercase w-fit px-2 py-0.5 rounded-full mb-2 tracking-widest">Limited</span>
-                        <h5 class="text-xl font-bold leading-tight text-white font-headline">Tawci Vouchers: Up to
-                            50% Off(soon)
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </section>
+
         <!-- Transactions Hint - No Border List -->
         <section class="space-y-6">
             <div class="flex items-end justify-between">
