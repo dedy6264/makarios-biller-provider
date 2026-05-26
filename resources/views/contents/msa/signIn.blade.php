@@ -304,13 +304,19 @@
                   toast.value.show=false;
                 }, 1000);
             }
-          }
+          };
           const otp=ref("");
           const modalShower=ref({
               isSetPin:false,
-              
-          })
+          });
+          const check=()=>{
+            // check localStorage.getItem('uid'), if found redirect to home
+            if (localStorage.getItem('uid')) {
+              window.location.href = "/msa/home";
+            }
+          }
           onMounted(() => {
+            check();
           });
           return {
             formSignIn,
