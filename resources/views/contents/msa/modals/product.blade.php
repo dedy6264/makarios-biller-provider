@@ -7,7 +7,7 @@
                 <div class="relative group">
                     <input v-model="customerId"
                         class="w-full h-16 px-6 bg-surface-container-lowest border-none rounded-2xl shadow-sm text-lg font-headline font-semibold text-on-surface placeholder:text-outline/40 focus:ring-0 transition-all outline outline-[1.5px] outline-outline-variant/15 focus:outline-primary/40"
-                        placeholder="e.g. 081234567890" type="text" autofocus />
+                        placeholder="e.g. 081234567890" type="text" />
                     <div class="absolute flex items-center gap-2 -translate-y-1/2 right-4 top-1/2">
                         <button
                             class="p-2 transition-all text-primary hover:bg-primary-container/10 rounded-xl active:scale-95">
