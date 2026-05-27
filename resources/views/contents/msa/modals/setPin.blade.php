@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="flex flex-col gap-3 px-6 pb-8 bg-white dark:bg-gray-800">
-                    <button @click="confirm"
+                    <button @click="confirm" :disabled="modalShower.isSetPinConfirmBtn"
                         class="w-full py-4 text-sm font-bold transition-all shadow-lg rounded-xl bg-primary text-on-primary hover:bg-primary/90 shadow-primary/20">
                         Konfirmasi OTP
                     </button>

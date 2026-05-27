@@ -142,6 +142,7 @@
     @include('contents.msa.navModals.msaTransactions')
     @include('contents.msa.navModals.msaProfile')
     @include('contents.msa.modals.product')
+    @include('contents.msa.modals.updateProfilePage')
     @include('contents.msa.modals.toast')
     {{-- end modal home --}}
     <!-- BottomNavBar -->
@@ -226,6 +227,7 @@
             balance:0,
           });
           const modalShower=ref({
+            isUpdateProfile:false,
             isProductDisable:true,
             isOption:false,
             isDeposite:false,
@@ -236,6 +238,7 @@
             isLoading:false,
             isProductDetail:false,
             isReceipt:false,
+            isSetPinConfirmBtn:false,
             isSetPin:false,
             isLoadingProfile:false,
             isModalPin:false,
@@ -405,6 +408,7 @@
           const modalDestroy=()=>{
             customerId.value='';
             dataProducts.value='';
+            modalShower.value.isUpdateProfile=false;
             modalShower.value.isConfirm=false;
             modalShower.value.isDeposite=false;
             modalShower.value.isInquiry=false;
@@ -545,7 +549,13 @@
             modalShower.value.isConfirm=true;
             modalShower.value.isModalPin=true;
           };
+          const fUpdateProfile=()=>{
+            modalDestroy();
+            modalShower.value.isUpdateProfile=true;
+          };
           const confirm=async(val)=>{//proses payment, masih ada pr jika pin salah
+            modalShower.value.isSetPinConfirmBtn=true;
+            console.log( "==>",modalShower.value.isSetPinConfirmBtn);
             modalShower.value.isSetPin=false;
             modalShower.value.isConfirm=true;
             try {
@@ -559,14 +569,27 @@
                       Authorization: `Bearer ${token}`,
                   }
               });
+              console.log("==R= ", response);//.data.message);
               otp.value='';
               switch (response.data.responseCode) {
+                case '15':
+                  toast.value.show=true;
+                  toast.value.message=response.data.responseMessage;
+                  toast.value.type='error';
+                  setTimeout(() => {
+                    modalShower.value.isSetPinConfirmBtn=false;
+                    modalShower.value.isSetPin=true;
+                    toast.value.show=false;
+                  }, 1000);
+                  modalShower.value.isConfirm=false;
+                  break;
                 case '44':
                   toast.value.show=true;
                   toast.value.message='Pin salah, silahkan coba lagi';
                   toast.value.type='error';
                   setTimeout(() => {
                     toast.value.show=false;
+                    modalShower.value.isSetPinConfirmBtn=false;
                   }, 1000);
                   modalShower.value.isConfirm=false;
                   break;
@@ -578,6 +601,7 @@
                   setTimeout(() => {
                     toast.value.show=false;
                     fMsaTransactions();
+                    modalShower.value.isSetPinConfirmBtn=false;
                   }, 1000);
                   break;
                 default:
@@ -587,10 +611,11 @@
                     const data = JSON.parse(formattedString);
                     dataTransaction.value.bill_info.bill_desc=data;
                   }
-                  modalShower.value.isModalPin=false;
                   fMsaTransactions();
                   dataProducts.value=({}) ;
                   setTimeout(() => {
+                    modalShower.value.isModalPin=false;
+                    modalShower.value.isSetPinConfirmBtn=false;
                     modalShower.value.isReceipt=true;
                     customerId.value='';
                     pin.value='';
@@ -598,10 +623,20 @@
                   break;
               }
             } catch (error) {
-                console.error("Gagal inquiry:", error.response?.data || error.message);
-                if (error.response?.status === 401) {
-                    closeSession();
-                }
+              console.error("Gagal inquiry:", error.response?.data || error.message);
+              if (error.response?.status === 401) {
+                closeSession();
+              }
+              if(error.response.status===422){
+                toast.value.show=true;
+                toast.value.message=error.response.data.message;
+                toast.value.type='error';
+                setTimeout(() => {
+                  modalShower.value.isSetPinConfirmBtn=false;
+                  modalShower.value.isSetPin=true;
+                  toast.value.show=false;
+                }, 1000);
+              }
             }
           };
           const inquiry=async(val)=>{//proses inquiry
@@ -814,6 +849,7 @@
             navigateTo();
           });
           return { 
+            fUpdateProfile,
             print,
             otp,
             otpPayment,

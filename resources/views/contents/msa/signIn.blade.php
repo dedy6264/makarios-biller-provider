@@ -311,7 +311,7 @@
           });
           const check=()=>{
             // check localStorage.getItem('uid'), if found redirect to home
-            if (localStorage.getItem('uid')) {
+            if (localStorage.getItem('uid') && localStorage.getItem('token')) {
               window.location.href = "/msa/home";
             }
           }

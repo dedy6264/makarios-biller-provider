@@ -145,7 +145,8 @@
                             </div>
                         </div>
                         <div class="px-6 pb-4 space-y-3 ml-14">
-                            <button class="flex items-center justify-between w-full py-2 text-left group">
+                            <button @click="fUpdateProfile()"
+                                class="flex items-center justify-between w-full py-2 text-left group">
                                 <span
                                     class="text-sm transition-colors text-on-surface-variant group-hover:text-primary">Update
                                     Password</span>
