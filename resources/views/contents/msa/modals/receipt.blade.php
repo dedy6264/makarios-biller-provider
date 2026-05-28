@@ -120,6 +120,12 @@
                                             class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.meter_no}}</span>
                                     </div>
                                     <div class="flex items-center justify-between"
+                                        v-if="dataTransaction.bill_info.bill_desc.meter_no">
+                                        <span class="text-sm font-label text-on-surface-variant">Kwh</span>
+                                        <span
+                                            class="text-sm font-semibold font-body text-on-surface">@{{dataTransaction.bill_info.bill_desc.kwh}}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between"
                                         v-if="dataTransaction.bill_info.bill_desc.tarif">
                                         <span class="text-sm font-label text-on-surface-variant">Tarif</span>
                                         <span
