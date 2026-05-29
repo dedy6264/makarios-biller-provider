@@ -37,7 +37,7 @@
                     <span
                         class="text-xs font-bold text-center font-headline text-on-surface">@{{item.product_name}}</span>
                     <span
-                        class="text-xs font-bold text-center font-headline text-on-surface">@{{item.product_price}}</span>
+                        class="text-xs font-bold text-center font-headline text-on-surface">@{{$format.formatCurrency(item.product_price)}}</span>
                 </div>
                 <!-- Indosat Data -->
                 {{-- <div
