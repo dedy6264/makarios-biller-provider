@@ -35,7 +35,9 @@
                             style="font-variation-settings: 'FILL' 1;">signal_cellular_alt</span>
                     </div>
                     <span
-                        class="text-sm font-bold text-center font-headline text-on-surface">@{{item.product_name}}</span>
+                        class="text-xs font-bold text-center font-headline text-on-surface">@{{item.product_name}}</span>
+                    <span
+                        class="text-xs font-bold text-center font-headline text-on-surface">@{{item.product_price}}</span>
                 </div>
                 <!-- Indosat Data -->
                 {{-- <div
