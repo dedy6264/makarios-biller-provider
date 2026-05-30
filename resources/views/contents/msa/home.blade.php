@@ -472,6 +472,13 @@
                 modalShower.value.isOption=true;
                 getProduct('FINANCE');
                 break;
+              case "edana":
+                modalDestroy();
+                utils.value.productReferenceCode='EDANA';
+                modalShower.value.isProductDetail="true";
+                modalShower.value.isOption=true;
+                getProduct('EDANA');
+                break;
             
               default:
                 break;

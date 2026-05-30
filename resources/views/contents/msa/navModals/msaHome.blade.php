@@ -117,13 +117,14 @@
                             Token</span>
                     </div>
                     <!-- Games -->
-                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95">
+                    <div class="flex flex-col items-center gap-3 transition-all active:scale-95"
+                        @click="productDetail('edana')">
                         <div
                             class="flex items-center justify-center w-16 h-16 text-purple-500 shadow-sm rounded-2xl bg-surface-container-lowest">
                             <span class="text-3xl material-symbols-outlined">sports_esports</span>
                         </div>
                         <span class="text-xs font-semibold text-center font-label text-on-surface-variant">Game
-                            Voucher</span>
+                            Voucher/Ewallet Dana</span>
                     </div>
                     <!-- Water -->
                     <div class="flex flex-col items-center gap-3 transition-all active:scale-95">
