@@ -149,15 +149,17 @@
                                 class="flex items-center justify-between w-full py-2 text-left group">
                                 <span
                                     class="text-sm transition-colors text-on-surface-variant group-hover:text-primary">Update
-                                    Password</span>
+                                    Profile
+                                </span>
                                 <span
                                     class="material-symbols-outlined text-[18px] text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity"
                                     data-icon="chevron_right">chevron_right</span>
                             </button>
-                            <button class="flex items-center justify-between w-full py-2 text-left group">
+                            <button @click="fUpdatePassword"
+                                class="flex items-center justify-between w-full py-2 text-left group">
                                 <span
                                     class="text-sm transition-colors text-on-surface-variant group-hover:text-primary">Update
-                                    PIN</span>
+                                    Password</span>
                                 <span
                                     class="material-symbols-outlined text-[18px] text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity"
                                     data-icon="chevron_right">chevron_right</span>

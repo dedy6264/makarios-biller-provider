@@ -14,6 +14,8 @@ Route::post('/msa/get-transaction', [MsaController::class, 'getTransaction'])->n
 Route::get('/msa/print/{id}/{t}', [MsaController::class, 'print'])->name('msa.print');
 Route::post('/msa/get-product-by-type', [MsaController::class, 'getProductByType'])->name('msa.getProductByType');
 Route::get('/msa/get-profile', [MsaController::class, 'getProfile'])->name('msa.getProfile');
+Route::post('/msa/update-profile', [MsaController::class, 'updateProfile'])->name('msa.updateProfile');
+Route::post('/msa/update-password', [MsaController::class, 'updatePassword'])->name('msa.updatePassword');
 Route::post('/msa/get-product-prefix', [MsaController::class, 'getProductPrefix'])->name('msa.getProductPrefix');
 Route::post('/msa/get-product', [MsaController::class, 'getProduct'])->name('msa.getProduct');
 Route::post('/msa/inquiry', [MsaController::class, 'inquiry'])->name('msa.inquiry');

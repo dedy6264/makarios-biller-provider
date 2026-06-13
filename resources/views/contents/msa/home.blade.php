@@ -143,6 +143,7 @@
     @include('contents.msa.navModals.msaProfile')
     @include('contents.msa.modals.product')
     @include('contents.msa.modals.updateProfilePage')
+    @include('contents.msa.modals.updatePassword')
     @include('contents.msa.modals.toast')
     {{-- end modal home --}}
     <!-- BottomNavBar -->
@@ -227,6 +228,7 @@
             balance:0,
           });
           const modalShower=ref({
+            isUpdatePassword:false,
             isUpdateProfile:false,
             isProductDisable:true,
             isOption:false,
@@ -254,6 +256,16 @@
           const dataProducts=ref({});//variable penampung data produk detil
           const dataTransactions=ref({});//variable penampung data lis transaksi
           const dataProfile=ref({});//variable penampung data lis transaksi
+          const dataUpdateProfile=ref({
+            cifName:"",
+            outletName:"",
+          });
+          const dataUpdatePassword=ref({
+            currentPassword:"",
+            newPassword:"",
+            retypeNewPassword:"",
+            uid:localStorage.getItem('uid') || '',
+          });
           const dataTransaction=ref({});//variable penampung data detil transaksi untuk tampil di receipt
           //end interface variable
           const token=localStorage.getItem('token');
@@ -296,6 +308,7 @@
               });
               if(response.data.result.data.length>0){
                 dataProfile.value=response.data.result.data[0];
+                console.log("==: ",dataProfile.value.cifName);
                 setTimeout(() => {
                   modalShower.value.isLoadingProfile=false;
                 }, 1000);
@@ -408,6 +421,7 @@
           const modalDestroy=()=>{
             customerId.value='';
             dataProducts.value='';
+            modalShower.value.isUpdatePassword=false;
             modalShower.value.isUpdateProfile=false;
             modalShower.value.isConfirm=false;
             modalShower.value.isDeposite=false;
@@ -451,6 +465,7 @@
             modalNavigation.value.modalMsaProfile = true;
             getProfile();
           } 
+          //product
           const productDetail=(val)=>{//proses membuka list detil produk
             console.log("::",val);
             switch (val) {
@@ -551,14 +566,133 @@
                 }
             }
           };
+          const fUpdatePassword=()=>{
+             modalDestroy();
+            modalShower.value.isUpdatePassword=true;
+          }
+          //profile
+          const fUpdateProfile=()=>{
+            modalDestroy();
+            dataUpdateProfile.value.cifName=dataProfile.value.cif_name;
+            dataUpdateProfile.value.outletName=dataProfile.value.merchant_outlet_name;
+            modalShower.value.isUpdateProfile=true;
+          };
+          const updatePassword=async()=>{
+            if(dataUpdatePassword.value.newPassword==="" || dataUpdatePassword.value.currentPassword===""){
+              toast.value.show=true;
+                    toast.value.message='Mohon lengkapi data';
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                    }, 1000);
+                return
+            }
+            if(dataUpdatePassword.value.newPassword!==dataUpdatePassword.value.retypeNewPassword){
+              toast.value.show=true;
+                    toast.value.message='Retype Password tidak sesuai';
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                    }, 1000);
+                return
+            }
+            try {
+                const response = await axios.post('{{ route('msa.updatePassword') }}',dataUpdatePassword.value ,{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(":::",response.data);
+                switch (response.data.responseCode) {
+                  case "00":
+                    toast.value.show=true;
+                    toast.value.message='Sukses';
+                    toast.value.type='success';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      modalShower.value.isProductDetail=false;
+                      modalShower.value.isLoading=false;
+                      modalShower.value.isInquiry=true;
+                      fMsaHome();
+                    }, 500);
+                    break;
+                  default:
+                    toast.value.show=true;
+                    toast.value.message=response.data.responseMessage;
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      // fMsaTransactions();
+                      modalShower.value.isLoading=false;
+                    }, 1000);
+                    break;
+                }
+              } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                  if (error.response?.status === 422) {
+                    toast.value.show=true;
+                    toast.value.message=error.response.data.message;
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      modalShower.value.isLoading=false;
+                      }, 1000);
+                  }
+                  if (error.response?.status === 401) {
+                      closeSession();
+                  }
+              }
+          }
+          const updateProfile=async()=>{
+             try {
+                const response = await axios.post('{{ route('msa.updateProfile') }}',dataUpdateProfile.value ,{
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
+                console.log(":::",response.data);
+                switch (response.data.responseCode) {
+                  case "00":
+                    setTimeout(() => {
+                      modalShower.value.isProductDetail=false;
+                      modalShower.value.isLoading=false;
+                      modalShower.value.isInquiry=true;
+                      fMsaHome();
+                    }, 500);
+                    break;
+                  default:
+                    toast.value.show=true;
+                    toast.value.message='Terjadi Kesalahan';
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      // fMsaTransactions();
+                      modalShower.value.isLoading=false;
+                    }, 1000);
+                    break;
+                }
+                // formPayment.value.reference_number=dataInquiry.value.reference_number;
+              } catch (error) {
+                console.error("Gagal inquiry:", error.response?.data || error.message);
+                  if (error.response?.status === 422) {
+                    toast.value.show=true;
+                    toast.value.message=error.response.data.message;
+                    toast.value.type='error';
+                    setTimeout(() => {
+                      toast.value.show=false;
+                      modalShower.value.isLoading=false;
+                      }, 1000);
+                  }
+                  if (error.response?.status === 401) {
+                      closeSession();
+                  }
+              }
+          }
+          //transaksi
           const fConfirm=()=>{//menampilkan modal page input pin sebelum proses payment
             modalDestroy();
             modalShower.value.isConfirm=true;
             modalShower.value.isModalPin=true;
-          };
-          const fUpdateProfile=()=>{
-            modalDestroy();
-            modalShower.value.isUpdateProfile=true;
           };
           const confirm=async(val)=>{//proses payment, masih ada pr jika pin salah
             modalShower.value.isSetPinConfirmBtn=true;
@@ -753,6 +887,7 @@
                   }
               }
           };
+          //utils
           // Fungsi untuk menambah angka
           const addNumber = (num) => {
               if (pin.value.length < pinLimit) {
@@ -856,6 +991,11 @@
             navigateTo();
           });
           return { 
+            updatePassword,
+            fUpdatePassword,
+            dataUpdatePassword,
+            dataUpdateProfile,
+            updateProfile,
             fUpdateProfile,
             print,
             otp,

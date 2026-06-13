@@ -155,6 +155,19 @@
                 placeholder="e.g. Julian Alexander" type="text" name="fullname" v-model="formSignUp.fullname" />
             </div>
           </div>
+          <!-- Outlet name Field -->
+          <div class="relative group">
+            <label
+              class="block text-xs font-semibold text-on-surface-variant mb-1.5 ml-1 uppercase tracking-wider">Outlet
+              Name</label>
+            <div class="relative flex items-center">
+              <span
+                class="material-symbols-outlined absolute left-4 text-outline group-focus-within:text-primary transition-colors text-[20px]">person</span>
+              <input
+                class="w-full py-4 pl-12 pr-4 font-medium transition-all border-none outline-none bg-surface-container-lowest ring-1 ring-outline-variant/15 focus:ring-2 focus:ring-primary/40 rounded-xl placeholder:text-outline/50"
+                placeholder="e.g. Julian Alexander" type="text" name="outletName" v-model="formSignUp.outletName" />
+            </div>
+          </div>
           <!-- Username & ID (KTP) Row -->
           <div class="grid grid-cols-1 gap-4">
             <div class="relative group">
@@ -303,6 +316,7 @@
             password: '',
             email: '',
             fullname: '',
+            outletName: '',
             numberid: '',
             birthdate: '',
             phone: '',

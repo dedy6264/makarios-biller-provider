@@ -125,6 +125,7 @@ class MsaController extends Controller
                 'password' => 'required|string|min:6',
                 'email' => 'required|email|max:255',
                 'fullname' => 'required|string|max:255',
+                'outletName' => 'required|string|max:255',
                 'numberid' => 'required|string|max:50',
                 'birthdate' => 'required|date',
                 'phone' => 'required|string|max:20',
@@ -137,6 +138,7 @@ class MsaController extends Controller
                 'email.required' => 'Email is required.',
                 'email.email' => 'Email must be a valid email address.',
                 'fullname.required' => 'Full name is required.',
+                'outletName.required' => 'Full name is required.',
                 'numberid.required' => 'Number ID is required.',
                 'birthdate.required' => 'Birthdate is required.',
                 'birthdate.date' => 'Birthdate must be a valid date.',
@@ -149,6 +151,7 @@ class MsaController extends Controller
                 "password" => $validatedData['password'],
                 "email" => $validatedData['email'],
                 "fullname" => $validatedData['fullname'],
+                "merchant_outlet_name" => $validatedData['outletName'],
                 "numberid" => $validatedData['numberid'],
                 "birthdate" => $validatedData['birthdate'],
                 "phone" => $validatedData['phone'],
@@ -191,6 +194,62 @@ class MsaController extends Controller
     public function home()
     {
         return view('contents.msa.home');
+    }
+    public function updatePassword()
+    {
+        $authHeader = request()->bearerToken();
+        if(request()->isMethod('post')) {
+
+            $payload=[
+                "current_password"=>request()->input('currentPassword')?? '',
+                "new_password"=>request()->input('newPassword')?? '',
+                "device_uid"=>request()->input('uid')?? '',
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/update-password',$payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
+    }
+    public function updateProfile()
+    {
+
+        $authHeader = request()->bearerToken();
+        if(request()->isMethod('post')) {
+              $filter=[
+                "merchant_outlet_name"=>request()->input('outlet_name')?? '',
+                "id"=>(int)request()->input('id'),
+            ];
+            $payload=[
+                "start"=>request()->input('start')?? 0,
+                "length"=>request()->input('length')?? 10,
+                "columns"=>request()->input('columns')??'',
+                "search"=>request()->input('search')??'',
+                "order"=>request()->input('order')??'',
+                "sort"=>request()->input('sort')??'',
+                "start_date" => request()->input('start_date') ?: now()->format('Y-m-d'),
+                "end_date" => request()->input('end_date') ?: now()->format('Y-m-d'),
+                "filter"=>$filter,
+            ];
+            $response = Http::withToken($authHeader)->post($this->hostService->GetUrl('m').'/v2/update-profile',$payload)->json();
+            // dd($response);
+            if (!is_array($response) || !isset($response['result']) || !is_array($response['result'])) {
+                if($response['message']=="invalid or expired jwt"){
+                    return response()->json(['error'=>"invalid or expired jwt"],401);
+                }
+                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+            }
+            return response()->json($response);
+        }else{
+            return view('contents.msa.signIn');
+        }
     }
     public function getProfile()
     {

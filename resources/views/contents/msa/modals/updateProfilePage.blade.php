@@ -1,21 +1,6 @@
 <div v-if="modalShower.isUpdateProfile">
     @include('contents.msa.modals.toast')
     <main class="max-w-2xl px-6 pt-24 pb-32 mx-auto">
-        <!-- Profile Photo Section -->
-        <section class="flex flex-col items-center">
-            <div class="relative group">
-                <div class="w-32 h-32 overflow-hidden border-4 rounded-full shadow-xl border-surface-container-lowest">
-                    <img alt="Profile" class="object-cover w-full h-full"
-                        data-alt="A professional close-up portrait of a confident woman in her early 30s with a clean, minimalist background. The lighting is soft and natural, reflecting a bright, high-end lifestyle aesthetic. The color palette is composed of soft whites and neutral tones, aligning with a premium fintech app's clean and architectural visual style. The overall mood is sophisticated, modern, and trustworthy."
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBusElFkWJ9_0MbmtG5D_VW_Sx7d1806hT-eEo_EugQVzd9RD6ubuD5RNBBbRI_i6v3zv10JbBfdr8_2023ZGBfPi6Wy-un8AoUm4Noh_hEb8qWn4bab376u2OUBS6OlbBHF4DlB1pwL0anei0guWJWop21GwCNLVKTRHjUkCxWGXFXNPnry4C9vjEdWXZLV-a8Ao_x_B29QQqVYYkE2EYtwLZY8TRz3xC1ANvIVk1StK7BDKftF2fs2BBMi-QjZfViUvV6Aig6sTGt" />
-                </div>
-                <button
-                    class="absolute bottom-0 right-0 bg-primary-container text-white p-2.5 rounded-full shadow-lg border-2 border-white active:scale-90 transition-transform">
-                    <span class="material-symbols-outlined text-[20px]" data-icon="photo_camera">photo_camera</span>
-                </button>
-            </div>
-            <button class="mt-4 text-sm font-semibold tracking-wide text-primary">Change Photo</button>
-        </section>
         <!-- Form: Personal Information -->
         <section class="space-y-4">
             <div class="flex items-center justify-between px-1">
@@ -31,12 +16,29 @@
                         <span class="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary"
                             data-icon="person">person</span>
                         <input
-                            class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface font-medium focus:ring-2 focus:ring-primary/20 transition-all viller-input"
-                            type="text" value="Elena Rodriguez" />
+                            class="w-full pl-12 pr-4 py-3.5 bg-surface-container-highest/40 border-none rounded-xl text-on-surface-variant font-medium cursor-not-allowed"
+                            type="text" v-model="dataUpdateProfile.cifName" readonly />
+                        <span
+                            class="absolute text-sm -translate-y-1/2 material-symbols-outlined right-4 top-1/2 text-outline-variant"
+                            data-icon="lock">lock</span>
                     </div>
                 </div>
+
+                <!-- Outlet Name -->
+                <div class="space-y-1.5 opacity-80">
+                    <label class="text-[11px] font-bold uppercase tracking-wider text-outline px-1">Tax ID /
+                        SSN</label>
+                    <div class="relative">
+                        <span class="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary"
+                            data-icon="location_on">location_on</span>
+                        <input
+                            class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface font-medium focus:ring-2 focus:ring-primary/20 transition-all viller-input"
+                            name="outlet_name" type="text" v-model="dataUpdateProfile.outletName" />
+                    </div>
+                </div>
+
                 <!-- Date of Birth -->
-                <div class="space-y-1.5">
+                {{-- <div class="space-y-1.5">
                     <label class="text-[11px] font-bold uppercase tracking-wider text-outline px-1">Date of
                         Birth</label>
                     <div class="relative">
@@ -44,14 +46,14 @@
                             data-icon="calendar_today">calendar_today</span>
                         <input
                             class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface font-medium focus:ring-2 focus:ring-primary/20 transition-all viller-input"
-                            type="text" value="March 12, 1992" />
+                            type="text" value="March 12, 1992" readonly />
                         <span
                             class="absolute -translate-y-1/2 material-symbols-outlined right-4 top-1/2 text-outline-variant"
                             data-icon="expand_more">expand_more</span>
                     </div>
-                </div>
+                </div> --}}
                 <!-- ID Number (Masked/Read-only style) -->
-                <div class="space-y-1.5 opacity-80">
+                {{-- <div class="space-y-1.5 opacity-80">
                     <label class="text-[11px] font-bold uppercase tracking-wider text-outline px-1">Tax ID / SSN</label>
                     <div class="relative">
                         <span class="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary"
@@ -63,9 +65,10 @@
                             class="absolute text-sm -translate-y-1/2 material-symbols-outlined right-4 top-1/2 text-outline-variant"
                             data-icon="lock">lock</span>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </section>
+        {{--
         <!-- Form: Contact Details -->
         <section class="space-y-4">
             <div class="flex items-center justify-between px-1">
@@ -98,7 +101,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section> --}}
         <!-- Form: Residential Address -->
         <section class="space-y-4">
             <div class="flex items-center justify-between px-1">
@@ -112,7 +115,7 @@
                     <div class="relative">
                         <span class="absolute material-symbols-outlined left-4 top-4 text-primary"
                             data-icon="location_on">location_on</span>
-                        <textarea
+                        <textarea readonly
                             class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-none rounded-xl text-on-surface font-medium focus:ring-2 focus:ring-primary/20 transition-all viller-input resize-none"
                             rows="3">7224 Skyline Boulevard
 Apartment 4B
@@ -123,7 +126,7 @@ New York, NY 10012</textarea>
         </section>
         <!-- CTA Action -->
         <div class="pt-6">
-            <button
+            <button @click="updateProfile"
                 class="w-full bg-gradient-to-br from-primary to-primary-container text-white font-headline font-bold py-5 rounded-2xl shadow-[0px_8px_24px_rgba(0,62,199,0.25)] hover:opacity-90 active:scale-95 transition-all flex items-center justify-center space-x-3 group">
                 <span>Save Changes</span>
                 <span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform"
