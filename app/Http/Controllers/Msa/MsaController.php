@@ -224,7 +224,7 @@ class MsaController extends Controller
         $authHeader = request()->bearerToken();
         if(request()->isMethod('post')) {
               $filter=[
-                "merchant_outlet_name"=>request()->input('outlet_name')?? '',
+                "merchant_outlet_name"=>request()->input('outletName')?? '',
                 "id"=>(int)request()->input('id'),
             ];
             $payload=[
