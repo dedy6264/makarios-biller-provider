@@ -653,7 +653,12 @@
                 console.log(":::",response.data);
                 switch (response.data.responseCode) {
                   case "00":
+                     toast.value.show=true;
+                    toast.value.message='Sukses';
+                    toast.value.type='success';
                     setTimeout(() => {
+                      toast.value.show=false;
+
                       modalShower.value.isProductDetail=false;
                       modalShower.value.isLoading=false;
                       modalShower.value.isInquiry=true;

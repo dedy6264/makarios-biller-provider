@@ -432,7 +432,7 @@ class MsaController extends Controller
         <table style='width: 100%; border-collapse: collapse;'>".
             "<td style='font-weight:bold; font-size:12px; text-align:center'>".
             $data['merchant_outlet_name'].
-            " Outlet</td>".
+            " </td>".
         "</table>";
         $obj->bold = 1;
         $obj->align = 1; // Center
