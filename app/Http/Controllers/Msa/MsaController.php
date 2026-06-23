@@ -151,7 +151,7 @@ class MsaController extends Controller
                 "password" => $validatedData['password'],
                 "email" => $validatedData['email'],
                 "fullname" => $validatedData['fullname'],
-                "merchant_outlet_name" => $validatedData['outletName'],
+                "outlet_name" => $validatedData['outletName'],
                 "numberid" => $validatedData['numberid'],
                 "birthdate" => $validatedData['birthdate'],
                 "phone" => $validatedData['phone'],
