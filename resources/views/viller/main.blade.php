@@ -4,6 +4,6 @@
         @include('viller.header')
         <!-- Top Section: Metrics Cards -->
         {{-- @include('viller.content') --}}
-        {{ $slot }}
+        @yield('content')
     </div>
 </main>

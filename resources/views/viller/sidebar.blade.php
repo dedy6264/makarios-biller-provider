@@ -27,6 +27,20 @@
                 style="font-variation-settings: 'FILL' 0;">group</span>
             <span class="font-body-md text-body-md">User Management</span>
         </a>
+        <div class="flex flex-col gap-1 mt-1 mb-2 ml-10">
+            <a href="#"
+                class="flex items-center py-2 font-semibold transition-colors text-primary font-body-sm text-body-sm hover:text-primary">
+                <span class="">Users</span>
+            </a>
+            <a href="#"
+                class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+                <span class="">Roles</span>
+            </a>
+            <a href="#"
+                class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+                <span class="">User Roles</span>
+            </a>
+        </div>
         <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-xl text-secondary hover:bg-surface-container"
             href="#">
             <span class="material-symbols-outlined" data-icon="account_tree"

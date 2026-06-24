@@ -13,7 +13,7 @@ Route::get('/dashboard', function () {
     ]);
     // dd(session('role_code'));
     // return view('layoutsviller.content');
-    return view('viller.app');
+    return view('viller.content');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
