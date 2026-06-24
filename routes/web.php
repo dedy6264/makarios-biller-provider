@@ -12,7 +12,8 @@ Route::get('/dashboard', function () {
         'activeMenu'=>'Dashboard',
     ]);
     // dd(session('role_code'));
-    return view('layoutsviller.content');
+    // return view('layoutsviller.content');
+    return view('viller.app');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
