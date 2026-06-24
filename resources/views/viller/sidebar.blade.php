@@ -1,16 +1,21 @@
-<nav class="w-[280px] h-screen fixed left-0 top-0 bg-surface shadow-sm z-50 flex flex-col py-unit px-gutter">
+<nav id="sidebar" class="w-[280px] h-screen fixed left-0 top-0 bg-surface shadow-sm z-50 flex flex-col py-unit px-gutter -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <!-- Brand -->
-    <div class="flex items-center gap-3 px-4 mt-6 mb-8">
-        <div
-            class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-container text-on-primary-container shrink-0">
-            <span class="material-symbols-outlined text-headline-lg"
-                data-icon="settings_suggest">settings_suggest</span>
+    <div class="flex items-center justify-between mt-6 mb-8 px-4">
+        <div class="flex items-center gap-3 min-w-0">
+            <div
+                class="flex items-center justify-center w-10 h-10 rounded-lg bg-primary-container text-on-primary-container shrink-0">
+                <span class="material-symbols-outlined text-headline-lg"
+                    data-icon="settings_suggest">settings_suggest</span>
+            </div>
+            <div class="min-w-0">
+                <h2 class="font-bold leading-none truncate font-headline-lg text-headline-lg text-primary">ConfigCenter</h2>
+                <p class="mt-1 font-label-caps text-label-caps text-secondary truncate">System Admin</p>
+            </div>
         </div>
-        <div>
-            <h2 class="font-bold leading-none truncate font-headline-lg text-headline-lg text-primary">ConfigCenter
-            </h2>
-            <p class="mt-1 font-label-caps text-label-caps text-secondary">System Admin</p>
-        </div>
+        <!-- Close Sidebar Button (Mobile Only) -->
+        <button id="close-sidebar" class="lg:hidden p-1.5 rounded-full text-secondary hover:bg-surface-container hover:text-primary transition-colors focus:outline-none shrink-0" aria-label="Close Sidebar">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
     </div>
     <!-- Navigation Links -->
     <div class="flex-1 pt-4 space-y-1 overflow-y-auto">

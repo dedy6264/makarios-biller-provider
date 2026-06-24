@@ -142,17 +142,26 @@
 <body class="min-h-screen overflow-x-hidden bg-background text-on-surface font-body-md">
     <!-- TopAppBar -->
     <header
-        class="bg-white/80 dark:bg-surface/80 backdrop-blur-md fixed top-0 right-0 w-[calc(100%-280px)] h-16 shadow-sm border-b border-outline-variant dark:border-outline flex justify-between items-center px-container-padding-desktop z-10 transition-all duration-300 ease-in-out">
-        <!-- Search bar (on_left configuration) -->
-        <div
-            class="flex items-center px-4 py-2 transition-all border border-transparent rounded-full bg-surface-container-low w-96 focus-within:border-primary focus-within:bg-white">
-            <span class="mr-2 material-symbols-outlined text-on-surface-variant">search</span>
-            <input
-                class="w-full bg-transparent border-none outline-none focus:ring-0 text-body-sm font-body-sm text-on-surface placeholder-on-surface-variant"
-                placeholder="Pencarian global..." type="text" />
+        class="bg-white/80 dark:bg-surface/80 backdrop-blur-md fixed top-0 right-0 w-full lg:w-[calc(100%-280px)] h-16 shadow-sm border-b border-outline-variant dark:border-outline flex justify-between items-center px-container-padding-mobile lg:px-container-padding-desktop z-10 transition-all duration-300 ease-in-out">
+        
+        <div class="flex items-center gap-2 flex-1 md:flex-initial mr-4">
+            <!-- Hamburger Menu Button (Mobile Only) -->
+            <button id="open-sidebar" class="lg:hidden p-2 rounded-full text-secondary hover:bg-surface-container hover:text-primary transition-colors focus:outline-none shrink-0" aria-label="Open Sidebar">
+                <span class="material-symbols-outlined text-[24px]">menu</span>
+            </button>
+            
+            <!-- Search bar (on_left configuration) -->
+            <div
+                class="flex items-center px-4 py-2 transition-all border border-transparent rounded-full bg-surface-container-low w-full max-w-[200px] sm:max-w-xs md:max-w-none md:w-96 focus-within:border-primary focus-within:bg-white">
+                <span class="mr-2 material-symbols-outlined text-on-surface-variant">search</span>
+                <input
+                    class="w-full bg-transparent border-none outline-none focus:ring-0 text-body-sm font-body-sm text-on-surface placeholder-on-surface-variant"
+                    placeholder="Pencarian global..." type="text" />
+            </div>
         </div>
+        
         <!-- Actions -->
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 shrink-0">
             <button
                 class="flex items-center justify-center w-10 h-10 transition-colors rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container">
                 <span class="material-symbols-outlined">notifications</span>
@@ -164,10 +173,59 @@
             </div>
         </div>
     </header>
+
+    <!-- Sidebar Backdrop Overlay (Mobile Only) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-40 lg:hidden hidden transition-opacity duration-300 opacity-0"></div>
+
     <!-- SideNavBar -->
     @include('viller.sidebar')
     <!-- Main Canvas -->
     @include('viller.main')
+
+    <!-- Script to toggle sidebar on mobile -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            function showSidebar() {
+                if (!sidebar || !sidebarOverlay) return;
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+                // Force layout reflow to allow transition to trigger
+                sidebarOverlay.offsetHeight;
+                sidebarOverlay.classList.remove('opacity-0');
+                sidebarOverlay.classList.add('opacity-100');
+            }
+
+            function hideSidebar() {
+                if (!sidebar || !sidebarOverlay) return;
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.remove('opacity-100');
+                sidebarOverlay.classList.add('opacity-0');
+                
+                const onTransitionEnd = () => {
+                    if (sidebarOverlay.classList.contains('opacity-0')) {
+                        sidebarOverlay.classList.add('hidden');
+                    }
+                    sidebarOverlay.removeEventListener('transitionend', onTransitionEnd);
+                };
+                sidebarOverlay.addEventListener('transitionend', onTransitionEnd);
+            }
+
+            if (openSidebarBtn) {
+                openSidebarBtn.addEventListener('click', showSidebar);
+            }
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', hideSidebar);
+            }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', hideSidebar);
+            }
+        });
+    </script>
 </body>
 
 </html>
