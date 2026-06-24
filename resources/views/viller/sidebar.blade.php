@@ -61,11 +61,14 @@
     </div>
     <!-- Bottom Action -->
     <div class="pt-6 pb-4 mt-auto border-t border-outline-variant/30">
-        <button
-            class="flex items-center w-full gap-3 px-4 py-3 transition-colors rounded-xl text-on-surface-variant hover:bg-surface-container">
-            <span class="material-symbols-outlined" data-icon="logout"
-                style="font-variation-settings: 'FILL' 0;">logout</span>
-            <span class="font-body-md text-body-md">Sign Out</span>
-        </button>
+        <form method="POST" action="{{ route('logout') }}" class="w-full">
+            @csrf
+            <button type="submit"
+                class="flex items-center w-full gap-3 px-4 py-3 transition-colors rounded-xl text-on-surface-variant hover:bg-surface-container">
+                <span class="material-symbols-outlined" data-icon="logout"
+                    style="font-variation-settings: 'FILL' 0;">logout</span>
+                <span class="font-body-md text-body-md">Sign Out</span>
+            </button>
+        </form>
     </div>
 </nav>
