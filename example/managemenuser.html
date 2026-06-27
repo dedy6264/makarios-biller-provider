@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Manajemen Pengguna - ConfigCenter</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#0f0069",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-fixed-dim": "#c3c0ff",
+                        "tertiary-fixed-dim": "#ffb695",
+                        "on-secondary-fixed-variant": "#444749",
+                        "primary-container": "#4f46e5",
+                        "secondary-container": "#e0e3e5",
+                        "on-primary-container": "#dad7ff",
+                        "on-tertiary-container": "#ffd2be",
+                        "inverse-primary": "#c3c0ff",
+                        "on-surface": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-fixed": "#e0e3e5",
+                        "error": "#ba1a1a",
+                        "primary": "#3525cd",
+                        "secondary": "#5c5f61",
+                        "secondary-fixed-dim": "#c4c7c9",
+                        "on-surface-variant": "#464555",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e2dfff",
+                        "outline": "#777587",
+                        "surface-tint": "#4d44e3",
+                        "tertiary-container": "#a44100",
+                        "on-tertiary-fixed-variant": "#7b2f00",
+                        "on-tertiary-fixed": "#351000",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "outline-variant": "#c7c4d8",
+                        "surface-dim": "#cbdbf5",
+                        "inverse-surface": "#213145",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#626567",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed": "#191c1e",
+                        "tertiary": "#7e3000",
+                        "tertiary-fixed": "#ffdbcc",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#dce9ff",
+                        "on-primary-fixed-variant": "#3323cc",
+                        "surface-container": "#e5eeff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "background": "#f8f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "card-gap": "24px",
+                        "container-padding-mobile": "16px",
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "container-padding-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "data-tabular": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "data-tabular": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Subtle row hover effect */
+        .table-row-hover:hover {
+            background-color: #f8fafe;
+            /* Very subtle blue tint for hover */
+            transform: translateY(-1px);
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen antialiased bg-background text-on-background font-body-md text-body-md">
+    <!-- SideNavBar Component (From JSON) -->
+    <aside
+        class="bg-surface dark:bg-surface-dim w-[280px] h-screen fixed left-0 top-0 shadow-[0px_4px_20px_rgba(0,0,0,0.03)] flex flex-col h-full py-unit px-gutter z-20">
+        <!-- Brand -->
+        <div class="flex items-center gap-3 px-4 py-6 mb-4">
+            <div class="flex items-center justify-center w-10 h-10 shadow-sm rounded-xl bg-primary">
+                <span class="text-white material-symbols-outlined"
+                    style="font-variation-settings: 'FILL' 1;">widgets</span>
+            </div>
+            <div>
+                <h1 class="font-bold font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim">
+                    ConfigCenter</h1>
+                <p class="font-label-caps text-label-caps text-secondary dark:text-secondary-fixed-dim">System Admin</p>
+            </div>
+        </div>
+        <!-- Navigation -->
+        <nav class="flex flex-col flex-1 gap-2">
+            <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-container-high font-body-sm text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="">Dashboard</span>
+            </a>
+            <!-- ACTIVE TAB -->
+            <a class="flex items-center gap-3 px-4 py-3 font-bold transition-transform duration-150 scale-95 border-r-4 rounded-lg text-primary dark:text-primary-fixed-dim border-primary bg-surface-container-low font-body-sm text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+                <span class="">User Management</span>
+            </a>
+            <div class="flex flex-col gap-1 mt-1 mb-2 ml-10">
+                <a href="#"
+                    class="flex items-center py-2 font-semibold transition-colors text-primary font-body-sm text-body-sm hover:text-primary">
+                    <span class="">Users</span>
+                </a>
+                <a href="#"
+                    class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+                    <span class="">Roles</span>
+                </a>
+                <a href="#"
+                    class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+                    <span class="">User Roles</span>
+                </a>
+            </div>
+            <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-container-high font-body-sm text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined">account_tree</span>
+                <span class="">Hierarchy</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-lg text-secondary dark:text-secondary-fixed-dim hover:bg-surface-container dark:hover:bg-surface-container-high font-body-sm text-body-sm"
+                href="#">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="">Settings</span>
+            </a>
+        </nav>
+        <!-- User Profile Area in Sidebar bottom -->
+        <div class="pt-6 mt-auto border-t border-outline-variant">
+            <div class="flex items-center gap-3 px-4 py-2">
+                <img class="object-cover w-10 h-10 border rounded-full border-outline-variant"
+                    data-alt="A highly detailed, professional headshot of a corporate admin employee in a soft, modern light-mode office setting. Bright, diffuse lighting, calming atmosphere, minimalist background with subtle glassmorphism elements."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnbEj5KBJSZ9_feRW9u3rXKFMNxUpkNZRtGT5OY33Juy-ITz2pQx3rrxVbX-3askXrc9kRIXp_DWbc4BkjJgQh_tNhM8-4EVVwYL9hpOgwC3Uz98NIj2Wy3twIcvhMi-P7fQAevEb61yKoY5JH7kj3dwExrU_lSTZWEuNo4HDiuBmvWMYqivG1bie1UxRztxjBcKpmLUzR-VeDe5qpvnplTMHBvHs21nydSy3-Bpj8uYkEOJ0ygRwbKZ_rArL6Vo67KROK2BXs6tg">
+                <div>
+                    <p class="font-data-tabular text-data-tabular text-on-surface">Admin User</p>
+                    <p class="font-label-caps text-label-caps text-on-surface-variant">admin@config.center</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <!-- Main Content Area -->
+    <main class="flex-1 ml-[280px] flex flex-col min-h-screen relative">
+        <!-- TopAppBar Component (From JSON) -->
+        <header
+            class="bg-white/80 dark:bg-surface/80 backdrop-blur-md fixed top-0 right-0 w-[calc(100%-280px)] h-16 shadow-sm border-b border-outline-variant dark:border-outline flex justify-between items-center px-container-padding-desktop z-10 transition-all duration-300 ease-in-out">
+            <!-- Search bar (on_left configuration) -->
+            <div
+                class="flex items-center px-4 py-2 transition-all border border-transparent rounded-full bg-surface-container-low w-96 focus-within:border-primary focus-within:bg-white">
+                <span class="mr-2 material-symbols-outlined text-on-surface-variant">search</span>
+                <input
+                    class="w-full bg-transparent border-none outline-none focus:ring-0 text-body-sm font-body-sm text-on-surface placeholder-on-surface-variant"
+                    placeholder="Pencarian global..." type="text">
+            </div>
+            <!-- Actions -->
+            <div class="flex items-center gap-4">
+                <button
+                    class="flex items-center justify-center w-10 h-10 transition-colors rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <div class="w-8 h-8 overflow-hidden border rounded-full cursor-pointer border-outline-variant">
+                    <img alt="User Avatar" class="object-cover w-full h-full"
+                        data-alt="A professional headshot of an administrator for a system dashboard, clear lighting, bright background."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsCDZ6eznY9XP5Dn-odaUwLIYH9RJ3JgysT9A3illy_68JBH1qUZMHl2aHEca8J7BrSlL629z5Nqjm7QfYoi5EfRXbsamqOaIGskEBC0qRGFLH8zoyHztL6YMROWcdQiddXZuYvZO1CJ0vdhzVWc4onsJXb5MwVJj0E2646hIrtZdpvUgqkM3cNb9W2ZI2l2_wh8PHOYGZZjQhxmNTVO4pcQTX3oK-g9huIpHDvA2IEQ_3lRncfuoA4fZd8gy6yJqnfekDpPTw3T0">
+                </div>
+            </div>
+        </header>
+        <!-- Page Canvas -->
+        <div class="flex-1 w-full pt-24 pb-12 mx-auto px-container-padding-desktop max-w-7xl">
+            <!-- Page Header Section -->
+            <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center mb-card-gap">
+                <div>
+                    <h2 class="font-headline-xl text-headline-xl text-on-surface">Manajemen Pengguna</h2>
+                    <p class="mt-1 font-body-md text-body-md text-on-surface-variant">Kelola akses, peran, dan detail
+                        profil untuk seluruh pengguna sistem.</p>
+                </div>
+                <button
+                    class="bg-primary text-on-primary font-data-tabular text-data-tabular px-6 h-[44px] rounded-lg flex items-center gap-2 hover:bg-primary-fixed-variant transition-colors shadow-sm"
+                    id="btn-add-user">
+                    <span class="text-sm material-symbols-outlined">add</span>
+                    Tambah Pengguna
+                </button>
+            </div>
+            <!-- Main Content Card -->
+            <div
+                class="bg-surface-container-lowest rounded-[24px] shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant overflow-hidden flex flex-col">
+                <!-- Toolbar/Filters -->
+                <div
+                    class="flex flex-col items-center justify-between gap-4 p-6 border-b border-outline-variant md:flex-row bg-white/50">
+                    <div class="relative w-full md:w-80">
+                        <span
+                            class="absolute text-sm -translate-y-1/2 material-symbols-outlined left-3 top-1/2 text-on-surface-variant">search</span>
+                        <input
+                            class="w-full pl-10 pr-4 h-11 bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-body-sm font-body-sm text-on-surface transition-all"
+                            placeholder="Cari nama, email, atau username..." type="text">
+                    </div>
+                    <div class="flex items-center w-full gap-3 md:w-auto">
+                        <span class="font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap">Filter
+                            Peran:</span>
+                        <select
+                            class="h-11 bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary rounded-lg text-body-sm font-body-sm text-on-surface min-w-[160px] cursor-pointer">
+                            <option value="all">Semua Peran</option>
+                            <option value="admin">Administrator</option>
+                            <option value="manager">Manajer</option>
+                            <option value="user">Pengguna Standar</option>
+                        </select>
+                        <button
+                            class="flex items-center justify-center px-4 ml-2 transition-colors border rounded-lg h-11 border-outline-variant text-on-surface-variant hover:bg-surface-container">
+                            <span class="material-symbols-outlined">filter_list</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Data Table Container -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-surface-bright/50">
+                                <th
+                                    class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                                    Pengguna</th>
+                                <th
+                                    class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                                    Username</th>
+                                <th
+                                    class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                                    Kontak</th>
+                                <th
+                                    class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                                    Peran</th>
+                                <th
+                                    class="px-6 py-4 tracking-wider text-right uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                                    Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <!-- Row 1 -->
+                            <tr class="border-b table-row-hover border-surface-container group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <img class="object-cover w-10 h-10 rounded-full"
+                                            data-alt="A highly detailed, professional headshot of a female executive in a modern light-mode office setting. Bright, diffuse lighting, calming atmosphere."
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5ZGAZUsKwRnhnUe6v0iJPk2KzEBgI_-xTnBjW-UEkcyMvGbPgAYqS_n-XKVfg4eDkCvt0fIOwFoRxdUV7IbnZOBdKWKoP1K2-GNvfecUbeVX_yL8qKjzBfSMtwvxkbHvQZ43LFV8PPMe7yQfem2IvjcHwnmRbzQ12SN5g02uKH-b6Wp6wj_0kL2VPTZ1-Y5b8MuF7QSL_XQ-tTd3hCMx6g6fZLhVWGqtqnda0vT3rVF8RkCbwB-16LAu0Xa6YeiVdbHNgkDq09Lo">
+                                        <div>
+                                            <p
+                                                class="font-semibold font-data-tabular text-data-tabular text-on-surface">
+                                                Sarah Jenkins</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">@sjenkins</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="font-body-sm text-body-sm text-on-surface">sarah.j@config.center</span>
+                                        <span class="mt-1 font-label-caps text-label-caps text-on-surface-variant">+62
+                                            812-3456-7890</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label-caps text-label-caps">
+                                        Administrator
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container"
+                                            title="Edit">
+                                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                                        </button>
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container"
+                                            title="Hapus">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 2 -->
+                            <tr class="table-row-hover border-b border-surface-container bg-[#F8FAFC]/50 group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 font-bold rounded-full bg-surface-container-highest text-primary font-data-tabular">
+                                            MK
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="font-semibold font-data-tabular text-data-tabular text-on-surface">
+                                                Michael Kusuma</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">@mkusuma</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="font-body-sm text-body-sm text-on-surface">michael@config.center</span>
+                                        <span class="mt-1 font-label-caps text-label-caps text-on-surface-variant">+62
+                                            811-9876-5432</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-label-caps">
+                                        Manajer
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container">
+                                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                                        </button>
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 3 -->
+                            <tr class="border-b table-row-hover border-surface-container group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <img class="object-cover w-10 h-10 rounded-full"
+                                            data-alt="A highly detailed, professional headshot of a young male developer in a modern light-mode office setting. Bright, diffuse lighting, calming atmosphere."
+                                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBe8Nj2r1f2qic3ypoXnHYTYMhM1ph0zJEXnoCd8d5QZF6CIavwW154CwO82BvhqmC5VfCE2-mbanyN2SFAK0kNReIW3D74fjLotoM42Nf8rLQabvx2iq05H8BBlTDajoVtxdYq7a_c2UP9BUsuF1K2eYUdMJ6Y3Hp7tsSjuRmuvvym13ROaQHzohs63TRzQrJJVOwuUaoGvRvpazce0Y4qjmloevaFlt6ec0gT39mUrI3MHNj3tzjkE95cIcw6R4HWtrztLJIK2X0">
+                                        <div>
+                                            <p
+                                                class="font-semibold font-data-tabular text-data-tabular text-on-surface">
+                                                Budi Santoso</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">@budis</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="font-body-sm text-body-sm text-on-surface">budi.s@config.center</span>
+                                        <span class="mt-1 font-label-caps text-label-caps text-on-surface-variant">+62
+                                            856-1122-3344</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 border rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps border-outline-variant/30">
+                                        Pengguna Standar
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container">
+                                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                                        </button>
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row 4 -->
+                            <tr class="table-row-hover bg-[#F8FAFC]/50 group">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="flex items-center justify-center w-10 h-10 font-bold rounded-full bg-surface-container-highest text-primary font-data-tabular">
+                                            AL
+                                        </div>
+                                        <div>
+                                            <p
+                                                class="font-semibold font-data-tabular text-data-tabular text-on-surface">
+                                                Anita Larasati</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 font-body-sm text-body-sm text-on-surface-variant">@anital</td>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col">
+                                        <span
+                                            class="font-body-sm text-body-sm text-on-surface">anita.l@config.center</span>
+                                        <span class="mt-1 font-label-caps text-label-caps text-on-surface-variant">+62
+                                            821-5566-7788</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 border rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps border-outline-variant/30">
+                                        Pengguna Standar
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div
+                                        class="flex justify-end gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container">
+                                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                                        </button>
+                                        <button
+                                            class="p-2 transition-colors rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container">
+                                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination Footer -->
+                <div class="flex items-center justify-between p-4 bg-white border-t border-outline-variant">
+                    <span class="font-body-sm text-body-sm text-on-surface-variant">Menampilkan 1-4 dari 42
+                        pengguna</span>
+                    <div class="flex gap-1">
+                        <button
+                            class="flex items-center justify-center w-8 h-8 border rounded-md opacity-50 cursor-not-allowed border-outline-variant text-on-surface-variant">
+                            <span class="text-sm material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center w-8 h-8 text-white rounded-md bg-primary font-data-tabular">1</button>
+                        <button
+                            class="flex items-center justify-center w-8 h-8 transition-colors rounded-md hover:bg-surface-container text-on-surface font-data-tabular">2</button>
+                        <button
+                            class="flex items-center justify-center w-8 h-8 transition-colors rounded-md hover:bg-surface-container text-on-surface font-data-tabular">3</button>
+                        <span class="flex items-center justify-center w-8 h-8 text-on-surface-variant">...</span>
+                        <button
+                            class="flex items-center justify-center w-8 h-8 transition-colors border rounded-md border-outline-variant text-on-surface-variant hover:bg-surface-container">
+                            <span class="text-sm material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Modal overlay (Hidden by default) -->
+    <div class="fixed inset-0 z-50 hidden" id="modal-add-user">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 transition-opacity bg-inverse-surface/40 backdrop-blur-sm"></div>
+        <!-- Modal Container -->
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <!-- Modal Box -->
+            <div
+                class="glass-panel w-full max-w-[560px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.08)] border border-white/40 overflow-hidden flex flex-col transform transition-transform scale-100">
+                <!-- Modal Header -->
+                <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/50 bg-white/50">
+                    <h3 class="font-headline-lg text-headline-lg text-on-surface">Tambah Pengguna Baru</h3>
+                    <button
+                        class="flex items-center justify-center w-8 h-8 transition-colors rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/50"
+                        id="btn-close-modal">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <!-- Modal Body -->
+                <div class="p-6 overflow-y-auto max-h-[614px]">
+                    <form class="space-y-5">
+                        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                            <!-- Input Field structure -->
+                            <div class="flex flex-col gap-1">
+                                <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant">Nama
+                                    Lengkap</label>
+                                <input
+                                    class="h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Masukkan nama" type="text">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant">Nama
+                                    Pengguna (Username)</label>
+                                <input
+                                    class="h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="mis. jdoe" type="text">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant">Alamat
+                                    Email</label>
+                                <input
+                                    class="h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="email@contoh.com" type="email">
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant">Nomor
+                                    Telepon</label>
+                                <input
+                                    class="h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="+62..." type="tel">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1 pt-2">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant">Peran
+                                Akses</label>
+                            <select
+                                class="h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 font-body-md text-body-md text-on-surface transition-all">
+                                <option disabled="" selected="">Pilih peran...</option>
+                                <option>Administrator</option>
+                                <option>Manajer</option>
+                                <option>Pengguna Standar</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <!-- Modal Footer -->
+                <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-bright/80 border-outline-variant/50">
+                    <button
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors"
+                        id="btn-cancel-modal">
+                        Batal
+                    </button>
+                    <button
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular bg-primary text-white shadow-sm hover:bg-primary-fixed-variant transition-colors">
+                        Simpan Pengguna
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Simple Script for Modal Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('modal-add-user');
+            const btnAdd = document.getElementById('btn-add-user');
+            const btnClose = document.getElementById('btn-close-modal');
+            const btnCancel = document.getElementById('btn-cancel-modal');
+
+            const toggleModal = () => {
+                modal.classList.toggle('hidden');
+            };
+
+            btnAdd.addEventListener('click', toggleModal);
+            btnClose.addEventListener('click', toggleModal);
+            btnCancel.addEventListener('click', toggleModal);
+        });
+    </script>
+
+
+</body>
+
+</html>
+"binding menu sub menu user dengan content user, untuk kontent user terapkan sesuai template pada
+example/managemenuser.html di Page Canvas, untuk content user ini disimpan di folder resource/view/viller/content
+"

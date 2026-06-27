@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function index(){
         session(['activeMenu'=>'User']);
-        return view('contents.users.index');
+        return view('viller.content.user');
     }
     public function getAll(){
         $dataUser=User::select('*')->get();
