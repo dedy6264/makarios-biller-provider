@@ -26,10 +26,10 @@
                 style="font-variation-settings: 'FILL' {{ session('activeMenu') === 'Dashboard' ? '1' : '0' }};">dashboard</span>
             <span class="font-body-md text-body-md">Dashboard</span>
         </a>
-        <a class="flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-xl {{ session('activeMenu') === 'User' ? 'font-bold scale-95 border-r-4 text-primary border-primary bg-surface-container-low' : 'text-secondary hover:bg-surface-container' }}"
+        <a class="flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-xl {{ in_array(session('activeMenu'), ['User', 'Role', 'User Role']) ? 'font-bold scale-95 border-r-4 text-primary border-primary bg-surface-container-low' : 'text-secondary hover:bg-surface-container' }}"
             href="{{ route('users.index') }}">
             <span class="material-symbols-outlined" data-icon="group"
-                style="font-variation-settings: 'FILL' {{ session('activeMenu') === 'User' ? '1' : '0' }};">group</span>
+                style="font-variation-settings: 'FILL' {{ in_array(session('activeMenu'), ['User', 'Role', 'User Role']) ? '1' : '0' }};">group</span>
             <span class="font-body-md text-body-md">User Management</span>
         </a>
         <div class="flex flex-col gap-1 mt-1 mb-2 ml-10">
@@ -37,12 +37,12 @@
                 class="flex items-center py-2 font-semibold transition-colors {{ session('activeMenu') === 'User' ? 'text-primary' : 'text-secondary hover:text-primary' }} font-body-sm text-body-sm">
                 <span class="">Users</span>
             </a>
-            <a href="#"
-                class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+            <a href="{{ route('roles.index') }}"
+                class="flex items-center py-2 transition-colors {{ session('activeMenu') === 'Role' ? 'font-semibold text-primary' : 'text-secondary hover:text-primary' }} font-body-sm text-body-sm">
                 <span class="">Roles</span>
             </a>
-            <a href="#"
-                class="flex items-center py-2 transition-colors text-secondary dark:text-secondary-fixed-dim font-body-sm text-body-sm hover:text-primary">
+            <a href="{{ route('user_roles.index') }}"
+                class="flex items-center py-2 transition-colors {{ session('activeMenu') === 'User Role' ? 'font-semibold text-primary' : 'text-secondary hover:text-primary' }} font-body-sm text-body-sm">
                 <span class="">User Roles</span>
             </a>
         </div>

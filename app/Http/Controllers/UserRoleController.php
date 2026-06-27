@@ -6,6 +6,9 @@ use App\Models\{UserRole,User,Role};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Services\HostService;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserRoleController extends Controller
 {
@@ -26,7 +29,7 @@ class UserRoleController extends Controller
         ];
         $payload=[
             "start"=>0,
-            "length"=>0,
+            "length"=>100,
             "columns"=>"",
             "search"=>"",
             "order"=>"id",
@@ -54,7 +57,7 @@ class UserRoleController extends Controller
         $response = $response['result'];
         $merchant_outlets=$response['data'];
         // dd($clients);
-        return view('contents.user_roles.index', compact('users', 'roles','clients','merchant_outlets', 'merchants'));
+        return view('viller.content.user-role', compact('users', 'roles','clients','merchant_outlets', 'merchants'));
     }
     public function getAll(){
         $data=UserRole::join('roles', 'user_roles.role_id', '=', 'roles.id')
@@ -83,50 +86,132 @@ class UserRoleController extends Controller
 
      public function store(Request $request)
     {
-        $request->validate([
-            'user_id'       => 'required',
-            'role_id'       => 'required',
-            'client_id'    => 'integer',
-            'merchant_id'  => 'integer',
-            'outlet_id'    => 'integer',
-        ]);
+        try {
+            $request->validate([
+                'user_id'       => ['required', Rule::unique('user_roles', 'user_id')],
+                'role_id'       => 'required',
+                'client_id'    => 'nullable|integer',
+                'merchant_id'  => 'nullable|integer',
+                'merchant_outlet_id'    => 'nullable|integer',
+            ]);
 
-        UserRole::create([
-            'user_id'       => (int)$request->input('user_id'),
-            'role_id'       => (int)$request->input('role_id'),
-            'client_id'    => (int)$request->input('client_id'),
-            'merchant_id'  => (int)$request->input('merchant_id'),
-            'outlet_id'    => (int)$request->input('merchant_outlet_id'),
-        ]);
+            $userRole = UserRole::create([
+                'user_id'       => (int)$request->input('user_id'),
+                'role_id'       => (int)$request->input('role_id'),
+                'client_id'    => (int)$request->input('client_id'),
+                'merchant_id'  => (int)$request->input('merchant_id'),
+                'outlet_id'    => (int)$request->input('merchant_outlet_id'),
+            ]);
 
-        return redirect()->route('user_roles.index');
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User role berhasil ditambahkan.',
+                    'data' => $userRole,
+                ]);
+            }
+
+            return redirect()->route('user_roles.index');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+
+            throw $th;
+        } catch (\Throwable $th) {
+            \Log::error('Failed create user role', ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User role gagal ditambahkan.',
+                ], 422);
+            }
+
+            return redirect()->route('user_roles.index')->with('status', 'user-role-creation-failed');
+        }
     }
 
     public function update(Request $request)
     {
-        // dd(request()->all());
-        $request->validate([
-            'user_id'       => 'required',
-            'role_id'       => 'required',
-            'client_id'    => 'integer',
-            'merchant_id'  => 'integer',
-            'outlet_id'    => 'integer',
-        ]);
+        try {
+            $request->validate([
+                'user_id'       => ['required', Rule::unique('user_roles', 'user_id')->ignore($request->id)],
+                'role_id'       => 'required',
+                'client_id'    => 'nullable|integer',
+                'merchant_id'  => 'nullable|integer',
+                'merchant_outlet_id'    => 'nullable|integer',
+            ]);
 
-        UserRole::where('id', $request->id)->update([
-            'user_id'       => (int)$request->input('user_id'),
-            'role_id'       => (int)$request->input('role_id'),
-            'client_id'    => (int)$request->input('client_id'),
-            'merchant_id'  => (int)$request->input('merchant_id'),
-            'outlet_id'    => (int)$request->input('merchant_outlet_id'),
-        ]);
-        return redirect()->route('user_roles.index');
+            UserRole::where('id', $request->id)->update([
+                'user_id'       => (int)$request->input('user_id'),
+                'role_id'       => (int)$request->input('role_id'),
+                'client_id'    => (int)$request->input('client_id'),
+                'merchant_id'  => (int)$request->input('merchant_id'),
+                'outlet_id'    => (int)$request->input('merchant_outlet_id'),
+            ]);
+
+            $userRole = UserRole::find($request->id);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User role berhasil diperbarui.',
+                    'data' => $userRole,
+                ]);
+            }
+
+            return redirect()->route('user_roles.index');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+
+            throw $th;
+        } catch (\Throwable $th) {
+            \Log::error('Failed update user role', ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User role gagal diperbarui.',
+                ], 422);
+            }
+
+            return redirect()->route('user_roles.index')->with('status', 'user-role-update-failed');
+        }
     }
 
     public function destroy(Request $request)
     {
-        $user = UserRole::findOrFail($request->id);
-        $user->delete();
-        return Redirect::route('user_roles.index')->with('status', 'profile-deleted');
+        try {
+            $user = UserRole::findOrFail($request->id);
+            $user->delete();
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'User role berhasil dihapus.',
+                ]);
+            }
+
+            return Redirect::route('user_roles.index')->with('status', 'profile-deleted');
+        } catch (\Throwable $th) {
+            \Log::error('Failed delete user role', ['user_role_id' => $request->id, 'error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User role gagal dihapus.',
+                ], 422);
+            }
+
+            return Redirect::route('user_roles.index')->with('status', 'user-role-deletion-failed');
+        }
     }
 }
