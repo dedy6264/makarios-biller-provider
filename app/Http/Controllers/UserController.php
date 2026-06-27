@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -39,9 +41,34 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pengguna berhasil ditambahkan.',
+                    'data' => $user,
+                ]);
+            }
+
             return Redirect::route('users.index')->with('status', 'user-created');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+
+            throw $th;
         } catch (\Throwable $th) {
             \Log::error("message", ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pengguna gagal ditambahkan.',
+                ], 422);
+            }
             return Redirect::route('users.index')->with('status', 'user-creation-failed');
         }
     }
@@ -50,7 +77,7 @@ class UserController extends Controller
             if (isset($request->password)){
                 $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($request->id)],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
                 ]);
                 $user=User::where('id', $request->id)->update([
@@ -60,25 +87,63 @@ class UserController extends Controller
                 ]);
             }else{
                 $request->validate([
-                    'name'=>['required'],
-                    'email'=>['required'],
+                    'name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($request->id)],
                 ]);
                 $user=User::where('id', $request->id)->update([
                 'name'=>$request->name,
                 'email'=>$request->email,
                 ]);
             }
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data pengguna berhasil diperbarui.',
+                ]);
+            }
+
             return Redirect::route('users.index')->with('status', 'profile-updated');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+
+            throw $th;
         } catch (\Throwable $th) {
             \Log::error("message", ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data pengguna gagal diperbarui.',
+                ], 422);
+            }
             return Redirect::route('users.index')->with('status', 'profile-update-failed');
         }
     }
      public function destroy(Request $request){
         $deleted = User::userDelete($request->id);
         if ($deleted) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pengguna berhasil dihapus.',
+                ]);
+            }
+
             return Redirect::route('users.index')
                 ->with('status', 'profile-deleted');
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna gagal dihapus.',
+            ], 422);
         }
 
         return Redirect::route('users.index')
