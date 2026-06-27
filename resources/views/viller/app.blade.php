@@ -155,6 +155,8 @@
                 class="flex items-center px-4 py-2 transition-all border border-transparent rounded-full bg-surface-container-low w-full max-w-[200px] sm:max-w-xs md:max-w-none md:w-96 focus-within:border-primary focus-within:bg-white">
                 <span class="mr-2 material-symbols-outlined text-on-surface-variant">search</span>
                 <input
+                    name="global-search"
+                    autocomplete="off"
                     class="w-full bg-transparent border-none outline-none focus:ring-0 text-body-sm font-body-sm text-on-surface placeholder-on-surface-variant"
                     placeholder="Pencarian global..." type="text" />
             </div>
