@@ -6,6 +6,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Partner\ClientController;
 use App\Http\Controllers\Partner\GroupController;
 use App\Http\Controllers\Partner\MerchantController;
+use App\Http\Controllers\Partner\MerchantOutletController;
 use App\Http\Controllers\Product\SegmentController;
 use App\Http\Controllers\Product\SegmentProductController;
 use App\Http\Controllers\Product\ProductTypeController;
@@ -55,6 +56,11 @@ Route::middleware(['auth','checkRole:ADMT,CLT'])->group(function () {
     Route::post('/merchants/getAll', [MerchantController::class, 'getAll'])->name('merchants.getAll');
     Route::post('/merchants/update', [MerchantController::class, 'update'])->name('merchants.update');
     Route::post('/merchants/destroy', [MerchantController::class, 'destroy'])->name('merchants.destroy');
+
+    Route::post('/merchant_outlets/store', [MerchantOutletController::class, 'store'])->name('merchant_outlets.store');
+    Route::post('/merchant_outlets/getAll', [MerchantOutletController::class, 'getAll'])->name('merchant_outlets.getAll');
+    Route::post('/merchant_outlets/update', [MerchantOutletController::class, 'update'])->name('merchant_outlets.update');
+    Route::post('/merchant_outlets/destroy', [MerchantOutletController::class, 'destroy'])->name('merchant_outlets.destroy');
 
     
 });

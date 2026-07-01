@@ -46,10 +46,10 @@
                 <span class="">User Roles</span>
             </a>
         </div>
-        <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-xl text-secondary hover:bg-surface-container"
-            href="#">
+        <a class="flex items-center gap-3 px-4 py-3 transition-all duration-150 rounded-xl {{ session('activeMenu') === 'Hierarchy' ? 'font-bold scale-95 border-r-4 text-primary border-primary bg-surface-container-low' : 'text-secondary hover:bg-surface-container' }}"
+            href="{{ route('clients.index') }}">
             <span class="material-symbols-outlined" data-icon="account_tree"
-                style="font-variation-settings: 'FILL' 0;">account_tree</span>
+                style="font-variation-settings: 'FILL' {{ session('activeMenu') === 'Hierarchy' ? '1' : '0' }};">account_tree</span>
             <span class="font-body-md text-body-md">Hierarchy</span>
         </a>
         <a class="flex items-center gap-3 px-4 py-3 transition-colors rounded-xl text-secondary hover:bg-surface-container"

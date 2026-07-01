@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\ValidationException;
 use App\Services\HostService;
 class GroupController extends Controller
 {
@@ -39,7 +40,7 @@ class GroupController extends Controller
         $response = $response['result'];
         $clients=$response['data'];
 
-        session(['activeMenu'=>'Group']);
+        session(['activeMenu'=>'Hierarchy']);
         return view('contents.partners.groups.index',compact('clients'));
     }
     public function getAll(){
@@ -79,50 +80,93 @@ class GroupController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'group_name' => 'required|string|max:100',
-            'client_id'=>'required|integer|max:100',
-            'client_name'=>'required|string|max:100',
-        ]);
         try {
+            $request->validate([
+                'group_name' => 'required|string|max:100',
+                'client_id'=>'required|integer|max:100',
+                'client_name'=>'required|string|max:100',
+            ]);
             $payload=[
                 "group_name"=>strtoupper($request->group_name),
                 "client_id"=>(int)$request->client_id,
                 "client_name"=>strtoupper($request->client_name),
             ];
             $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/addGroup', $payload)->json();
-            // dd($response);
             if (!is_array($response) || !isset($response['result']) || $response['responseCode']!="00") {
-                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                throw new \RuntimeException('Invalid API response format or data type');
             } 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Group berhasil ditambahkan.',
+                    'data' => $response['result'],
+                ]);
+            }
             return Redirect::route('groups.index')->with('status', 'group-created');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+            throw $th;
         } catch (\Throwable $th) {
             \Log::error("message", ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Group gagal ditambahkan.',
+                ], 422);
+            }
             return Redirect::route('groups.index')->with('status', 'group-creation-failed');
         }
     }
      public function update(Request $request)
     {
-        $request->validate([
-            'id'=>'required|integer',
-            'group_name' => 'required|string|max:100',
-             'client_id'=>'required|integer|max:100',
-            'client_name'=>'required|string|max:100',
-        ]);
         try {
+            $request->validate([
+                'id'=>'required|integer',
+                'group_name' => 'required|string|max:100',
+                'client_id'=>'required|integer|max:100',
+                'client_name'=>'required|string|max:100',
+            ]);
             $payload=[
                 "id"=>(int)$request->id,
                 "group_name"=>strtoupper($request->group_name),
-                 "client_id"=>(int)$request->client_id,
+                "client_id"=>(int)$request->client_id,
                 "client_name"=>strtoupper($request->client_name),
             ];
             $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/updateGroup', $payload)->json();
             if (!is_array($response) || !isset($response['result']) || $response['responseCode']!='00') {
-                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                throw new \RuntimeException('Invalid API response format or data type');
             } 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Group berhasil diperbarui.',
+                    'data' => $response['result'],
+                ]);
+            }
             return Redirect::route('groups.index')->with('status', 'group-updated');
+        } catch (ValidationException $th) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi gagal.',
+                    'errors' => $th->errors(),
+                ], 422);
+            }
+            throw $th;
         } catch (\Throwable $th) {
             \Log::error("message", ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Group gagal diperbarui.',
+                ], 422);
+            }
             return Redirect::route('groups.index')->with('status', 'group-updated-failed');
         }
     }
@@ -136,11 +180,23 @@ class GroupController extends Controller
             $response = Http::withBasicAuth('mocha','michi')->post($this->hostService->GetUrl('m').'/deleteGroup', $payload)->json();
 
             if (!is_array($response) || !isset($response['result']) || $response['responseCode']!='00') {
-                return response()->json(['error' => 'Invalid API response format or data type'], 500);
+                throw new \RuntimeException('Invalid API response format or data type');
             } 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Group berhasil dihapus.',
+                ]);
+            }
             return Redirect::route('groups.index')->with('status', 'group-deleted');
         } catch (\Throwable $th) {
             \Log::error("message", ['error' => $th]);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Group gagal dihapus.',
+                ], 422);
+            }
             return Redirect::route('groups.index')->with('status', 'group-delete-failed');
         }
     }
