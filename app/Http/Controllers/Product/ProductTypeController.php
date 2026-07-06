@@ -15,8 +15,8 @@ class ProductTypeController extends Controller
     }
       public function index()
     {
-        session(['activeMenu'=>'Product Type']);
-        return view('contents.products.product_types.index');
+        session(['activeMenu'=>'Product Types']);
+        return view('viller.content.product-type');
     }
 
     public function getAll(){

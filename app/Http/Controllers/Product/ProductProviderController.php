@@ -16,6 +16,7 @@ class ProductProviderController extends Controller
     }
     public function index()
     {
+        session(['activeMenu'=>'Product Providers']);
         $filter=[
             "id"=>0,
             "provider_name"=>"",
@@ -37,8 +38,7 @@ class ProductProviderController extends Controller
         }
         $response = $response['result'];
         $providers=$response['data'];
-        session(['activeMenu'=>'Product Provider']);
-        return view('contents.products.product_providers.index', compact('providers'));
+        return view('viller.content.product-provider', compact('providers'));
     }
 
     public function getAll(){

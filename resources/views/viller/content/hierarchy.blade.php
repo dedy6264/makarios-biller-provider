@@ -1,11 +1,13 @@
-@extends('viller.app')
+{{-- @extends('viller.app') --}}
 
 @section('header')
+
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="flex flex-col justify-between gap-4 md:flex-row md:items-center">
     <div>
         <h2 class="mb-1 font-headline-xl text-headline-xl text-on-surface">Hierarki Klien</h2>
-        <p class="font-body-md text-body-md text-secondary">Kelola struktur klien, group, dan merchant yang terhubung.</p>
+        <p class="font-body-md text-body-md text-secondary">Kelola struktur klien, group, dan merchant yang
+            terhubung.</p>
     </div>
     <div class="flex flex-wrap gap-3">
         <button id="btn-add-outlet"
@@ -32,220 +34,270 @@
 </div>
 @endsection
 
-@section('content')
-<style>
-    .hierarchy-card { transition: all 0.2s ease; }
-    .hierarchy-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); }
-    #toast-notification { transition: all 0.3s ease; transform: translateY(100px); opacity: 0; }
-    #toast-notification.show { transform: translateY(0); opacity: 1; }
-</style>
+<x-app-layout>
+    {{-- @section('content') --}}
+    <style>
+        .hierarchy-card {
+            transition: all 0.2s ease;
+        }
 
-<div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
-    <div class="relative w-full md:w-96">
-        <span class="absolute -translate-y-1/2 material-symbols-outlined left-3 top-1/2 text-secondary">search</span>
-        <input id="search-input"
-            class="w-full py-2.5 pl-10 pr-4 transition-all border rounded-lg bg-surface-bright border-outline-variant text-body-sm font-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-            placeholder="Cari klien, group, atau merchant..." type="text">
-    </div>
-    <button id="btn-refresh"
-        class="px-5 py-2.5 rounded-lg border border-outline-variant text-on-surface font-data-tabular hover:bg-surface-container transition-colors flex items-center gap-2">
-        <span class="material-symbols-outlined text-[20px]">refresh</span>
-        Refresh
-    </button>
-</div>
+        .hierarchy-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
 
-<div id="summary-grid" class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
-    <div class="p-5 bg-white border rounded-2xl border-outline-variant">
-        <p class="font-label-caps text-label-caps text-on-surface-variant">Client</p>
-        <p id="summary-clients" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
-    </div>
-    <div class="p-5 bg-white border rounded-2xl border-outline-variant">
-        <p class="font-label-caps text-label-caps text-on-surface-variant">Group</p>
-        <p id="summary-groups" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
-    </div>
-    <div class="p-5 bg-white border rounded-2xl border-outline-variant">
-        <p class="font-label-caps text-label-caps text-on-surface-variant">Merchant</p>
-        <p id="summary-merchants" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
-    </div>
-    <div class="p-5 bg-white border rounded-2xl border-outline-variant">
-        <p class="font-label-caps text-label-caps text-on-surface-variant">Outlet</p>
-        <p id="summary-outlets" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
-    </div>
-</div>
+        #toast-notification {
+            transition: all 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+        }
 
-<div id="hierarchy-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-card-gap">
-    <div class="p-6 bg-white border rounded-2xl border-outline-variant">
-        <div class="flex items-center gap-3 text-on-surface-variant">
-            <span class="material-symbols-outlined animate-spin text-primary">progress_activity</span>
-            Memuat hierarki...
+        #toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+
+    <div class="flex flex-col gap-4 mb-6 md:flex-row md:items-center md:justify-between">
+        <div class="relative w-full md:w-96">
+            <span
+                class="absolute -translate-y-1/2 material-symbols-outlined left-3 top-1/2 text-secondary">search</span>
+            <input id="search-input"
+                class="w-full py-2.5 pl-10 pr-4 transition-all border rounded-lg bg-surface-bright border-outline-variant text-body-sm font-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="Cari klien, group, atau merchant..." type="text">
+        </div>
+        <button id="btn-refresh"
+            class="px-5 py-2.5 rounded-lg border border-outline-variant text-on-surface font-data-tabular hover:bg-surface-container transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">refresh</span>
+            Refresh
+        </button>
+    </div>
+
+    <div id="summary-grid" class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-4">
+        <div class="p-5 bg-white border rounded-2xl border-outline-variant">
+            <p class="font-label-caps text-label-caps text-on-surface-variant">Client</p>
+            <p id="summary-clients" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
+        </div>
+        <div class="p-5 bg-white border rounded-2xl border-outline-variant">
+            <p class="font-label-caps text-label-caps text-on-surface-variant">Group</p>
+            <p id="summary-groups" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
+        </div>
+        <div class="p-5 bg-white border rounded-2xl border-outline-variant">
+            <p class="font-label-caps text-label-caps text-on-surface-variant">Merchant</p>
+            <p id="summary-merchants" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
+        </div>
+        <div class="p-5 bg-white border rounded-2xl border-outline-variant">
+            <p class="font-label-caps text-label-caps text-on-surface-variant">Outlet</p>
+            <p id="summary-outlets" class="mt-1 font-headline-lg text-headline-lg text-on-surface">0</p>
         </div>
     </div>
-</div>
 
-<div class="fixed inset-0 z-50 hidden" id="entity-modal">
-    <div class="absolute inset-0 bg-inverse-surface/30 backdrop-blur-sm" id="entity-backdrop"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="relative w-full max-w-[560px] bg-white/90 backdrop-blur-xl rounded-2xl shadow-[0px_10px_40px_rgba(0,0,0,0.08)] border border-white/20 overflow-hidden flex flex-col">
-            <div class="flex items-center justify-between px-6 py-5 border-b border-surface-variant">
-                <h3 id="entity-title" class="font-headline-lg text-headline-lg text-on-surface">Tambah Data</h3>
-                <button id="btn-close-entity" class="transition-colors text-secondary hover:text-error">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="flex-1 p-6 space-y-5 overflow-y-auto max-h-[70vh]">
-                <input type="hidden" id="entity-type">
-                <input type="hidden" id="entity-id">
-                <div id="entity-alert" class="hidden px-4 py-3 rounded-xl text-body-sm font-body-sm"></div>
-
-                <div id="client-fields" class="space-y-5">
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="client-name">Nama Klien</label>
-                        <input id="client-name"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
-                            placeholder="Masukkan nama entitas klien" type="text">
-                        <p id="client-name-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                </div>
-
-                <div id="group-fields" class="hidden space-y-5">
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="group-client-id">Client</label>
-                        <select id="group-client-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="group-client-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="group-name">Nama Group</label>
-                        <input id="group-name"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
-                            placeholder="Masukkan nama group" type="text">
-                        <p id="group-name-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                </div>
-
-                <div id="merchant-fields" class="hidden space-y-5">
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="merchant-client-id">Client</label>
-                        <select id="merchant-client-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="merchant-client-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="merchant-group-id">Group</label>
-                        <select id="merchant-group-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="merchant-group-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="merchant-name">Nama Merchant</label>
-                        <input id="merchant-name"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
-                            placeholder="Masukkan nama merchant" type="text">
-                        <p id="merchant-name-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="merchant-segment-id">Segment</label>
-                        <select id="merchant-segment-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="merchant-segment-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="first-name">First Name</label>
-                            <input id="first-name" class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all" type="text">
-                        </div>
-                        <div>
-                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="last-name">Last Name</label>
-                            <input id="last-name" class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all" type="text">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="outlet-fields" class="hidden space-y-5">
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-client-id">Client</label>
-                        <select id="outlet-client-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="outlet-client-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-group-id">Group</label>
-                        <select id="outlet-group-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="outlet-group-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-merchant-id">Merchant</label>
-                        <select id="outlet-merchant-id"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
-                        </select>
-                        <p id="outlet-merchant-id-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div>
-                        <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-name">Nama Outlet</label>
-                        <input id="outlet-name"
-                            class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
-                            placeholder="Masukkan nama outlet" type="text">
-                        <p id="outlet-name-error" class="hidden mt-1 text-xs text-error"></p>
-                    </div>
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-username">Username</label>
-                            <input id="outlet-username" class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all" type="text">
-                        </div>
-                        <div>
-                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant" for="outlet-device-uid">Device UID</label>
-                            <input id="outlet-device-uid" class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all" type="text">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-container-lowest/50 border-surface-variant">
-                <button id="btn-cancel-entity" class="px-4 py-2 transition-colors rounded-lg text-secondary hover:bg-surface-container font-data-tabular">Batal</button>
-                <button id="btn-submit-entity" class="px-6 py-2 transition-all rounded-lg shadow-sm bg-primary text-on-primary font-data-tabular hover:opacity-90 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">save</span>
-                    Simpan Data
-                </button>
+    <div id="hierarchy-grid" class="grid grid-cols-1 xl:grid-cols-2 gap-card-gap">
+        <div class="p-6 bg-white border rounded-2xl border-outline-variant">
+            <div class="flex items-center gap-3 text-on-surface-variant">
+                <span class="material-symbols-outlined animate-spin text-primary">progress_activity</span>
+                Memuat hierarki...
             </div>
         </div>
     </div>
-</div>
 
-<div class="fixed inset-0 z-50 hidden" id="delete-modal">
-    <div class="absolute inset-0 bg-inverse-surface/30 backdrop-blur-sm"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="w-full max-w-[420px] bg-white rounded-2xl shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-outline-variant overflow-hidden">
-            <div class="p-6 text-center">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-error-container">
-                    <span class="material-symbols-outlined text-[32px] text-error">delete_forever</span>
+    <div class="fixed inset-0 z-50 hidden" id="entity-modal">
+        <div class="absolute inset-0 bg-inverse-surface/30 backdrop-blur-sm" id="entity-backdrop"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div
+                class="relative w-full max-w-[560px] bg-white/90 backdrop-blur-xl rounded-2xl shadow-[0px_10px_40px_rgba(0,0,0,0.08)] border border-white/20 overflow-hidden flex flex-col">
+                <div class="flex items-center justify-between px-6 py-5 border-b border-surface-variant">
+                    <h3 id="entity-title" class="font-headline-lg text-headline-lg text-on-surface">Tambah Data</h3>
+                    <button id="btn-close-entity" class="transition-colors text-secondary hover:text-error">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
-                <h3 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Hapus Data?</h3>
-                <p id="delete-text" class="font-body-md text-body-md text-on-surface-variant">Tindakan ini tidak dapat dibatalkan.</p>
-            </div>
-            <div class="flex gap-3 px-6 pb-6">
-                <button id="btn-cancel-delete" class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">Batal</button>
-                <button id="btn-confirm-delete" class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular bg-error text-white shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">delete</span>
-                    Ya, Hapus
-                </button>
+                <div class="flex-1 p-6 space-y-5 overflow-y-auto max-h-[70vh]">
+                    <input type="hidden" id="entity-type">
+                    <input type="hidden" id="entity-id">
+                    <div id="entity-alert" class="hidden px-4 py-3 rounded-xl text-body-sm font-body-sm"></div>
+
+                    <div id="client-fields" class="space-y-5">
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="client-name">Nama Klien</label>
+                            <input id="client-name"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                placeholder="Masukkan nama entitas klien" type="text">
+                            <p id="client-name-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                    </div>
+
+                    <div id="group-fields" class="hidden space-y-5">
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="group-client-id">Client</label>
+                            <select id="group-client-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="group-client-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="group-name">Nama Group</label>
+                            <input id="group-name"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                placeholder="Masukkan nama group" type="text">
+                            <p id="group-name-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                    </div>
+
+                    <div id="merchant-fields" class="hidden space-y-5">
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="merchant-client-id">Client</label>
+                            <select id="merchant-client-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="merchant-client-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="merchant-group-id">Group</label>
+                            <select id="merchant-group-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="merchant-group-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="merchant-name">Nama Merchant</label>
+                            <input id="merchant-name"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                placeholder="Masukkan nama merchant" type="text">
+                            <p id="merchant-name-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="merchant-segment-id">Segment</label>
+                            <select id="merchant-segment-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="merchant-segment-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                    for="first-name">First Name</label>
+                                <input id="first-name"
+                                    class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                    type="text">
+                            </div>
+                            <div>
+                                <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                    for="last-name">Last Name</label>
+                                <input id="last-name"
+                                    class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                    type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="outlet-fields" class="hidden space-y-5">
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="outlet-client-id">Client</label>
+                            <select id="outlet-client-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="outlet-client-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="outlet-group-id">Group</label>
+                            <select id="outlet-group-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="outlet-group-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="outlet-merchant-id">Merchant</label>
+                            <select id="outlet-merchant-id"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all">
+                            </select>
+                            <p id="outlet-merchant-id-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                for="outlet-name">Nama Outlet</label>
+                            <input id="outlet-name"
+                                class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                placeholder="Masukkan nama outlet" type="text">
+                            <p id="outlet-name-error" class="hidden mt-1 text-xs text-error"></p>
+                        </div>
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div>
+                                <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                    for="outlet-username">Username</label>
+                                <input id="outlet-username"
+                                    class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                    type="text">
+                            </div>
+                            <div>
+                                <label class="block mb-1 font-data-tabular text-data-tabular text-on-surface-variant"
+                                    for="outlet-device-uid">Device UID</label>
+                                <input id="outlet-device-uid"
+                                    class="w-full bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg px-4 py-2.5 text-body-md transition-all"
+                                    type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-container-lowest/50 border-surface-variant">
+                    <button id="btn-cancel-entity"
+                        class="px-4 py-2 transition-colors rounded-lg text-secondary hover:bg-surface-container font-data-tabular">Batal</button>
+                    <button id="btn-submit-entity"
+                        class="flex items-center gap-2 px-6 py-2 transition-all rounded-lg shadow-sm bg-primary text-on-primary font-data-tabular hover:opacity-90">
+                        <span class="material-symbols-outlined text-[18px]">save</span>
+                        Simpan Data
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="toast-notification" class="fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg max-w-sm">
-    <span id="toast-icon" class="material-symbols-outlined text-[22px] shrink-0"></span>
-    <p id="toast-message" class="font-body-sm text-body-sm"></p>
-</div>
+    <div class="fixed inset-0 z-50 hidden" id="delete-modal">
+        <div class="absolute inset-0 bg-inverse-surface/30 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div
+                class="w-full max-w-[420px] bg-white rounded-2xl shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-outline-variant overflow-hidden">
+                <div class="p-6 text-center">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-error-container">
+                        <span class="material-symbols-outlined text-[32px] text-error">delete_forever</span>
+                    </div>
+                    <h3 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Hapus Data?</h3>
+                    <p id="delete-text" class="font-body-md text-body-md text-on-surface-variant">Tindakan ini tidak
+                        dapat dibatalkan.</p>
+                </div>
+                <div class="flex gap-3 px-6 pb-6">
+                    <button id="btn-cancel-delete"
+                        class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">Batal</button>
+                    <button id="btn-confirm-delete"
+                        class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular bg-error text-white shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+    <div id="toast-notification"
+        class="fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg max-w-sm">
+        <span id="toast-icon" class="material-symbols-outlined text-[22px] shrink-0"></span>
+        <p id="toast-message" class="font-body-sm text-body-sm"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let clients = [];
     let groups = [];
@@ -363,7 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (filteredClients.length === 0) {
             grid.innerHTML = `
-                <div class="col-span-full p-10 text-center bg-white border rounded-2xl border-outline-variant text-on-surface-variant">
+                <div class="p-10 text-center bg-white border col-span-full rounded-2xl border-outline-variant text-on-surface-variant">
                     <span class="material-symbols-outlined text-[44px] block mb-2 opacity-50">account_tree_off</span>
                     Tidak ada data hierarki ditemukan.
                 </div>`;
@@ -381,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const merchantOutlets = clientOutlets.filter(outlet => String(outlet.merchant_id) === String(merchant.id));
                         const outletCards = merchantOutlets.length
                             ? merchantOutlets.map(outlet => `
-                                <div class="flex items-start justify-between gap-2 p-2 border rounded-md bg-white border-outline-variant/50">
+                                <div class="flex items-start justify-between gap-2 p-2 bg-white border rounded-md border-outline-variant/50">
                                     <div>
                                         <span class="block font-body-sm text-body-sm text-on-surface">${escapeHtml(outlet.merchant_outlet_name)}</span>
                                         <span class="font-label-caps text-label-caps text-secondary">OUT-${outlet.id}</span>
@@ -405,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-1 gap-2 mt-3">${outletCards}</div>
-                                <button onclick="openEntityModal('outlet', null, ${client.id}, ${group.id}, ${merchant.id})" class="flex items-center justify-center w-full gap-2 p-2 mt-2 transition-colors border border-dashed rounded-md bg-white border-outline-variant text-secondary hover:text-primary hover:border-primary hover:bg-surface-container">
+                                <button onclick="openEntityModal('outlet', null, ${client.id}, ${group.id}, ${merchant.id})" class="flex items-center justify-center w-full gap-2 p-2 mt-2 transition-colors bg-white border border-dashed rounded-md border-outline-variant text-secondary hover:text-primary hover:border-primary hover:bg-surface-container">
                                     <span class="material-symbols-outlined text-[16px]">add</span>
                                     <span class="font-label-caps text-label-caps">Tambah Outlet</span>
                                 </button>
@@ -756,5 +808,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadAll();
 });
-</script>
-@endsection
+    </script>
+    {{-- @endsection --}}
+</x-app-layout>

@@ -15,8 +15,8 @@ class AccountController extends Controller
     }
     public function index()
     {
-        session(['activeMenu'=>'Account']);
-        return view('contents.accounts.accounts.index');
+        session(['activeMenu'=>'Accounts']);
+        return view('viller.content.account');
     }
 
     public function getAll(){

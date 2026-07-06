@@ -15,8 +15,8 @@ class ProductCategoryController extends Controller
     }
       public function index()
     {
-        session(['activeMenu'=>'Product Category']);
-        return view('contents.products.product_categories.index');
+        session(['activeMenu'=>'Product Categories']);
+        return view('viller.content.product-categories');
     }
 
     public function getAll(){

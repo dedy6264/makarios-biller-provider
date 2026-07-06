@@ -15,6 +15,7 @@ class ProductController extends Controller
     }
     public function index()
     {
+        session(['activeMenu'=>'Products']);
          $filter=[
             "id"=>0,
             "product_category_name"=>"",
@@ -58,8 +59,7 @@ class ProductController extends Controller
         }
         $response = $response['result'];
         $product_references=$response['data'];
-        session(['activeMenu'=>'Product']);
-        return view('contents.products.products.index', compact('product_categories','product_references'));
+        return view('viller.content.product', compact('product_categories','product_references'));
     }
 
     public function getAll(){

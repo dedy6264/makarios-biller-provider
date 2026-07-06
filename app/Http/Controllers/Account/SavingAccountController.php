@@ -36,8 +36,8 @@ class SavingAccountController extends Controller
         }
         $response = $response['result'];
         $accounts=$response['data'];
-        session(['activeMenu'=>'Saving']);
-        return view('contents.accounts.savings.index',compact('accounts'));
+        session(['activeMenu'=>'Saving Accounts']);
+        return view('viller.content.saving-account',compact('accounts'));
     }
 
     public function getAll(){

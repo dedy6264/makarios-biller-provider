@@ -1,4 +1,4 @@
-@extends('viller.app')
+{{-- @extends('viller.app') --}}
 
 @section('header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,400 +16,409 @@
     </button>
 </div>
 @endsection
+<x-app-layout>
 
-@section('content')
-<!-- Style for table row hover -->
-<style>
-    .table-row-hover {
-        transition: all 0.15s ease;
-    }
+    {{-- @section('content') --}}
+    <!-- Style for table row hover -->
+    <style>
+        .table-row-hover {
+            transition: all 0.15s ease;
+        }
 
-    .table-row-hover:hover {
-        background-color: #f8fafe;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    }
+        .table-row-hover:hover {
+            background-color: #f8fafe;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
 
-    #users-table tbody tr td {
-        vertical-align: middle;
-    }
+        #users-table tbody tr td {
+            vertical-align: middle;
+        }
 
-    /* Notification toast */
-    #toast-notification {
-        transition: all 0.3s ease;
-        transform: translateY(100px);
-        opacity: 0;
-    }
+        /* Notification toast */
+        #toast-notification {
+            transition: all 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+        }
 
-    #toast-notification.show {
-        transform: translateY(0);
-        opacity: 1;
-    }
-</style>
+        #toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
 
-<!-- Main Content Card -->
-<div
-    class="bg-surface-container-lowest rounded-[24px] shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant overflow-hidden flex flex-col">
-    <!-- Toolbar/Filters -->
+    <!-- Main Content Card -->
     <div
-        class="flex flex-col items-center justify-between gap-4 p-6 border-b border-outline-variant md:flex-row bg-white/50">
-        <div class="relative w-full md:w-80">
-            <span
-                class="absolute text-sm -translate-y-1/2 material-symbols-outlined left-3 top-1/2 text-on-surface-variant">search</span>
-            <input id="search-input" name="user-table-search" autocomplete="new-password"
-                class="w-full pl-10 pr-4 h-11 bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-body-sm font-body-sm text-on-surface transition-all"
-                placeholder="Cari nama atau email..." type="text">
-        </div>
-        <div class="flex items-center w-full gap-3 md:w-auto">
-            <button id="btn-refresh"
-                class="flex items-center justify-center gap-2 px-4 transition-colors border rounded-lg h-11 border-outline-variant text-on-surface-variant hover:bg-surface-container font-body-sm text-body-sm">
-                <span class="material-symbols-outlined text-[20px]">refresh</span>
-                <span class="hidden sm:inline">Refresh</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Data Table Container -->
-    <div class="overflow-x-auto">
-        <table id="users-table" class="w-full text-left border-collapse">
-            <thead>
-                <tr class="bg-surface-bright/50">
-                    <th
-                        class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        No</th>
-                    <th
-                        class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        Pengguna</th>
-                    <th
-                        class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        Email</th>
-                    <th
-                        class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        Verifikasi Email</th>
-                    <th
-                        class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        Dibuat</th>
-                    <th
-                        class="px-6 py-4 tracking-wider text-center uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
-                        Aksi</th>
-                </tr>
-            </thead>
-            <tbody id="users-tbody" class="bg-white">
-                <!-- Rows populated by JS -->
-                <tr id="loading-row">
-                    <td colspan="6" class="px-6 py-12 text-center text-on-surface-variant font-body-sm text-body-sm">
-                        <div class="flex items-center justify-center gap-3">
-                            <span class="material-symbols-outlined animate-spin text-primary">progress_activity</span>
-                            Memuat data...
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Pagination Footer -->
-    <div id="pagination-footer" class="flex items-center justify-between p-4 bg-white border-t border-outline-variant">
-        <span id="pagination-info" class="font-body-sm text-body-sm text-on-surface-variant">-</span>
-        <div id="pagination-controls" class="flex gap-1">
-            <!-- Pagination generated by JS -->
-        </div>
-    </div>
-</div>
-
-<!-- ===================== MODAL CREATE ===================== -->
-<div class="fixed inset-0 z-50 hidden" id="modal-create-user">
-    <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm" id="backdrop-create"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-[600px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-white/40 overflow-hidden flex flex-col"
-            style="background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);">
-            <!-- Header -->
-            <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/50 bg-white/60">
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 text-primary">
-                        <span class="material-symbols-outlined text-[20px]">person_add</span>
-                    </div>
-                    <h3 class="font-headline-lg text-headline-lg text-on-surface">Tambah Pengguna Baru</h3>
-                </div>
-                <button
-                    class="flex items-center justify-center w-8 h-8 transition-colors rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/50"
-                    id="btn-close-create">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <!-- Body -->
-            <div class="p-6 overflow-y-auto max-h-[70vh]">
-                <!-- Alert -->
-                <div id="create-alert" class="hidden px-4 py-3 mb-5 rounded-xl text-body-sm font-body-sm"></div>
-
-                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                    <!-- Nama Lengkap -->
-                    <div class="flex flex-col gap-1.5 md:col-span-2">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant" for="create-name">
-                            Nama Lengkap <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">person</span>
-                            <input id="create-name" type="text"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Masukkan nama lengkap">
-                        </div>
-                        <p id="create-name-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="flex flex-col gap-1.5 md:col-span-2">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant" for="create-email">
-                            Alamat Email <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">mail</span>
-                            <input id="create-email" type="email"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="email@contoh.com">
-                        </div>
-                        <p id="create-email-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Password -->
-                    <div class="flex flex-col gap-1.5">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
-                            for="create-password">
-                            Password <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock</span>
-                            <input id="create-password" type="password"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Min. 8 karakter">
-                            <button type="button"
-                                onclick="togglePasswordVisibility('create-password', 'icon-create-pw')"
-                                class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
-                                <span id="icon-create-pw"
-                                    class="material-symbols-outlined text-[20px]">visibility_off</span>
-                            </button>
-                        </div>
-                        <p id="create-password-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Konfirmasi Password -->
-                    <div class="flex flex-col gap-1.5">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
-                            for="create-password-confirm">
-                            Konfirmasi Password <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock_reset</span>
-                            <input id="create-password-confirm" type="password"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Ulangi password">
-                            <button type="button"
-                                onclick="togglePasswordVisibility('create-password-confirm', 'icon-create-confirm')"
-                                class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
-                                <span id="icon-create-confirm"
-                                    class="material-symbols-outlined text-[20px]">visibility_off</span>
-                            </button>
-                        </div>
-                        <p id="create-confirm-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer -->
-            <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-bright/80 border-outline-variant/50">
-                <button id="btn-cancel-create"
-                    class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
-                    Batal
-                </button>
-                <button id="btn-submit-create"
-                    class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular bg-primary text-white shadow-sm hover:opacity-90 transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">person_add</span>
-                    Simpan Pengguna
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ===================== MODAL UPDATE ===================== -->
-<div class="fixed inset-0 z-50 hidden" id="modal-update-user">
-    <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm" id="backdrop-update"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-[600px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-white/40 overflow-hidden flex flex-col"
-            style="background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);">
-            <!-- Header -->
-            <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/50 bg-white/60">
-                <div class="flex items-center gap-3">
-                    <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-tertiary/10"
-                        style="color: #7e3000;">
-                        <span class="material-symbols-outlined text-[20px]">edit</span>
-                    </div>
-                    <div>
-                        <h3 class="font-headline-lg text-headline-lg text-on-surface">Edit Pengguna</h3>
-                        <p id="update-subtitle" class="font-body-sm text-body-sm text-secondary mt-0.5"></p>
-                    </div>
-                </div>
-                <button
-                    class="flex items-center justify-center w-8 h-8 transition-colors rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/50"
-                    id="btn-close-update">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <!-- Body -->
-            <div class="p-6 overflow-y-auto max-h-[70vh]">
-                <input type="hidden" id="update-id">
-
-                <!-- Alert -->
-                <div id="update-alert" class="hidden px-4 py-3 mb-5 rounded-xl text-body-sm font-body-sm"></div>
-
-                <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-                    <!-- Nama Lengkap -->
-                    <div class="flex flex-col gap-1.5 md:col-span-2">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant" for="update-name">
-                            Nama Lengkap <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">person</span>
-                            <input id="update-name" type="text"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Masukkan nama lengkap">
-                        </div>
-                        <p id="update-name-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Email -->
-                    <div class="flex flex-col gap-1.5 md:col-span-2">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant" for="update-email">
-                            Alamat Email <span class="text-error">*</span>
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">mail</span>
-                            <input id="update-email" type="email"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="email@contoh.com">
-                        </div>
-                        <p id="update-email-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Divider password section -->
-                    <div class="md:col-span-2">
-                        <div class="flex items-center gap-3 py-2">
-                            <div class="flex-1 border-t border-outline-variant/40"></div>
-                            <span
-                                class="px-2 font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap">
-                                Ubah Password (opsional)
-                            </span>
-                            <div class="flex-1 border-t border-outline-variant/40"></div>
-                        </div>
-                        <p class="mt-1 text-xs text-on-surface-variant">Biarkan kosong jika tidak ingin mengubah
-                            password.</p>
-                    </div>
-
-                    <!-- Password Baru -->
-                    <div class="flex flex-col gap-1.5">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
-                            for="update-password">
-                            Password Baru
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock</span>
-                            <input id="update-password" type="password"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Min. 8 karakter">
-                            <button type="button"
-                                onclick="togglePasswordVisibility('update-password', 'icon-update-pw')"
-                                class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
-                                <span id="icon-update-pw"
-                                    class="material-symbols-outlined text-[20px]">visibility_off</span>
-                            </button>
-                        </div>
-                        <p id="update-password-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-
-                    <!-- Konfirmasi Password Baru -->
-                    <div class="flex flex-col gap-1.5">
-                        <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
-                            for="update-password-confirm">
-                            Konfirmasi Password Baru
-                        </label>
-                        <div class="relative">
-                            <span
-                                class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock_reset</span>
-                            <input id="update-password-confirm" type="password"
-                                class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
-                                placeholder="Ulangi password baru">
-                            <button type="button"
-                                onclick="togglePasswordVisibility('update-password-confirm', 'icon-update-confirm')"
-                                class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
-                                <span id="icon-update-confirm"
-                                    class="material-symbols-outlined text-[20px]">visibility_off</span>
-                            </button>
-                        </div>
-                        <p id="update-confirm-error" class="hidden ml-1 text-xs text-error"></p>
-                    </div>
-                </div>
-            </div>
-            <!-- Footer -->
-            <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-bright/80 border-outline-variant/50">
-                <button id="btn-cancel-update"
-                    class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
-                    Batal
-                </button>
-                <button id="btn-submit-update"
-                    class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular bg-primary text-white shadow-sm hover:opacity-90 transition-all flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">save</span>
-                    Simpan Perubahan
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ===================== MODAL DELETE CONFIRM ===================== -->
-<div class="fixed inset-0 z-50 hidden" id="modal-delete-user">
-    <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm"></div>
-    <div class="absolute inset-0 flex items-center justify-center p-4">
+        class="bg-surface-container-lowest rounded-[24px] shadow-[0px_4px_20px_rgba(0,0,0,0.03)] border border-outline-variant overflow-hidden flex flex-col">
+        <!-- Toolbar/Filters -->
         <div
-            class="w-full max-w-[420px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.12)] border border-outline-variant overflow-hidden flex flex-col bg-white">
-            <div class="p-6 text-center">
-                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-error-container">
-                    <span class="material-symbols-outlined text-[32px] text-error">delete_forever</span>
-                </div>
-                <h3 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Hapus Pengguna?</h3>
-                <p id="delete-confirm-text" class="font-body-md text-body-md text-on-surface-variant">
-                    Tindakan ini tidak dapat dibatalkan.
-                </p>
+            class="flex flex-col items-center justify-between gap-4 p-6 border-b border-outline-variant md:flex-row bg-white/50">
+            <div class="relative w-full md:w-80">
+                <span
+                    class="absolute text-sm -translate-y-1/2 material-symbols-outlined left-3 top-1/2 text-on-surface-variant">search</span>
+                <input id="search-input" name="user-table-search" autocomplete="new-password"
+                    class="w-full pl-10 pr-4 h-11 bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg text-body-sm font-body-sm text-on-surface transition-all"
+                    placeholder="Cari nama atau email..." type="text">
             </div>
-            <div class="flex gap-3 px-6 pb-6">
-                <button id="btn-cancel-delete"
-                    class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
-                    Batal
-                </button>
-                <button id="btn-confirm-delete"
-                    class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular bg-error text-white shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined text-[18px]">delete</span>
-                    Ya, Hapus
+            <div class="flex items-center w-full gap-3 md:w-auto">
+                <button id="btn-refresh"
+                    class="flex items-center justify-center gap-2 px-4 transition-colors border rounded-lg h-11 border-outline-variant text-on-surface-variant hover:bg-surface-container font-body-sm text-body-sm">
+                    <span class="material-symbols-outlined text-[20px]">refresh</span>
+                    <span class="hidden sm:inline">Refresh</span>
                 </button>
             </div>
         </div>
+
+        <!-- Data Table Container -->
+        <div class="overflow-x-auto">
+            <table id="users-table" class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-surface-bright/50">
+                        <th
+                            class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            No</th>
+                        <th
+                            class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            Pengguna</th>
+                        <th
+                            class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            Email</th>
+                        <th
+                            class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            Verifikasi Email</th>
+                        <th
+                            class="px-6 py-4 tracking-wider uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            Dibuat</th>
+                        <th
+                            class="px-6 py-4 tracking-wider text-center uppercase border-b font-label-caps text-label-caps text-on-surface-variant border-outline-variant whitespace-nowrap">
+                            Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="users-tbody" class="bg-white">
+                    <!-- Rows populated by JS -->
+                    <tr id="loading-row">
+                        <td colspan="6"
+                            class="px-6 py-12 text-center text-on-surface-variant font-body-sm text-body-sm">
+                            <div class="flex items-center justify-center gap-3">
+                                <span
+                                    class="material-symbols-outlined animate-spin text-primary">progress_activity</span>
+                                Memuat data...
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div id="pagination-footer"
+            class="flex items-center justify-between p-4 bg-white border-t border-outline-variant">
+            <span id="pagination-info" class="font-body-sm text-body-sm text-on-surface-variant">-</span>
+            <div id="pagination-controls" class="flex gap-1">
+                <!-- Pagination generated by JS -->
+            </div>
+        </div>
     </div>
-</div>
 
-<!-- Toast Notification -->
-<div id="toast-notification"
-    class="fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg max-w-sm">
-    <span id="toast-icon" class="material-symbols-outlined text-[22px] shrink-0"></span>
-    <p id="toast-message" class="font-body-sm text-body-sm"></p>
-</div>
+    <!-- ===================== MODAL CREATE ===================== -->
+    <div class="fixed inset-0 z-50 hidden" id="modal-create-user">
+        <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm" id="backdrop-create"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass-panel w-full max-w-[600px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-white/40 overflow-hidden flex flex-col"
+                style="background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/50 bg-white/60">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 text-primary">
+                            <span class="material-symbols-outlined text-[20px]">person_add</span>
+                        </div>
+                        <h3 class="font-headline-lg text-headline-lg text-on-surface">Tambah Pengguna Baru</h3>
+                    </div>
+                    <button
+                        class="flex items-center justify-center w-8 h-8 transition-colors rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/50"
+                        id="btn-close-create">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <!-- Body -->
+                <div class="p-6 overflow-y-auto max-h-[70vh]">
+                    <!-- Alert -->
+                    <div id="create-alert" class="hidden px-4 py-3 mb-5 rounded-xl text-body-sm font-body-sm"></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                        <!-- Nama Lengkap -->
+                        <div class="flex flex-col gap-1.5 md:col-span-2">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="create-name">
+                                Nama Lengkap <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">person</span>
+                                <input id="create-name" type="text"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Masukkan nama lengkap">
+                            </div>
+                            <p id="create-name-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex flex-col gap-1.5 md:col-span-2">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="create-email">
+                                Alamat Email <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">mail</span>
+                                <input id="create-email" type="email"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="email@contoh.com">
+                            </div>
+                            <p id="create-email-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="create-password">
+                                Password <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock</span>
+                                <input id="create-password" type="password"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Min. 8 karakter">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('create-password', 'icon-create-pw')"
+                                    class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
+                                    <span id="icon-create-pw"
+                                        class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                </button>
+                            </div>
+                            <p id="create-password-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Konfirmasi Password -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="create-password-confirm">
+                                Konfirmasi Password <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock_reset</span>
+                                <input id="create-password-confirm" type="password"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Ulangi password">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('create-password-confirm', 'icon-create-confirm')"
+                                    class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
+                                    <span id="icon-create-confirm"
+                                        class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                </button>
+                            </div>
+                            <p id="create-confirm-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-bright/80 border-outline-variant/50">
+                    <button id="btn-cancel-create"
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
+                        Batal
+                    </button>
+                    <button id="btn-submit-create"
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular bg-primary text-white shadow-sm hover:opacity-90 transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">person_add</span>
+                        Simpan Pengguna
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL UPDATE ===================== -->
+    <div class="fixed inset-0 z-50 hidden" id="modal-update-user">
+        <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm" id="backdrop-update"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="glass-panel w-full max-w-[600px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.10)] border border-white/40 overflow-hidden flex flex-col"
+                style="background: rgba(255,255,255,0.92); backdrop-filter: blur(16px);">
+                <!-- Header -->
+                <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/50 bg-white/60">
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center justify-center w-9 h-9 rounded-xl bg-tertiary/10"
+                            style="color: #7e3000;">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                        </div>
+                        <div>
+                            <h3 class="font-headline-lg text-headline-lg text-on-surface">Edit Pengguna</h3>
+                            <p id="update-subtitle" class="font-body-sm text-body-sm text-secondary mt-0.5"></p>
+                        </div>
+                    </div>
+                    <button
+                        class="flex items-center justify-center w-8 h-8 transition-colors rounded-full text-on-surface-variant hover:text-error hover:bg-error-container/50"
+                        id="btn-close-update">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <!-- Body -->
+                <div class="p-6 overflow-y-auto max-h-[70vh]">
+                    <input type="hidden" id="update-id">
+
+                    <!-- Alert -->
+                    <div id="update-alert" class="hidden px-4 py-3 mb-5 rounded-xl text-body-sm font-body-sm"></div>
+
+                    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                        <!-- Nama Lengkap -->
+                        <div class="flex flex-col gap-1.5 md:col-span-2">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="update-name">
+                                Nama Lengkap <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">person</span>
+                                <input id="update-name" type="text"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Masukkan nama lengkap">
+                            </div>
+                            <p id="update-name-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="flex flex-col gap-1.5 md:col-span-2">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="update-email">
+                                Alamat Email <span class="text-error">*</span>
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">mail</span>
+                                <input id="update-email" type="email"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-4 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="email@contoh.com">
+                            </div>
+                            <p id="update-email-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Divider password section -->
+                        <div class="md:col-span-2">
+                            <div class="flex items-center gap-3 py-2">
+                                <div class="flex-1 border-t border-outline-variant/40"></div>
+                                <span
+                                    class="px-2 font-label-caps text-label-caps text-on-surface-variant whitespace-nowrap">
+                                    Ubah Password (opsional)
+                                </span>
+                                <div class="flex-1 border-t border-outline-variant/40"></div>
+                            </div>
+                            <p class="mt-1 text-xs text-on-surface-variant">Biarkan kosong jika tidak ingin mengubah
+                                password.</p>
+                        </div>
+
+                        <!-- Password Baru -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="update-password">
+                                Password Baru
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock</span>
+                                <input id="update-password" type="password"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Min. 8 karakter">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('update-password', 'icon-update-pw')"
+                                    class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
+                                    <span id="icon-update-pw"
+                                        class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                </button>
+                            </div>
+                            <p id="update-password-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+
+                        <!-- Konfirmasi Password Baru -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="ml-1 font-label-caps text-label-caps text-on-surface-variant"
+                                for="update-password-confirm">
+                                Konfirmasi Password Baru
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[20px] text-on-surface-variant">lock_reset</span>
+                                <input id="update-password-confirm" type="password"
+                                    class="w-full h-[44px] bg-[#F1F5F9] border-transparent focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary rounded-lg pl-10 pr-10 font-body-md text-body-md text-on-surface transition-all"
+                                    placeholder="Ulangi password baru">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('update-password-confirm', 'icon-update-confirm')"
+                                    class="absolute transition-colors -translate-y-1/2 right-3 top-1/2 text-on-surface-variant hover:text-primary">
+                                    <span id="icon-update-confirm"
+                                        class="material-symbols-outlined text-[20px]">visibility_off</span>
+                                </button>
+                            </div>
+                            <p id="update-confirm-error" class="hidden ml-1 text-xs text-error"></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="flex justify-end gap-3 px-6 py-4 border-t bg-surface-bright/80 border-outline-variant/50">
+                    <button id="btn-cancel-update"
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
+                        Batal
+                    </button>
+                    <button id="btn-submit-update"
+                        class="h-[44px] px-6 rounded-lg font-data-tabular text-data-tabular bg-primary text-white shadow-sm hover:opacity-90 transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">save</span>
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== MODAL DELETE CONFIRM ===================== -->
+    <div class="fixed inset-0 z-50 hidden" id="modal-delete-user">
+        <div class="absolute inset-0 bg-inverse-surface/40 backdrop-blur-sm"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div
+                class="w-full max-w-[420px] rounded-[24px] shadow-[0px_10px_40px_rgba(0,0,0,0.12)] border border-outline-variant overflow-hidden flex flex-col bg-white">
+                <div class="p-6 text-center">
+                    <div
+                        class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-error-container">
+                        <span class="material-symbols-outlined text-[32px] text-error">delete_forever</span>
+                    </div>
+                    <h3 class="mb-2 font-headline-lg text-headline-lg text-on-surface">Hapus Pengguna?</h3>
+                    <p id="delete-confirm-text" class="font-body-md text-body-md text-on-surface-variant">
+                        Tindakan ini tidak dapat dibatalkan.
+                    </p>
+                </div>
+                <div class="flex gap-3 px-6 pb-6">
+                    <button id="btn-cancel-delete"
+                        class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular border border-outline text-secondary hover:bg-surface-container transition-colors">
+                        Batal
+                    </button>
+                    <button id="btn-confirm-delete"
+                        class="flex-1 h-[44px] rounded-lg font-data-tabular text-data-tabular bg-error text-white shadow-sm hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">delete</span>
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notification"
+        class="fixed bottom-6 right-6 z-[100] flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg max-w-sm">
+        <span id="toast-icon" class="material-symbols-outlined text-[22px] shrink-0"></span>
+        <p id="toast-message" class="font-body-sm text-body-sm"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     // ========== State ==========
@@ -884,5 +893,5 @@
 
     fetchUsers();
 });
-</script>
-@endsection
+    </script>
+</x-app-layout>

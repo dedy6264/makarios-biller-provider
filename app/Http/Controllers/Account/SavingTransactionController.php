@@ -38,8 +38,8 @@ class SavingTransactionController extends Controller
         }
         $response = $response['result'];
         $accounts=$response['data'];
-        session(['activeMenu'=>'Saving']);
-        return view('contents.accounts.saving_transactions.index',compact('accounts'));
+        session(['activeMenu'=>'Saving Transactions']);
+        return view('viller.content.saving-transaction',compact('accounts'));
     }
 
     public function getAll(){

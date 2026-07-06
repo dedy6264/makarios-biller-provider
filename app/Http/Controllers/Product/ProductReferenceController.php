@@ -15,8 +15,8 @@ class ProductReferenceController extends Controller
     }
        public function index()
     {
-        session(['activeMenu'=>'Product Reference']);
-        return view('contents.products.product_references.index');
+        session(['activeMenu'=>'Product References']);
+        return view('viller.content.product-reference');
     }
 
     public function getAll(){

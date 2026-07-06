@@ -107,8 +107,8 @@ class ProductSegmentController extends Controller
         }
         $response = $response['result'];
         $products=$response['data'];
-        session(['activeMenu'=>'Product Segment']);
-        return view('contents.products.product_segments.index', compact('providers','segments','product_types','products'));
+        session(['activeMenu'=>'Product Segments']);
+        return view('viller.content.product-segment', compact('providers','segments','product_types','products'));
     }
 
     public function getAll(){

@@ -15,8 +15,8 @@ class TransactionController extends Controller
     }
     public function index()
     {
-        session(['activeMenu'=>'Transaction']);
-        return view('contents.products.transactions.index');
+        session(['activeMenu'=>'Transactions']);
+        return view('viller.content.transaction');
     }
 
     public function getAll(){

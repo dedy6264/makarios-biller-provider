@@ -16,8 +16,8 @@ class ProviderController extends Controller
     }
      public function index()
     {
-        session(['activeMenu'=>'Provider']);
-        return view('contents.products.providers.index');
+        session(['activeMenu'=>'Providers']);
+        return view('viller.content.provider');
     }
 
     public function getAll(){

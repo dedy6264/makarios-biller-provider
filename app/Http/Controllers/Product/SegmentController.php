@@ -17,8 +17,8 @@ class SegmentController extends Controller
     }
     public function index()
     {
-        session(['activeMenu'=>'Segment']);
-        return view('contents.products.segments.index');
+        session(['activeMenu'=>'Segments']);
+        return view('viller.content.segment');
     }
 
     public function getAll(){
